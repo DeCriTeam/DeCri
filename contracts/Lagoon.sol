@@ -4,17 +4,11 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 contract Lagoon is ERC721 {
-  struct ItemJeu {
-    uint8 x;
-    uint8 y;
-    uint8 type_item; 
-  }
+  bool has_zone_reelle;
+  uint zone_reelle_id;
 
-  ItemJeu[] items; // level dépend du nombre d'items
-
-  bool has_zone;
-  uint zone_id;
-  uint participation_zone;  
+  bool has_zone_virtuelle_jeu;
+  uint zone_virtuelle_jeu_id;
 
   constructor() ERC721("LAGOON", "LAG") {
 

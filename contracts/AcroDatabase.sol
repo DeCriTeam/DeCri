@@ -5,7 +5,7 @@ contract AcroDatabase {
 
    // TODO: Affiner et optimiser les types de données ci dessous
    // TODO: Arbitrer la manière dont on empile l'historique de l'état d'une zone
-   struct Zone {
+   struct ZoneRelle {
       // TODO: Identifiant de la zone ? Index dans le tableau ?
       uint date_prise_photo;
       string fichier;
@@ -17,19 +17,30 @@ contract AcroDatabase {
       uint nb_especes_coraux;
       uint etat;
 
-      address acteur;
+      address acteur;	// Acteur qui a référencé la zone (pour statistiques)
+			// Pour connaitre l'individu qui a adpoté une part de la zone, il faut regarder l'affectation via son NFT "Lag"
    }
 
-   // Les données associées au jeu sont mémorisées dans le NFT
-   // Pour connaitre la liste des terrains d'un joueur, il suffit de consulter les NFT dans son wallet
-   // Définition d'un joueur, c'est quelqu'un qui possède au moins un NFT dans son wallet
 
-   Zone[] zones;
-   mapping(address => bool) acteurs;
+   struct ItemJeu {
+      uint8 x;
+      uint8 y;
+      uint8 type_item;
+   }
+
+   struct ZoneVirtuelleJeu {
+      ItemJeu[] items_jeu;
+      // Pour connaitre l'individu qui possède cette zone virtuelle, il faut regarder l'affectation via son NFT "Lag"
+   }    
+
+   ZoneRelle[] zones_reelles;
+   ZoneVirtuelleJeu[] zones_virtuelles_jeu;
+
+   mapping(address => bool) whitelist_acteurs;
+   mapping(address => bool) blacklist_acteurs;
 
    // TODO:
    // Mécanisme de vote avec proposals sous forme de texte
    // Mécanisme de vote permettant l'acceptation d'un nouvel acteur
-   // Révocation d'un acteur existant ? table de blacklist ?
 }
 
