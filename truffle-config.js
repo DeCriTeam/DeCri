@@ -1,4 +1,5 @@
 const path = require("path");
+const HDWalletProvider = require("@truffle/hdwallet-provider");
 
 module.exports = {
   // See <http://truffleframework.com/docs/advanced/configuration>
@@ -7,6 +8,10 @@ module.exports = {
   networks: {
     develop: {
       port: 8545
+    },
+    ropsten2: {
+      provider: function() { return new HDWalletProvider(`${process.env.MNEMONIC}`, `${process.env.INFURA_URL}`) },
+      network_id: 3
     }
   },
   compilers: {
