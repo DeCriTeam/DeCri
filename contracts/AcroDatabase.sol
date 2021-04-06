@@ -12,6 +12,7 @@ contract AcroDatabase {
       uint latitude;
       uint longitude;
       uint profondeur;
+      uint pourcentage_vivant;
       uint taille;
       uint espece;
       uint nb_especes_coraux;
