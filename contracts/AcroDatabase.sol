@@ -15,7 +15,7 @@ contract AcroDatabase {
       uint pourcentage_vivant;
       uint taille;
       uint espece;
-      uint nb_especes_coraux;
+      uint coral_species;
       uint state;		// Faire un enum. Une zone peut aussi avoir un état "n'existe plus"
 
       address acteur;	// Acteur qui a référencé la zone (pour statistiques)
