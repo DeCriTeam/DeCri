@@ -2,8 +2,11 @@
 pragma solidity ^0.8.0;
 
 contract AcroActors {
+   // A voir: un seul tableau: Quand on blacklist on supprime l'entrée (ou mise à false)
    mapping(address => bool) actors_whitelist;
    mapping(address => bool) actors_blacklist;
+
+   address[] actors;
 
    // TODO:
    // Mécanisme de vote avec proposals sous forme de texte
