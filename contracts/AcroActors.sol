@@ -6,6 +6,17 @@ contract AcroActors {
    mapping(address => bool) actors_whitelist;
    mapping(address => bool) actors_blacklist;
 
+   struct ActorsInfo {
+      address actorsWallet;
+      string organisationName;
+      string country;
+      uint latCenter;
+      uint longCenter;
+      string email;
+      uint nbMintedArea;
+      uint yearOfCreation;
+   }
+
    address[] actors;
 
    // TODO:
