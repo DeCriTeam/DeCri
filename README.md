@@ -9,7 +9,8 @@
 
 ## Links
 
-* [Presentation]https://docs.google.com/presentation/d/1Hxhd25u1_e6L1vMgsCxNFhaGa1qNxPxr8uHhT3BZyAg/edit?ts=6070168b#slide=id.gce4a5e4cc1_0_95
+* [Presentation] https://docs.google.com/presentation/d/1yiRUaE0X9yLE9HL7eQ68k8uhFjp5NLcDxX5vnXmV47E/edit#slide=id.gcf207230ce_0_0
+https://docs.google.com/presentation/d/1Hxhd25u1_e6L1vMgsCxNFhaGa1qNxPxr8uHhT3BZyAg/edit?ts=6070168b#slide=id.gce4a5e4cc1_0_95
 * [Wireframes](to do)
 * [Github](https://github.com/DeCriTeam/DeCri.git)
 * [DaPP Heroku](To do)
