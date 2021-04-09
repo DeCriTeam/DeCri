@@ -4,6 +4,7 @@ pragma solidity 0.8.0;
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 
 contract Lagoon is ERC1155 {
+/*
    struct RealZone {
       uint photo_date;	// Change data type ?
       string jpeg_file; //link toward image
@@ -30,18 +31,18 @@ contract Lagoon is ERC1155 {
    }
 
    RealZone real_zone;
-   VirtuaZone virtual_zone;
+   VirtualZone virtual_zone;
+*/
 
-
-   constructor() ERC1155("https://ipfs.io/")   //("LAGOON", "LAG") {
+   constructor() ERC1155("https://ipfs.io/xxxx") {   //("LAGOON", "LAG")
       
    }      
 
-   function merge_token(uint token_id) {
+   function merge_token(uint token_id) external {
      // TODO
    } 
 
-   function lock(uint token_id,uint amount) {
+   function lock(uint token_id,uint amount) external {
       // TODO
    }
 
@@ -49,11 +50,11 @@ contract Lagoon is ERC1155 {
       // TODO
    }
 
-   function buy_virtual_item(uint token_id,uint item_type_id) payable {
+   function buy_virtual_item(uint token_id,uint item_type_id) external payable {
       // TODO
    }
 
-   function add_virtual_item(uint token_id, uint item_id, uint8 x, uint8 y) {
+   function add_virtual_item(uint token_id, uint item_id, uint8 x, uint8 y) external {
       // TODO
    }
 }

@@ -6,12 +6,33 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 contract Acro is ERC20 {
     constructor(uint256 initialSupply) ERC20("Acropora Token", "ACRO") {
-        _mint(msg.sender, initialSupply);
+        _mint(/* msg.sender */ address(this), 10000000000000000000000 /* initialSupply*/ );
     }
     
-    function tmp_buy_accro(uint amount) external payable {
-       require(msg.value == amount*2);
-       _mint(msg.sender, amount);		// A voir: se servir dans le initial supply
+    function tmp_buy_acro() external payable {
+       require(msg.value>0);
+       // _mint(msg.sender, msg.value*20);
+       _transfer( address(this), msg.sender, msg.value*20);		// TODO: Handle Error
+    }
+
+    function get_ether_balance_of_this_contract() external view returns (uint) {
+       return address(this).balance;
+    }
+
+    function get_acro_balance_of_this_contract() external view returns (uint) {
+       return balanceOf(address(this));
+    }
+
+    function get_ether_balance_of_sender() external view returns (uint) {
+       return msg.sender.balance;
+    }
+
+    function get_acro_balance_of_sender() external view returns (uint) {
+       return balanceOf(msg.sender);
+    }
+
+    function withdraw_ether() /* onlyOwner */ external {
+       // TODO
     }
 }
 

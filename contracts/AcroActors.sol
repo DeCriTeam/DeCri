@@ -7,6 +7,7 @@ contract AcroActors {
    // mapping(address => bool) actors_whitelist;
    // mapping(address => bool) actors_blacklist;
 
+/*
    struct Actor {
       uint id; //!!to be added below & !!to be regrouped by var.cat. for optim
       bool isRegistered;
@@ -38,21 +39,20 @@ contract AcroActors {
 
    //NOT FINISHED: adding new actors
    function add_new_actor(address _address,
-                          string _actorName,
-                          string _country,
+                          string memory _actorName,
+                          string memory _country,
                           uint _latCenter,
                           uint _longCenter,
                           uint _yearOfCreation,
-                          string _email, //type to be checked
-                          string _actorType
+                          string memory _email, //type to be checked
+                          string memory _actorType
                           
                           ) public {
-      require(!RegisteredActors[_address].isRegistered != true,"This address is already registered";
+      require(!RegisteredActors[_address].isRegistered != true,"This address is already registered");
       RegisteredActors[actorCount] = Actor(actorCount,true,false,0,0,date, _actorName, _country,_latCenter, _longCenter,  _yearOfCreation,_email,_actorType); //DATE A VOIR
       actors.push(_address);
       actorCount++;
       emit ActorRegistered(_address);
-
    }
 
    //To get actors informations: 
@@ -108,7 +108,7 @@ contract AcroActors {
    //TO DO: can only vote once for an actor
    //TO DO: vote for multiple actors at once
    function votingForActor (uint actor_id) external 
-   {
+   { 
       require(RegisteredActors[msg.sender].isRegistered == true);
       require(actor_id >=0 && actor_id <= actorCount-1);
       RegisteredActors[_address].voteCount++; //actor_id?
@@ -142,5 +142,6 @@ contract AcroActors {
       require(actors_whitelist[msg.sender]==true);
       // Si le nb de requests > seuil -> ajout à la blacklist
    }
+*/
 }
 
