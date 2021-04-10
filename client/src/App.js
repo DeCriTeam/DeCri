@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
@@ -14,15 +14,13 @@ import Jeu from './Jeu';
 import Dons from './Dons';
 import Data from './Data';
 
-class App extends Component {
-  state = { 
-    web3:null,
-    account:null,
-    acro_contract:null,
-  };
+const App = () => {
 
-  componentDidMount = async () => {
-/*
+  const [web3, setWeb3] = useState(null);
+  const [account, setAccount] = useState(null);
+  const [acro_contract, setAcroContract] = useState(null);
+
+  async function init() {
      try 
      {
        const web3 = await getWeb3();
@@ -31,28 +29,31 @@ class App extends Component {
        const networkId = await web3.eth.net.getId();
        const deployedNetwork = AcroContract.networks[networkId];
 
-       this.setState({ 
-         web3,
-         account: accounts[0],
-         acro_contract: new web3.eth.Contract(AcroContract.abi, deployedNetwork && deployedNetwork.address) 
-       });
+       setAccount(accounts[0]);
+       setAcroContract(new web3.eth.Contract(AcroContract.abi, deployedNetwork && deployedNetwork.address)); 
+       setWeb3(web3);
      }
      catch (error)
      {
        alert(`Failed to load web3, accounts, or contract. Check console for details.`);
        console.error(error);
      }
-*/
   };
 
-  render() {
-  //  if (!this.state.web3) {
-  //    return <div>Loading Web3, accounts, and contract...</div>;
-  //  }
-    return (
+  window.ethereum.on("accountsChanged", async function () {
+     const accounts = await window.ethereum.enable();
+     setAccount(accounts[0]);
+  });
+
+  useEffect(() => { init(); }, []);
+
+  if (!web3) {
+    return <div>Loading Web3, accounts, and contract...</div>;
+  }
+  return (
      <BrowserRouter>
        <div className="App">
-         <Web3Context.Provider value={( this.state.account, this.state.acro_contract )}>
+         <Web3Context.Provider value={{ web3, account, acro_contract }}>
            <Navbar bg="light" expand="lg">
              <Navbar.Brand href="/">
                <img src='/logo.png' width='30' height='30' className="d-inline-block align-top" style={{ marginRight:10 +'px'}} alt="Decri logo" />
@@ -67,7 +68,7 @@ class App extends Component {
                  <Nav.Link href='/data'>Inventaire</Nav.Link>
                </Nav>
                <Nav> 
-                 <Nav.Link href='#'>{ this.state.account }</Nav.Link>
+                 <Nav.Link href='#'>{ account }</Nav.Link>
                </Nav>
              </Navbar.Collapse>
            </Navbar>
@@ -80,8 +81,7 @@ class App extends Component {
          </Web3Context.Provider>
        </div>
      </BrowserRouter>
-    );
-  }
+  );
 }
 
 export default App;
