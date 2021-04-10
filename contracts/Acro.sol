@@ -3,8 +3,9 @@
 pragma solidity 0.8.0;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract Acro is ERC20 {
+contract Acro is ERC20, Ownable {
     constructor(uint256 initialSupply) ERC20("Acropora Token", "ACRO") {
         _mint(/* msg.sender */ address(this), 10000000000000000000000 /* initialSupply*/ );
     }
@@ -23,6 +24,7 @@ contract Acro is ERC20 {
        return balanceOf(address(this));
     }
 
+   // Does not work on Ganache: wrong user eth balance value
     function get_ether_balance_of_sender() external view returns (uint) {
        return msg.sender.balance;
     }
@@ -35,8 +37,9 @@ contract Acro is ERC20 {
        transfer(address(this), amount); 
     }
 
-    function withdraw_ether() /* onlyOwner */ external {
-       // TODO
+    function withdraw_ether(uint amount) external payable onlyOwner {
+      require(address(this).balance >= amount);
+      msg.sender.transfer(amount);   
     }
 }
 
