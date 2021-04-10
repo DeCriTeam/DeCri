@@ -85,6 +85,28 @@ class Dons extends Component {
      }
   };
 
+  on_btn_test_signature_click = async () => {
+     const { web3, account, acro_contract } = this.state;
+     try
+     {
+        var signature = await web3.eth.personal.sign("Hello !", account);
+        alert(signature);
+        console.log(signature);
+
+        // Verification de la signature:
+        const signer = await web3.eth.personal.ecRecover("Hello !", signature);
+        console.log(signer);
+
+        const signer2 = await web3.eth.accounts.recover("Hello !", signature);
+        console.log(signer2);
+     }
+     catch (error)
+     {
+         alert('Transaction failed.');
+         console.error(error);
+     }
+  };
+
   render() {
     if (!this.state.web3) {
       return <div>Loading Web3, accounts, and contract...</div>;
@@ -96,6 +118,8 @@ class Dons extends Component {
         <button onClick={this.on_btn_buy_acro_click}>Buy Acro (0.1 ether for 2 Acros)</button>
         <br />
         <button onClick={this.on_btn_acro_donation_click}>Donate 3 Acros to Decri</button>
+        <br />
+        <button onClick={this.on_btn_test_signature_click}>Test signature</button>
         <br />
 	User Address: { this.state.account }<br />
 
