@@ -31,6 +31,10 @@ contract Acro is ERC20 {
        return balanceOf(msg.sender);
     }
 
+    function acro_donation(uint amount) external {
+       transfer(address(this), amount); 
+    }
+
     function withdraw_ether() /* onlyOwner */ external {
        // TODO
     }
