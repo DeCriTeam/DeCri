@@ -6,22 +6,21 @@ function Dons() {
   const {
     web3,
     account,
-    acro_contract
+    acro_contract,
+    database_contract,
+    lagoon_contract
   } = web3Context;
 
-  const [contract_acro, setContractAcro] = useState("");
-  const [user_acro, setUserAcro] = useState("");
-  const [contract_ether, setContractEther] = useState("");
-  const [user_ether, setUserEther] = useState("");
+  const [contract_acro_balance, setContractAcroBalance] = useState("");
+  const [user_acro_balance, setUserAcroBalance] = useState("");
+  const [contract_ether_balance, setContractEtherBalance] = useState("");
+  const [user_ether_balance, setUserEtherBalance] = useState("");
 
-  // refresh_contract_variables = async () => {
   async function refresh_contract_variables() {
-     setContractEther(await acro_contract.methods.get_ether_balance_of_this_contract().call());
-     setContractAcro(await acro_contract.methods.get_acro_balance_of_this_contract().call());
-     setUserEther(await acro_contract.methods.get_ether_balance_of_sender().call({ from: account }));
-     setUserAcro(await acro_contract.methods.get_acro_balance_of_sender().call({ from: account }));
-     // await web3.eth.getBalance(account),
-     // await acro_contract.methods.balanceOf(account).call()
+     setContractEtherBalance(await acro_contract.methods.get_ether_balance_of_this_contract().call());
+     setContractAcroBalance(await acro_contract.methods.get_acro_balance_of_this_contract().call());
+     setUserEtherBalance(await acro_contract.methods.get_ether_balance_of_sender().call({ from: account }));
+     setUserAcroBalance(await acro_contract.methods.get_acro_balance_of_sender().call({ from: account }));
   };
 
   useEffect(() => { refresh_contract_variables(); }, []);
@@ -52,27 +51,6 @@ function Dons() {
      }
   };
 
-  async function on_btn_test_signature_click() {
-     try
-     {
-        var signature = await web3.eth.personal.sign("Hello !", account);
-        alert(signature);
-        console.log(signature);
-
-        // Verification de la signature:
-        const signer = await web3.eth.personal.ecRecover("Hello !", signature);
-        console.log(signer);
-
-        const signer2 = await web3.eth.accounts.recover("Hello !", signature);
-        console.log(signer2);
-     }
-     catch (error)
-     {
-         alert('Transaction failed.');
-         console.error(error);
-     }
-  };
-
   return (
       <>
         <h1>Dons</h1>
@@ -80,14 +58,10 @@ function Dons() {
         <br />
         <button onClick={on_btn_acro_donation_click}>Donate 3 Acros to Decri</button>
         <br />
-        <button onClick={on_btn_test_signature_click}>Test signature</button>
-        <br />
-        Ether contrat: {  web3.utils.fromWei( contract_ether.toString(), 'ether') }<br />
-        Acro contrat: {  web3.utils.fromWei(contract_acro.toString(), 'ether') }<br />
-        Ether user: { web3.utils.fromWei(user_ether.toString(), 'ether') }<br />
-        Acro user: {  web3.utils.fromWei(user_acro.toString(),'ether') }<br />
-        <br />
-        User Address: { account }<br />
+        Ether contrat: {  web3.utils.fromWei( contract_ether_balance.toString(), 'ether') }<br />
+        Acro contrat: {  web3.utils.fromWei(contract_acro_balance.toString(), 'ether') }<br />
+        Ether user: { web3.utils.fromWei(user_ether_balance.toString(), 'ether') }<br />
+        Acro user: {  web3.utils.fromWei(user_acro_balance.toString(),'ether') }<br />
       </>
   );
 }

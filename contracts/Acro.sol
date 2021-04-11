@@ -4,12 +4,8 @@ pragma solidity 0.8.0;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/math/SafeMath.sol";
 
 contract Acro is ERC20, Ownable {
-   
-   using SafeMath for uint;
-
     constructor(uint256 initialSupply) ERC20("Acropora Token", "ACRO") {
         _mint(/* msg.sender */ address(this), 10000000000000000000000 /* initialSupply*/ );
     }
@@ -24,7 +20,6 @@ contract Acro is ERC20, Ownable {
        // _mint(msg.sender, msg.value*20);
        _transfer( address(this), msg.sender, msg.value*20);		// TODO: Handle Error
        emit buyingAcro(msg.sender, msg.value);
-
     }
 
     function get_ether_balance_of_this_contract() external view returns (uint) {
@@ -51,7 +46,7 @@ contract Acro is ERC20, Ownable {
 
     function withdraw_ether(uint256 amount) external payable onlyOwner {
       require(address(this).balance >= amount, "account balance is too low");
-      msg.sender.transfer(amount);
+      payable(msg.sender).transfer(amount);
       emit withdrawal(msg.sender, amount);
     }
 

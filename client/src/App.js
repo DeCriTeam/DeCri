@@ -2,23 +2,30 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
+import Container from "react-bootstrap/Container";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import Web3Context from "./Web3context";
 
 import AcroContract from "./contracts/Acro.json";
+import DatabaseContract from "./contracts/AcroDatabase.json";
+import LagoonContract from "./contracts/Lagoon.json";
+
 import getWeb3 from "./getWeb3";
 
 import Home from './Home';
 import Jeu from './Jeu';
 import Dons from './Dons';
 import Data from './Data';
+import AddData from './AddData';
 
 const App = () => {
 
   const [web3, setWeb3] = useState(null);
   const [account, setAccount] = useState(null);
   const [acro_contract, setAcroContract] = useState(null);
+  const [database_contract, setDatabaseContract] = useState(null);
+  const [lagoon_contract, setLagoonContract] = useState(null);
 
   async function init() {
      try 
@@ -27,10 +34,16 @@ const App = () => {
        const accounts = await web3.eth.getAccounts();
 
        const networkId = await web3.eth.net.getId();
-       const deployedNetwork = AcroContract.networks[networkId];
 
        setAccount(accounts[0]);
+       var deployedNetwork = AcroContract.networks[networkId];
        setAcroContract(new web3.eth.Contract(AcroContract.abi, deployedNetwork && deployedNetwork.address)); 
+
+       deployedNetwork = DatabaseContract.networks[networkId];
+       setDatabaseContract(new web3.eth.Contract(DatabaseContract.abi, deployedNetwork && deployedNetwork.address)); 
+
+       deployedNetwork = LagoonContract.networks[networkId];
+       setLagoonContract(new web3.eth.Contract(LagoonContract.abi, deployedNetwork && deployedNetwork.address)); 
        setWeb3(web3);
      }
      catch (error)
@@ -53,7 +66,7 @@ const App = () => {
   return (
      <BrowserRouter>
        <div className="App">
-         <Web3Context.Provider value={{ web3, account, acro_contract }}>
+         <Web3Context.Provider value={{ web3, account, acro_contract, database_contract, lagoon_contract }}>
            <Navbar bg="light" expand="lg">
              <Navbar.Brand href="/">
                <img src='/logo.png' width='30' height='30' className="d-inline-block align-top" style={{ marginRight:10 +'px'}} alt="Decri logo" />
@@ -72,12 +85,15 @@ const App = () => {
                </Nav>
              </Navbar.Collapse>
            </Navbar>
-           <Switch>
-             <Route path='/' exact component={Home} />
-             <Route path='/jeu' component={Jeu} />
-             <Route path='/dons' component={Dons} />
-             <Route path='/data' component={Data} />
-           </Switch>
+           <Container>
+             <Switch>
+               <Route path='/' exact component={Home} />
+               <Route path='/jeu' component={Jeu} />
+               <Route path='/dons' component={Dons} />
+               <Route path='/data' component={Data} />
+               <Route path='/add_data' component={AddData} />
+             </Switch>
+           </Container>
          </Web3Context.Provider>
        </div>
      </BrowserRouter>
