@@ -73,11 +73,11 @@ contract AcroActors {
       string[] memory actorTypes = new string[](actorCount);
 
       uint[] memory voteCounts = new uint[](actorCount);
-      uint[] memory latCenters = new uint[](actorCount);
-      uint[] memory longCenters = new uint[](actorCount);
-      uint[] memory yearsOfCreation = new uint[](actorCount);
-      uint[] memory nbMintedAreas = new uint[](actorCount);
-      bool[] memory isValidateds = new uint[](actorCount);
+      uint[] memory latCenters = new uint[](latCenter);
+      uint[] memory longCenters = new uint[](longCenter);
+      uint[] memory yearsOfCreation = new uint[](yearOfCreation);
+      uint[] memory nbMintedAreas = new uint[](nbMintedArea);
+      bool[] memory isValidateds = new uint[](isValidated);
 
 
       for(uint i = 0; i < actorCount; i++) {
