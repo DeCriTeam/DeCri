@@ -5,7 +5,14 @@ pragma solidity 0.8.0;
 contract AcroActors {
    // A voir: un seul tableau: Quand on blacklist on supprime l'entrée (ou mise à false)
    mapping(address => bool) public actors_whitelist;
+   mapping(address => uint) public actors_score_whitelist;
+   mapping(address => mapping(address => bool)) public already_vote;
+
    // mapping(address => bool) actors_blacklist;
+
+   function is_actor(address addr) external view returns (bool) {
+     return actors_whitelist[addr];
+   }
 
    constructor() {
      actors_whitelist[msg.sender] = true;
