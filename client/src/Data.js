@@ -1,8 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import CardDeck from "react-bootstrap/CardDeck";
 import Card from 'react-bootstrap/Card';
 import Web3Context from "./Web3context";
@@ -10,10 +7,6 @@ import Web3Context from "./Web3context";
 function Data() {
   const web3Context = useContext(Web3Context);
   const {
-    web3,
-    account,
-    acro_contract,
-    database_contract,
     lagoon_contract
   } = web3Context;
 
@@ -27,7 +20,8 @@ function Data() {
        for (var i=0;i<token_count;i++) {
          var url_json = await lagoon_contract.methods.uri(i+1).call();
          let response = await fetch(url_json);
-         let responseJson = await response.json();
+         var responseJson = await response.json();
+         responseJson.url_json = url_json;
          _items.push(responseJson);
        }
        setItems(_items);
@@ -57,6 +51,7 @@ function Data() {
                 <Card.Title>{item.name}</Card.Title>
                 <Card.Text>{item.description}</Card.Text>
                 <Button variant="primary">Transférer</Button>
+                <a href={item.url_json} target="_blank" rel="noopener noreferrer">Metadatas</a>
               </Card.Body>
             </Card>
           )

@@ -7,8 +7,6 @@ function Dons() {
     web3,
     account,
     acro_contract,
-    database_contract,
-    lagoon_contract
   } = web3Context;
 
   const [contract_acro_balance, setContractAcroBalance] = useState("");
@@ -16,20 +14,22 @@ function Dons() {
   const [contract_ether_balance, setContractEtherBalance] = useState("");
   const [user_ether_balance, setUserEtherBalance] = useState("");
 
-  async function refresh_contract_variables() {
+  async function refresh() {
+     console.log("refresh");
      setContractEtherBalance(await acro_contract.methods.get_ether_balance_of_this_contract().call());
      setContractAcroBalance(await acro_contract.methods.get_acro_balance_of_this_contract().call());
      setUserEtherBalance(await acro_contract.methods.get_ether_balance_of_sender().call({ from: account }));
      setUserAcroBalance(await acro_contract.methods.get_acro_balance_of_sender().call({ from: account }));
   };
 
-  useEffect(() => { refresh_contract_variables(); }, []);
+  useEffect(() => { refresh(); }, []);
+  // refresh();
 	
   async function on_btn_buy_acro_click() {
      try
      {
         await acro_contract.methods.tmp_buy_acro().send({ from: account, value:web3.utils.toWei('0.1', "ether") });
-        await refresh_contract_variables();
+        await refresh();
      }
      catch (error)
      {
@@ -42,7 +42,7 @@ function Dons() {
      try
      {
         await acro_contract.methods.acro_donation(web3.utils.toWei('3','ether')).send({ from: account });
-        await refresh_contract_variables();
+        await refresh();
      }
      catch (error)
      {

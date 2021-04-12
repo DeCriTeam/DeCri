@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
@@ -9,15 +9,19 @@ import IPFS from "ipfs-api"; // const IPFS = require('ipfs-api');
 function AddData() {
   const web3Context = useContext(Web3Context);
   const {
-    web3,
     account,
-    acro_contract,
-    database_contract,
     lagoon_contract
   } = web3Context;
 
   const [upload_file_buffer, setUploadFileBuffer] = useState(null);
   const [disabled, setDisabled] = useState(false);
+  const [ form, setForm ] = useState({})
+  const setField = (field, value) => {
+    setForm({
+      ...form,
+      [field]: value
+    })
+  }
 
   async function on_file_change(event) {
     const file = event.target.files[0]
@@ -31,6 +35,7 @@ function AddData() {
      setDisabled(true);
      try
      {
+        const { latitude, longitude, profondeur, etat } = form
         const ipfs = new IPFS({host: 'ipfs.infura.io', port: 5001, protocol: 'https' });
 
         var url_image = "";
@@ -39,7 +44,6 @@ function AddData() {
           var ret_ipfs = await ipfs.add(upload_file_buffer);
           var hash_ipfs = ret_ipfs[0].hash;
           url_image = "https://ipfs.io/ipfs/" + hash_ipfs;
-          console.log(url_image);
         }
 
         var metadatas = {
@@ -47,10 +51,10 @@ function AddData() {
           description: "Lagoon",
           image: url_image,
           properties: {
-            latitude: "1.12121212",
-            longitude: "5.2323232323",
-            profondeur: "100",
-            etat: "OK"
+            latitude: latitude,
+            longitude: longitude,
+            profondeur: profondeur,
+            etat: etat
           }
         };
         var buffer_metadatas = Buffer.from(JSON.stringify(metadatas), 'utf8');
@@ -72,28 +76,28 @@ function AddData() {
       <>
         <h2>Déclarer une nouvelle zone</h2>
         <Form>
-            <Form.Group as={Row} controlId="form.latitude">
+            <Form.Group as={Row}>
                 <Form.Label column sm={2}>Latitude</Form.Label>
                 <Col sm={10}>
-                    <Form.Control type="text" disabled={disabled} />
+                    <Form.Control type="text" disabled={disabled} onChange={ e => setField('latitude', e.target.value) } />
                 </Col>
             </Form.Group>
-            <Form.Group as={Row} controlId="form.longitude">
+            <Form.Group as={Row}>
                 <Form.Label column sm={2}>Longitude</Form.Label>
                 <Col sm={10}>
-                    <Form.Control type="text" disabled={disabled} />
+                    <Form.Control type="text" disabled={disabled} onChange={ e => setField('longitude', e.target.value) } />
                 </Col>
             </Form.Group>
-            <Form.Group as={Row} controlId="form.profondeur">
+            <Form.Group as={Row}>
                 <Form.Label column sm={2}>Profondeur</Form.Label>
                 <Col sm={10}>
-                    <Form.Control type="text" disabled={disabled} />
+                    <Form.Control type="text" disabled={disabled} onChange={ e => setField('profondeur', e.target.value) } />
                 </Col>
             </Form.Group>
-            <Form.Group as={Row} controlId="form.etat">
+            <Form.Group as={Row}>
                 <Form.Label column sm={2}>Etat</Form.Label>
                 <Col sm={10}>
-                    <Form.Control as="select" disabled={disabled}>
+                    <Form.Control as="select" disabled={disabled} onChange={ e => setField('etat', e.target.value) }>
                         <option>OK</option>
                         <option>Bof</option>
                         <option>HS</option>
