@@ -8,7 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Web3Context from "./Web3context";
 
 import AcroContract from "./contracts/Acro.json";
-import DatabaseContract from "./contracts/AcroActors.json";
+import ActorsContract from "./contracts/AcroActors.json";
 import LagoonContract from "./contracts/Lagoon.json";
 
 import getWeb3 from "./getWeb3";
@@ -25,27 +25,34 @@ const App = () => {
   const [web3, setWeb3] = useState(null);
   const [account, setAccount] = useState(null);
   const [acro_contract, setAcroContract] = useState(null);
-  const [database_contract, setDatabaseContract] = useState(null);
+  const [actors_contract, setActorsContract] = useState(null);
   const [lagoon_contract, setLagoonContract] = useState(null);
+  const [is_actor, setIsActor] = useState(null);
 
   async function init() {
      try 
      {
+	     console.log("init");
        const web3 = await getWeb3();
        const accounts = await web3.eth.getAccounts();
 
        const networkId = await web3.eth.net.getId();
 
        setAccount(accounts[0]);
-       var deployedNetwork = AcroContract.networks[networkId];
-       setAcroContract(new web3.eth.Contract(AcroContract.abi, deployedNetwork && deployedNetwork.address)); 
 
-       deployedNetwork = DatabaseContract.networks[networkId];
-       setDatabaseContract(new web3.eth.Contract(DatabaseContract.abi, deployedNetwork && deployedNetwork.address)); 
+       var deployedNetwork = AcroContract.networks[networkId];
+       setAcroContract(new web3.eth.Contract(AcroContract.abi, deployedNetwork && deployedNetwork.address));
+
+       deployedNetwork = ActorsContract.networks[networkId];
+       let _actors_contract = new web3.eth.Contract(ActorsContract.abi, deployedNetwork && deployedNetwork.address);
+       setActorsContract(_actors_contract);
 
        deployedNetwork = LagoonContract.networks[networkId];
-       setLagoonContract(new web3.eth.Contract(LagoonContract.abi, deployedNetwork && deployedNetwork.address)); 
+       setLagoonContract(new web3.eth.Contract(LagoonContract.abi, deployedNetwork && deployedNetwork.address));
+
        setWeb3(web3);
+
+       setIsActor(await _actors_contract.methods.is_actor(accounts[0]).call());
      }
      catch (error)
      {
@@ -55,8 +62,7 @@ const App = () => {
   };
 
   window.ethereum.on("accountsChanged", async function () {
-     const accounts = await window.ethereum.enable();
-     setAccount(accounts[0]);
+     window.location = window.location.href;
   });
 
   useEffect(() => { init(); }, []);
@@ -64,10 +70,11 @@ const App = () => {
   if (!web3) {
     return <div>Loading Web3, accounts, and contract...</div>;
   }
+
   return (
      <BrowserRouter>
        <div className="App">
-         <Web3Context.Provider value={{ web3, account, acro_contract, database_contract, lagoon_contract }}>
+         <Web3Context.Provider value={{ web3, account, acro_contract, actors_contract, lagoon_contract }}>
            <Navbar bg="light" expand="lg">
              <Navbar.Brand href="/">
                <img src='/logo.png' width='30' height='30' className="d-inline-block align-top" style={{ marginRight:10 +'px'}} alt="Decri logo" />
@@ -83,7 +90,7 @@ const App = () => {
                  <Nav.Link href='/data/all'>Datas</Nav.Link>
                </Nav>
                <Nav> 
-                 <Nav.Link href='#'>{ account }</Nav.Link>
+                 <Nav.Link href='#'>{ account } { is_actor?("[A]"):("") }</Nav.Link>
                </Nav>
              </Navbar.Collapse>
            </Navbar>

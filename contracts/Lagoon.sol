@@ -25,6 +25,11 @@ contract Lagoon is ERC1155 {
    mapping (uint256 => string) private _tokenURIs;
    mapping (uint256 => GameItem[]) public game_items;
 
+   modifier onlyActor() {
+     require (actors_contract.is_actor(msg.sender)==true,"Not verified Actor");
+     _;
+   }
+
    constructor(address acro_contract_address, address actors_contract_address) ERC1155("") {
      acro_contract = Acro(acro_contract_address);
      actors_contract = AcroActors(actors_contract_address);
@@ -34,17 +39,17 @@ contract Lagoon is ERC1155 {
       return _tokenURIs[token_id];
    }
 
-   function new_real_zone(string memory metadatas_url) external {
-      // TODO: only actors
+   function new_real_zone(string memory metadatas_url) external onlyActor {
       _tokenIds.increment();
-      _mint( address(this), _tokenIds.current(), 100, "");
+      // _mint( address(this), _tokenIds.current(), 100, "");
+      _mint( msg.sender, _tokenIds.current(), 100, "");
       _tokenURIs[_tokenIds.current()] = metadatas_url;
       lagoon_types[_tokenIds.current()] = LagoonType.REAL;
    }
 
-   function update_real_zone(uint token_id, string memory metadatas_url) external {
-      // TODO: only actors
-      _tokenURIs[_tokenIds.current()] = metadatas_url;
+   function update_real_zone(uint token_id, string memory metadatas_url) external onlyActor {
+      require(lagoon_types[token_id]!=LagoonType.VIRTUAL,"only applies to real");
+      _tokenURIs[token_id] = metadatas_url;
    }
 
    function new_virtual_zone() external {

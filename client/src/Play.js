@@ -27,8 +27,6 @@ function Play() {
   async function on_btn_test_click() {
      try
      {
-        console.log('Lag: ');
-	     console.log(lagoon_contract._address);
         await acro_contract.methods.approve(lagoon_contract._address, '100000000000000000').send({ from: account });
 	await lagoon_contract.methods.buy_and_put_game_item(token_id, 0, 0, 0).send({ from: account });
         await refresh();
@@ -40,6 +38,7 @@ function Play() {
      }
   };
 
+  useEffect(() => { refresh(); }, []);
 
   useEffect(() => {
     const script = document.createElement('script');

@@ -17,7 +17,6 @@ function Dons() {
   const [user_acro_staking_balance, setUserAcroStakingBalance] = useState("");
 
   async function refresh() {
-     console.log("refresh");
      setContractEtherBalance(await acro_contract.methods.get_ether_balance_of_this_contract().call());
      setContractAcroBalance(await acro_contract.methods.get_acro_balance_of_this_contract().call());
      setUserEtherBalance(await acro_contract.methods.get_ether_balance_of_sender().call({ from: account }));
@@ -26,7 +25,6 @@ function Dons() {
   };
 
   useEffect(() => { refresh(); }, []);
-  // refresh();
 	
   async function on_btn_buy_acro_click() {
      try
@@ -95,7 +93,11 @@ function Dons() {
         Acro contrat: {  web3.utils.fromWei(contract_acro_balance.toString(), 'ether') }<br />
         Ether user: { web3.utils.fromWei(user_ether_balance.toString(), 'ether') }<br />
         Acro user: {  web3.utils.fromWei(user_acro_balance.toString(),'ether') }<br />
+      </>
+  );
+}
 
+/*
         <h1> Stake your Acro </h1><img src= {accrologo} height="54" alt="" /> <br />
         Staking balance: {  web3.utils.fromWei(user_acro_staking_balance.toString(), 'ether') }<br />
         <input id="number" type="number" value="10"></input>
@@ -103,9 +105,6 @@ function Dons() {
         <button onClick={on_btn_acro_stake}> Stake your accro ! </button><br />
         <br />
         <button onClick={on_btn_acro_unstake}> Unstake...</button>
-       
-      </>
-  );
-}
+*/
 
 export default Dons;
