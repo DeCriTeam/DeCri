@@ -4,8 +4,12 @@ pragma solidity 0.8.0;
 
 contract AcroActors {
    // A voir: un seul tableau: Quand on blacklist on supprime l'entrée (ou mise à false)
-   // mapping(address => bool) actors_whitelist;
+   mapping(address => bool) public actors_whitelist;
    // mapping(address => bool) actors_blacklist;
+
+   constructor() {
+     actors_whitelist[msg.sender] = true;
+   } 
 
 /*
    struct Actor {

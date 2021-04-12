@@ -13,12 +13,15 @@ contract Lagoon is ERC1155 {
       uint8 item_type;
    }
 
+   enum LagoonType { VIRTUAL, REAL, BOTH }
+
    Acro acro_contract;
    AcroActors actors_contract;
 
    using Counters for Counters.Counter;
    Counters.Counter private _tokenIds;
 
+   mapping (uint256 => LagoonType) public lagoon_types;
    mapping (uint256 => string) private _tokenURIs;
    mapping (uint256 => GameItem[]) public game_items;
 
@@ -34,18 +37,34 @@ contract Lagoon is ERC1155 {
    function new_real_zone(string memory metadatas_url) external {
       // TODO: only actors
       _tokenIds.increment();
-      _mint(msg.sender, _tokenIds.current(), 100, "");
+      _mint( address(this), _tokenIds.current(), 100, "");
       _tokenURIs[_tokenIds.current()] = metadatas_url;
+      lagoon_types[_tokenIds.current()] = LagoonType.REAL;
+   }
+
+   function update_real_zone(uint token_id, string memory metadatas_url) external {
+      // TODO: only actors
+      _tokenURIs[_tokenIds.current()] = metadatas_url;
+   }
+
+   function new_virtual_zone() external {
+      _tokenIds.increment();
+      _mint(msg.sender, _tokenIds.current(), 1, "");
+      lagoon_types[_tokenIds.current()] = LagoonType.VIRTUAL;
+   }
+
+   function merge_tokens(uint real_token_id, uint virtual_token_id) external {
+      // TODO: Paiement en Acro
+      require(lagoon_types[real_token_id]==LagoonType.REAL, "Not real lagoon");
+      require(balanceOf(address(this), real_token_id)>0 ,"No free real left");
+      require(lagoon_types[virtual_token_id]==LagoonType.VIRTUAL, "Not virtual lagoon");
+
+       // TODO: Destroy/Transfert
    }
 
    function get_tokens_count() external view returns (uint) {
       return _tokenIds.current();
    }
-
-   function merge_token(uint token1_id, uint token2_id) external {
-     // TODO Vérifier token1: pur virtuel ; token2: pur reel
-     // TODO
-   } 
 
    function buy_and_put_game_item(uint token_id, uint8 x, uint8 y,uint8 item_type) external {
      // Vérifier que ce token_id m'appartient bien
