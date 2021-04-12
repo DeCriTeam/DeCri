@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import Web3Context from "./Web3context";
+import accrologo from "./ACRO-vf.png";
 
 function Dons() {
   const web3Context = useContext(Web3Context);
@@ -13,6 +14,7 @@ function Dons() {
   const [user_acro_balance, setUserAcroBalance] = useState("");
   const [contract_ether_balance, setContractEtherBalance] = useState("");
   const [user_ether_balance, setUserEtherBalance] = useState("");
+  const [user_acro_staking_balance, setUserAcroStakingBalance] = useState("");
 
   async function refresh() {
      console.log("refresh");
@@ -20,6 +22,7 @@ function Dons() {
      setContractAcroBalance(await acro_contract.methods.get_acro_balance_of_this_contract().call());
      setUserEtherBalance(await acro_contract.methods.get_ether_balance_of_sender().call({ from: account }));
      setUserAcroBalance(await acro_contract.methods.get_acro_balance_of_sender().call({ from: account }));
+     setUserAcroStakingBalance(await acro_contract.methods.stakingBalance(account).call({from: account}));
   };
 
   useEffect(() => { refresh(); }, []);
@@ -51,6 +54,36 @@ function Dons() {
      }
   };
 
+  async function on_btn_acro_stake(amount) {
+     try
+     {
+      await acro_contract.contract.methods.approve(account, amount, {from: account});
+      await acro_contract.methods.stakeAcroTokens(amount).send( {from: account});
+      await refresh();
+     }
+     catch (error)
+     {
+        alert('Transaction failed');
+        console.error(error);
+     }
+  };
+
+  async function on_btn_acro_unstake() {
+      try
+      {
+      await acro_contract.methods.unstakeTokens({from: account});
+      await refresh();
+      }
+      catch (error)
+      {
+         alert('Transaction failed');
+         console.error(error);
+      }
+};
+
+
+  
+
   return (
       <>
         <h1>Dons</h1>
@@ -62,6 +95,15 @@ function Dons() {
         Acro contrat: {  web3.utils.fromWei(contract_acro_balance.toString(), 'ether') }<br />
         Ether user: { web3.utils.fromWei(user_ether_balance.toString(), 'ether') }<br />
         Acro user: {  web3.utils.fromWei(user_acro_balance.toString(),'ether') }<br />
+
+        <h1> Stake your Acro </h1><img src= {accrologo} height="54" alt="" /> <br />
+        Staking balance: {  web3.utils.fromWei(user_acro_staking_balance.toString(), 'ether') }<br />
+        <input id="number" type="number" value="10"></input>
+        
+        <button onClick={on_btn_acro_stake}> Stake your accro ! </button><br />
+        <br />
+        <button onClick={on_btn_acro_unstake}> Unstake...</button>
+       
       </>
   );
 }
