@@ -63,7 +63,7 @@ function AddData() {
         var metadatas_ipfs_url = "https://ipfs.io/ipfs/" + hash_ipfs_metadatas;
 
         await lagoon_contract.methods.new_real_zone(metadatas_ipfs_url).send({ from: account });
-        window.location = '/data';
+        window.location = '/data/all';
      }
      catch (error)
      {

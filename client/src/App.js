@@ -8,14 +8,15 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Web3Context from "./Web3context";
 
 import AcroContract from "./contracts/Acro.json";
-import DatabaseContract from "./contracts/AcroDatabase.json";
+import DatabaseContract from "./contracts/AcroActors.json";
 import LagoonContract from "./contracts/Lagoon.json";
 
 import getWeb3 from "./getWeb3";
 
 import Home from './Home';
-import Jeu from './Jeu';
-import Dons from './Dons';
+import Play from './Play';
+import Acro from './Acro';
+import Actors from './Actors';
 import Data from './Data';
 import AddData from './AddData';
 
@@ -76,9 +77,10 @@ const App = () => {
              <Navbar.Collapse id="basic-navbar-nav">
                <Nav className="mr-auto"> 
                  <Nav.Link href='/'>Accueil</Nav.Link>
-                 <Nav.Link href='/jeu'>Jeu</Nav.Link>
-                 <Nav.Link href='/dons'>Dons</Nav.Link>
-                 <Nav.Link href='/data'>Inventaire</Nav.Link>
+                 <Nav.Link href='/acro'>Acheter (Acro)</Nav.Link>
+                 <Nav.Link href='/actors'>Acteurs</Nav.Link>
+                 <Nav.Link href='/data/me'>Mes LAGs</Nav.Link>
+                 <Nav.Link href='/data/all'>Datas</Nav.Link>
                </Nav>
                <Nav> 
                  <Nav.Link href='#'>{ account }</Nav.Link>
@@ -88,9 +90,10 @@ const App = () => {
            <Container>
              <Switch>
                <Route path='/' exact component={Home} />
-               <Route path='/jeu' component={Jeu} />
-               <Route path='/dons' component={Dons} />
-               <Route path='/data' component={Data} />
+               <Route path='/acro' component={Acro} />
+               <Route path='/actors' component={Actors} />
+               <Route path='/play/:token_id' component={Play} />
+               <Route path='/data/:plags' component={Data} />
                <Route path='/add_data' component={AddData} />
              </Switch>
            </Container>

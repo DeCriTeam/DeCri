@@ -3,8 +3,11 @@ import Button from 'react-bootstrap/Button';
 import CardDeck from "react-bootstrap/CardDeck";
 import Card from 'react-bootstrap/Card';
 import Web3Context from "./Web3context";
+import { useParams } from "react-router-dom";
+import { Link } from 'react-router-dom'
 
 function Data() {
+  const { plags } = useParams();
   const web3Context = useContext(Web3Context);
   const {
     lagoon_contract
@@ -22,6 +25,7 @@ function Data() {
          let response = await fetch(url_json);
          var responseJson = await response.json();
          responseJson.url_json = url_json;
+         responseJson.token_id = (i+1)
          _items.push(responseJson);
        }
        setItems(_items);
@@ -41,7 +45,12 @@ function Data() {
   // TODO: Paramétrage pour afficher uniquement mes lags ou la totalité
   return (
       <>
-        <h2>Zones</h2>
+        { (plags==='me') ? ( 
+            <h2>Mes lags</h2>
+          ) : (
+            <h2>Zones</h2>
+          )
+        }
         <CardDeck>
         {items.map((item, index) => {
           return (
@@ -51,7 +60,12 @@ function Data() {
                 <Card.Title>{item.name}</Card.Title>
                 <Card.Text>{item.description}</Card.Text>
                 <Button variant="primary">Transférer</Button>
-                <a href={item.url_json} target="_blank" rel="noopener noreferrer">Metadatas</a>
+                <div>
+                  <a href={item.url_json} target="_blank" rel="noopener noreferrer">Metadatas</a>
+                </div>
+                <div>
+                  <Link to={`/play/${item.token_id}`}>Jouer</Link>
+                </div>
               </Card.Body>
             </Card>
           )

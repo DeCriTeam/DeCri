@@ -3,7 +3,9 @@ var Lagoon = artifacts.require("./Lagoon.sol");
 var AcroActors = artifacts.require("./AcroActors.sol");
 
 module.exports = function(deployer) {
-  deployer.deploy(Acro, 100000000); // to be changed/defined
-  deployer.deploy(Lagoon);
-  deployer.deploy(AcroActors);
+  deployer.deploy(Acro, 100000000).then(function () { // to be changed/defined
+    deployer.deploy(AcroActors).then( function () {
+      return deployer.deploy(Lagoon, Acro.address, AcroActors.address)
+    });
+  });
 };
