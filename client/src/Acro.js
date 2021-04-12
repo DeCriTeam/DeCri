@@ -28,7 +28,7 @@ function Dons() {
   async function on_btn_buy_acro_click() {
      try
      {
-        await acro_contract.methods.tmp_buy_acro().send({ from: account, value:web3.utils.toWei('0.1', "ether") });
+        await acro_contract.methods.buy_acro().send({ from: account, value:web3.utils.toWei('0.1', "ether") });
         await refresh();
      }
      catch (error)

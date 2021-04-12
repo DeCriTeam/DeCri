@@ -84,7 +84,7 @@ contract('Acro', function (accounts) {
         });
 
         
-        // tmp_buy_acro = transfer function
+        // buy_acro = transfer function
         // acro_donation: idem
 
 
@@ -105,7 +105,7 @@ contract('Acro', function (accounts) {
             //ISSUE HERE ---> FAIL
             //buying 2 acros for 1 eth
             let amount = new BN(0.1); //new BN(0.1); //??
-            await this.ERC20Instance.tmp_buy_acro({ from: recipient, value: amount});
+            await this.ERC20Instance.buy_acro({ from: recipient, value: amount});
             
             let AcroBalanceOfOwnerAfterSelling = await this.ERC20Instance.balanceOf(owner);
             let AcroBalanceOfRecipientAfterBuyin = await this.ERC20Instance.balanceOf(recipient);

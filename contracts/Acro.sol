@@ -17,10 +17,9 @@ contract Acro is ERC20, Ownable {
    event withdrawal(address otheradress, uint256 amount);
 
    // TO DO - modify fonction, to be discussed
-    function tmp_buy_acro() external payable {
+    function buy_acro() external payable {
        require(msg.value>0);
-       // _mint(msg.sender, msg.value*20);
-       _transfer(address(this), msg.sender, msg.value*20);		// TODO: Handle Error
+       _transfer(address(this), msg.sender, msg.value*20);
        emit buyingAcro(msg.sender, msg.value);
     }
 
