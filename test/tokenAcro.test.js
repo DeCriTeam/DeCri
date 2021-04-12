@@ -8,6 +8,10 @@ function tokens(n) {
     return web3.utils.toWei(n, 'ether');
 }
 
+function convertfromWei(n) {
+    return web3.utils.fromWei(n, 'ether');
+}
+
 contract('Acro', function (accounts) {
     const _name = 'Acropora Token';
     const _symbol = 'ACRO';
@@ -16,8 +20,8 @@ contract('Acro', function (accounts) {
     const [owner,recipient,recipient2] = accounts;
 
     beforeEach(async function () {
-        this.ERC20Instance = await AcroContract.new(_initialsupply,{from: owner});
-        
+        // this.ERC20Instance = await AcroContract.new(_initialsupply,{from: owner});
+        this.ERC20Instance = await AcroContract.new({from: owner});
     });
 
     
@@ -40,113 +44,127 @@ contract('Acro', function (accounts) {
             expect(await this.ERC20Instance.decimals()).to.be.bignumber.equal(_decimals);
         });
 
-        it('balance owner check', async function (){
-            let balanceOwner = await this.ERC20Instance.balanceOf(owner); 
-            let totalSupply = await this.ERC20Instance.totalSupply(); //l000 ok
-            // console.log(balanceOwner, totalSupply); // FOR TESTING -> use this in Acro.sol constructor:  _mint(msg.sender, initialSupply);
-            expect(balanceOwner).to.be.bignumber.equal(totalSupply);
+        it('contract balance check', async function (){
+            // let balanceOwner = await this.ERC20Instance.balanceOf(owner);
+            let mintedAcro = new BN(10000);
+            let totalSupply = await this.ERC20Instance.totalSupply(); //Accro balance in Wei 
+            console.log('Acro contract balance: ', convertfromWei(totalSupply.toString())); //Accro balance in ether value (/10^18)
+            expect(convertfromWei(totalSupply)).to.be.bignumber.equal(mintedAcro);
         });
 
-        it('transfer from owner to recipient is ok', async function (){
-            let balanceOwnerBeforeTransfer = await this.ERC20Instance.balanceOf(owner);
+        it('buying accro', async function (){
+            // let balance = await web3.eth.getBalance(instance.address);
+            let acroBalanceContract = await this.ERC20Instance.get_acro_balance_of_this_contract();
             let balanceRecipientBeforeTransfer = await this.ERC20Instance.balanceOf(recipient);
-            let amount = new BN(100);
-            await this.ERC20Instance.transfer(recipient, amount, {from: owner});
-            let balanceOwnerAfterTransfer = await this.ERC20Instance.balanceOf(owner);
+            // console.log(acroBalanceContract.toString());
+            // let balanceOwnerBeforeTransfer = await this.ERC20Instance.balanceOf(owner);
+            
+            
+            await this.ERC20Instance.buy_acro({from: recipient, value:web3.utils.toWei('0.1', "ether")});
+            // await this.ERC20Instance.transfer(recipient, amount, {from: owner});
+            
+            let balanceContractAfterTransfer = await this.ERC20Instance.get_acro_balance_of_this_contract();
             let balanceRecipientAfterTransfer = await this.ERC20Instance.balanceOf(recipient);
-            expect(balanceOwnerAfterTransfer).to.be.bignumber.equal(balanceOwnerBeforeTransfer.sub(amount));
-            expect(balanceRecipientAfterTransfer).to.be.bignumber.equal(balanceRecipientBeforeTransfer.add(amount));
+            console.log('balance contract after buy: ',convertfromWei(balanceContractAfterTransfer.toString()));
+            console.log('balance recipient after buy: ',convertfromWei(balanceRecipientAfterTransfer.toString()));
+            balancecontractAT = convertfromWei(balanceContractAfterTransfer.toString());
+            balancecontractBT = convertfromWei(acroBalanceContract.toString());
+            // console.log(balancecontractAT,balancecontractBT);
+            balanceRecipientBT = convertfromWei(balanceRecipientBeforeTransfer.toString());
+            balanceRecipientAT = convertfromWei(balanceRecipientAfterTransfer.toString());
+            // console.log(balanceRecipientBT,balanceRecipientAT);
+
+            expect(balancecontractAT).to.equal('9998');
+            expect(balanceRecipientAT).to.equal('2');
+
+            // let nbtokens = new BN(2);
+            // console.log(nbtokens);
+            // expect(balanceContractAfterTransfer).to.be.bignumber.equal(acroBalanceContract.sub(nbtokens));
+            // expect(balanceRecipientAfterTransfer).to.be.bignumber.equal(balanceRecipientBeforeTransfer.add(amount));
         });
 
-        // If we split the contract in 2
-        // it('transferFrom function is ok', async function () {
-        //     let balanceOwnerBeforeTransfer = await this.ERC20Instance.balanceOf(owner);
-        //     let balanceRecipientBeforeTransfer = await this.ERC20Instance.balanceOf(recipient);
-        //     let amount = new BN(10);
+        // // If we split the contract in 2
+        // // it('transferFrom function is ok', async function () {
+        // //     let balanceOwnerBeforeTransfer = await this.ERC20Instance.balanceOf(owner);
+        // //     let balanceRecipientBeforeTransfer = await this.ERC20Instance.balanceOf(recipient);
+        // //     let amount = new BN(10);
             
-        //     await this.ERC20Instance.approve(recipient, amount, {from: owner});
-        //     await this.ERC20Instance.transferFrom(owner, recipient, amount, {from: recipient});
+        // //     await this.ERC20Instance.approve(recipient, amount, {from: owner});
+        // //     await this.ERC20Instance.transferFrom(owner, recipient, amount, {from: recipient});
             
-        //     let balanceOwnerAfterTransfer = await this.ERC20Instance.balanceOf(owner);
-        //     let balanceRecipientAfterTransfer = await this.ERC20Instance.balanceOf(recipient);
+        // //     let balanceOwnerAfterTransfer = await this.ERC20Instance.balanceOf(owner);
+        // //     let balanceRecipientAfterTransfer = await this.ERC20Instance.balanceOf(recipient);
             
-        //     expect(balanceOwnerAfterTransfer).to.be.bignumber.equal(balanceOwnerBeforeTransfer.sub(amount));
-        //     expect(balanceRecipientAfterTransfer).to.be.bignumber.equal(balanceRecipientBeforeTransfer.add(amount));
-        // })
+        // //     expect(balanceOwnerAfterTransfer).to.be.bignumber.equal(balanceOwnerBeforeTransfer.sub(amount));
+        // //     expect(balanceRecipientAfterTransfer).to.be.bignumber.equal(balanceRecipientBeforeTransfer.add(amount));
+        // // })
 
       
-        it('approval is ok', async function (){
-            let allowanceSpenderBeforeApprove = await this.ERC20Instance.allowance(owner, recipient);
-            let amount = new BN(10);
-            await this.ERC20Instance.approve(recipient, amount, {from: owner});
-            let allowanceSpenderAfterApprove = await this.ERC20Instance.allowance(owner, recipient);
-            expect(allowanceSpenderAfterApprove).to.be.bignumber.equal(allowanceSpenderBeforeApprove.add(amount));
+        // it('approval is ok', async function (){
+        //     let allowanceSpenderBeforeApprove = await this.ERC20Instance.allowance(owner, recipient);
+        //     let amount = new BN(10);
+        //     await this.ERC20Instance.approve(recipient, amount, {from: owner});
+        //     let allowanceSpenderAfterApprove = await this.ERC20Instance.allowance(owner, recipient);
+        //     expect(allowanceSpenderAfterApprove).to.be.bignumber.equal(allowanceSpenderBeforeApprove.add(amount));
+        // });
+
+        
+        // donating accro
+        it('donate accro to contract', async function (){
+            let acroBalanceContract = await this.ERC20Instance.get_acro_balance_of_this_contract();
+            let balanceRecipientBeforeTransfer = await this.ERC20Instance.balanceOf(recipient);
+                        
+            await this.ERC20Instance.buy_acro({from: recipient, value:web3.utils.toWei('0.1', "ether")}); //buying 2 Acro
+            await this.ERC20Instance.acro_donation(web3.utils.toWei('1','ether'), { from: recipient }); //giving 1 Acro
+                       
+            let balanceContractAfterTransfer = await this.ERC20Instance.get_acro_balance_of_this_contract();
+            let balanceRecipientAfterTransfer = await this.ERC20Instance.balanceOf(recipient);
+            console.log('balance contract after buy: ',convertfromWei(balanceContractAfterTransfer.toString()));
+            console.log('balance recipient after buy: ',convertfromWei(balanceRecipientAfterTransfer.toString()));
+            balancecontractAT = convertfromWei(balanceContractAfterTransfer.toString());
+            balancecontractBT = convertfromWei(acroBalanceContract.toString());
+            console.log(balancecontractAT,balancecontractBT);
+            balanceRecipientBT = convertfromWei(balanceRecipientBeforeTransfer.toString());
+            balanceRecipientAT = convertfromWei(balanceRecipientAfterTransfer.toString());
+            console.log(balanceRecipientBT,balanceRecipientAT);
+
+            expect(balancecontractAT).to.equal('9999');
+            expect(balanceRecipientAT).to.equal('1');
+        
         });
 
+
+        // //  TO DO withdraw_ether:
+        // // + expectEvent
         
-        // buy_acro = transfer function
-        // acro_donation: idem
-
-
-        //  TO DO withdraw_ether:
-        // + expectEvent
-        // !!!!!!!!!!!!!! ISSUE HERE 
-        it('selling functions', async function (){
-            let AcroBalanceOfOwnerBeforeSelling = await this.ERC20Instance.balanceOf(owner);
-            let AcroBalanceOfRecipientBeforeBuyin = await this.ERC20Instance.balanceOf(recipient);
-
-            console.log('Acro Balance of Owner Before Selling: ', AcroBalanceOfOwnerBeforeSelling.toString());
-            console.log('Acro Balance of Recipient Before Buying: ', AcroBalanceOfRecipientBeforeBuyin.toString());
-
+       
+        // //Staking and Unstaking Acro tokens -ok
             
-            let ethBalanceThisContract_beforeSellingAccro = await web3.eth.getBalance(this.ERC20Instance.address);
-            console.log('Eth Balance of Contract Before Selling Accro', ethBalanceThisContract_beforeSellingAccro.toString());
-            
-            //ISSUE HERE ---> FAIL
-            //buying 2 acros for 1 eth
-            let amount = new BN(0.1); //new BN(0.1); //??
-            await this.ERC20Instance.buy_acro({ from: recipient, value: amount});
-            
-            let AcroBalanceOfOwnerAfterSelling = await this.ERC20Instance.balanceOf(owner);
-            let AcroBalanceOfRecipientAfterBuyin = await this.ERC20Instance.balanceOf(recipient);
-            console.log('Acro Balance of Owner After Selling: ', AcroBalanceOfOwnerAfterSelling.toString());
-            console.log('Acro Balance of Recipient After Buying: ', AcroBalanceOfRecipientAfterBuyin.toString());
-
-            
-            // assert.equal( AcroBalanceOfOwnerAfterSelling.toString(), amount, "the contract's balance should be 1 ether");
-
-            //TO DO: Donation function
-
-            //TO DO: Withdraw function
-
-        })
-
-        
-        //Staking and Unstaking Acro tokens -ok
-            
-
         it('staking is ok', async function (){
-            //  first making a transfert toward recipient
+            //  first buying Acro
             let balanceRecipientBeforeTransfer = await this.ERC20Instance.balanceOf(recipient);
-            let amount = new BN(100);
-            await this.ERC20Instance.transfer(recipient, amount, {from: owner});
+            let amount = new BN(2);
+            
+            await this.ERC20Instance.buy_acro({from: recipient, value:web3.utils.toWei('0.1', "ether")}); //buying 2 Acro
+
             let balanceRecipientAfterTransfer = await this.ERC20Instance.balanceOf(recipient);
             // console.log(balanceRecipientAfterTransfer);
-            expect(balanceRecipientAfterTransfer).to.be.bignumber.equal(balanceRecipientBeforeTransfer.add(amount));
-            assert.equal(tokens(balanceRecipientAfterTransfer.toString()), tokens('100'), 'investor Acro wallet balance correct before staking');
+            // expect(balanceRecipientAfterTransfer).to.be.bignumber.equal(balanceRecipientBeforeTransfer.add(amount));
+            assert.equal(balanceRecipientAfterTransfer.toString(), tokens('2'), 'investor Acro wallet balance correct before staking');
               
             // Stake Acro Tokens
-            let stakeAmount = new BN(25);
-            await this.ERC20Instance.approve(recipient, stakeAmount, {from: owner});
-            await this.ERC20Instance.stakeAcroTokens(stakeAmount, { from: recipient });
+            let stakeAmount = new BN(2);
+            await this.ERC20Instance.approve(recipient, tokens(stakeAmount), {from: owner});
+            await this.ERC20Instance.stakeAcroTokens(tokens(stakeAmount), { from: recipient });
 
             // Check investor Acro balance after staking
             let balanceRecipientAfterStaking = await this.ERC20Instance.balanceOf(recipient);
-            assert.equal(tokens(balanceRecipientAfterStaking.toString()), tokens('75'), 'investor Acro wallet balance correct after staking');
+            console.log(balanceRecipientAfterStaking.toString());
+            assert.equal(tokens(balanceRecipientAfterStaking.toString()), tokens('0'), 'investor Acro wallet balance correct after staking');
         
             //investor staking balance      
             let investorStakingbalance = await this.ERC20Instance.stakingBalance(recipient);
-             assert.equal(tokens(investorStakingbalance.toString()), tokens('25'), 'investor staking balance correct after staking');
+            assert.equal(investorStakingbalance.toString(), tokens('2'), 'investor staking balance correct after staking');
 
             let stakerstatus = await this.ERC20Instance.isStaking(recipient);
             assert.equal(stakerstatus.toString(), 'true', 'investor staking status correct after staking');
@@ -157,7 +175,7 @@ contract('Acro', function (accounts) {
             //check results after unstaking
             let balanceRecipientAfterUnstaking = await this.ERC20Instance.balanceOf(recipient);
             // console.log(balanceRecipientAfterUnstaking);
-            assert.equal(tokens(balanceRecipientAfterUnstaking.toString()), tokens('100'), 'recipient Acro wallet balance correct after staking');
+            // assert.equal((balanceRecipientAfterUnstaking.toString()), tokens('0'), 'recipient Acro wallet balance correct after staking');
 
             recipientStakingBalance = await this.ERC20Instance.stakingBalance(recipient);
             assert.equal(recipientStakingBalance.toString(), tokens('0'), 'recipient staking balance correct after staking');
