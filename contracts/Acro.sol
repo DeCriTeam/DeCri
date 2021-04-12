@@ -6,9 +6,9 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract Acro is ERC20, Ownable {
-    constructor(uint256 initialSupply) ERC20("Acropora Token", "ACRO") {
-      // _mint(/* msg.sender */ address(this), 10000000000000000000000 /* initialSupply*/ );
-      _mint(msg.sender, initialSupply); //for tests, otherwise it does not work
+    constructor() ERC20("Acropora Token", "ACRO") {
+      _mint(/* msg.sender */ address(this), 10000000000000000000000 /* initialSupply*/ );
+      // _mint(msg.sender, initialSupply); //for tests, otherwise it does not work
     }
     
    //List of events
