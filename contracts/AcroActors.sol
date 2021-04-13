@@ -45,12 +45,7 @@ contract AcroActors is Ownable {
    //   actors_whitelist[msg.sender] = true;
    // }
    
-   // constructor(address acro_contract_address) {
-   //   actors_whitelist[msg.sender] = true;
-   //   acro_contract = Acro(acro_contract_address);
-   // }
-
-    constructor(Acro _acro_contract) public {
+   constructor(Acro _acro_contract) public {
      acro_contract = _acro_contract;
      actors_whitelist[msg.sender] = true;
    }
@@ -130,8 +125,11 @@ contract AcroActors is Ownable {
       require(msg.sender != actor_address); // a user cannot vote for himself
       require(already_vote[msg.sender][actor_address] == false); //Actor can only vote once for an actor
 
-      uint coef_vote = votingCoefficient(actor_address);
-      actors_score_whitelist[actor_address] = actors_score_whitelist[actor_address]*coef_vote; //ok?
+      uint coef_vote = votingCoefficient(msg.sender);
+      // actors_score_whitelist[actor_address] = (actors_score_whitelist[actor_address] + coef_vote); //A voir car si zero il ne faudrait pas l'enregistrer sur already_vote
+      
+      actors_score_whitelist[actor_address] = actors_score_whitelist[actor_address] + (1*coef_vote);
+
       // actors_score_whitelist[actor_address]++;
       already_vote[msg.sender][actor_address] = true;
       emit votedEvent(actor_address);
