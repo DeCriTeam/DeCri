@@ -144,6 +144,23 @@ contract('AcroActors', async accounts => {
         
     });
 
+    it("A registered actor cannot vote twice (or more) for the same actor", async() => {
+        actorName = "Manta Diving Club";
+        country = "US";
+        lat = 10;
+        long = 20;
+        yearOfCreation = 2020;
+        email = "mantaclub@gmail.com";
+        actortype = "Diving Club";
+        dateE = "11/04/2021";
+
+        await acroActorsInstance.add_new_actor(user1,actorName,country,lat,long,yearOfCreation,email, actortype,dateE, {from: user1});
+        await acroActorsInstance.add_new_actor(user2,actorName,country,lat,long,yearOfCreation,email, actortype,dateE, {from: user1});
+        await acroActorsInstance.votingForActor(user2, {from: user1});
+        await expectRevert.unspecified(acroActorsInstance.votingForActor(user2, {from: user1}));
+        
+    });
+
     //owner can validate actor
     it("Owner can validate an actor", async() => {
 

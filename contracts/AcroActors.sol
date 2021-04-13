@@ -1,7 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.0;
-import "@openzeppelin/contracts/access/Ownable.sol";
 pragma experimental ABIEncoderV2; // A voir si on l'utilise (pour récupérer tableau dans front)
+
+import "@openzeppelin/contracts/access/Ownable.sol";
+// import "./Acro.sol";
+
 
 contract AcroActors is Ownable {
    
@@ -34,10 +37,26 @@ contract AcroActors is Ownable {
    //TO ADD: Nb of minted area - mapping
 
    address[] public actors;
-   
+
+   Acro acro_contract;
+
    constructor() {
      actors_whitelist[msg.sender] = true;
-   } 
+     
+   }
+   
+   // constructor(address acro_contract_address) {
+   //   actors_whitelist[msg.sender] = true;
+   //   acro_contract = Acro(acro_contract_address);
+   // }
+
+   //Only actors that stake Acro token can vote. See later for using staking Balance
+   //TO DO LATER: add a minimum delay of staking, i.e. at least a month
+   // modifier onlyStaker() {
+   //    require (acro_contract.isStaking(msg.sender)==true,"No Acro tokens staked");
+   //    // require (acro_contract.staking_balance(msg.sender) > "10", "Not enough Acro tokens staked");
+   //    _;
+   //    }
 
    function is_actor(address addr) external view returns (bool) { //confusing iswhitelisted instead, change later because of Front!
      return actors_whitelist[addr];
@@ -88,15 +107,16 @@ contract AcroActors is Ownable {
 
   
    // Voter pour participer à la validation d'un acteur
-   // Note: an actor can only vote once for an actor. see require already_vote...
-   // //TO DO: THAT ACTOR MUST BE STAKING SOME ACROS to vote, need to import Acro contract for that
+   //TO DO: THAT ACTOR MUST BE STAKING SOME ACROS to vote, need to import Acro contract for that
    
-   function votingForActor(address actor_address) external 
-   { 
+   function votingForActor(address actor_address) external { 
       require(RegisteredActors[msg.sender].isRegistered == true); //The user must be registered to vote
       require(RegisteredActors[actor_address].isRegistered == true); //not possible to vote for a non-registered actor
       require(msg.sender != actor_address); // a user cannot vote for himself
+      require(already_vote[msg.sender][actor_address] == false); //Actor can only vote once for an actor
+
       actors_score_whitelist[actor_address]++;
+      already_vote[msg.sender][actor_address] = true;
       emit votedEvent(actor_address);
    }
 
