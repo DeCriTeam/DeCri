@@ -3,7 +3,7 @@ pragma solidity 0.8.0;
 pragma experimental ABIEncoderV2; // A voir si on l'utilise (pour récupérer tableau dans front)
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-// import "./Acro.sol";
+import "./Acro.sol";
 
 
 contract AcroActors is Ownable {
@@ -40,23 +40,17 @@ contract AcroActors is Ownable {
 
    Acro acro_contract;
 
-   constructor() {
-     actors_whitelist[msg.sender] = true;
-     
-   }
-   
-   // constructor(address acro_contract_address) {
+   // Case without Acro contract
+   // constructor() {
    //   actors_whitelist[msg.sender] = true;
-   //   acro_contract = Acro(acro_contract_address);
    // }
+   
+   constructor(address acro_contract_address) {
+     actors_whitelist[msg.sender] = true;
+     acro_contract = Acro(acro_contract_address);
+   }
 
-   //Only actors that stake Acro token can vote. See later for using staking Balance
-   //TO DO LATER: add a minimum delay of staking, i.e. at least a month
-   // modifier onlyStaker() {
-   //    require (acro_contract.isStaking(msg.sender)==true,"No Acro tokens staked");
-   //    // require (acro_contract.staking_balance(msg.sender) > "10", "Not enough Acro tokens staked");
-   //    _;
-   //    }
+   
 
    function is_actor(address addr) external view returns (bool) { //confusing iswhitelisted instead, change later because of Front!
      return actors_whitelist[addr];
@@ -108,14 +102,32 @@ contract AcroActors is Ownable {
   
    // Voter pour participer à la validation d'un acteur
    //TO DO: THAT ACTOR MUST BE STAKING SOME ACROS to vote, need to import Acro contract for that
-   
-   function votingForActor(address actor_address) external { 
+   //TO DO LATER: add a minimum delay of staking, i.e. at least a month
+
+   // Warning: amount to be decided, beware decimals
+   function votingCoefficient(address addr) public view returns(uint)
+   {
+      uint coef = 0;
+      if (acro_contract.staking_balance(addr) > 1) 
+      {
+         coef = 1;
+      }
+      else if (acro_contract.staking_balance(addr) > 50)
+      {
+         coef = 2;
+      }
+      return uint(coef);
+   }
+
+    function votingForActor(address actor_address) external { 
       require(RegisteredActors[msg.sender].isRegistered == true); //The user must be registered to vote
       require(RegisteredActors[actor_address].isRegistered == true); //not possible to vote for a non-registered actor
       require(msg.sender != actor_address); // a user cannot vote for himself
       require(already_vote[msg.sender][actor_address] == false); //Actor can only vote once for an actor
 
-      actors_score_whitelist[actor_address]++;
+      uint coef_vote = votingCoefficient(actor_address);
+      actors_score_whitelist[actor_address] = actors_score_whitelist[actor_address]*coef_vote; //ok?
+      // actors_score_whitelist[actor_address]++;
       already_vote[msg.sender][actor_address] = true;
       emit votedEvent(actor_address);
    }

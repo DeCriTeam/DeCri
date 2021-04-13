@@ -7,6 +7,7 @@ const AcroContract = artifacts.require('Acro');
 contract('AcroActors', async accounts => {
 
     var acroActorsInstance;
+    var acroInstance;
 
     const [owner,user1,user2,user3,user4, user5] = accounts;
     
@@ -54,6 +55,19 @@ contract('AcroActors', async accounts => {
     });
 
 
+    //Checking voting coef with acro_balance
+    it("calculate the right voting coefficient according to staking balance", async() => {
+        //Buying and staking process
+        await this.acroInstance.buy_acro({from: user1, value:web3.utils.toWei('0.1', "ether")}); //buying 2 Acro
+        let stakeAmount = new BN(2); // Stake Acro Tokens
+        await this.acroInstance.approve(recipient, tokens(stakeAmount), {from: owner});
+        await this.acroInstance.stakeAcroTokens(tokens(stakeAmount), {from: user1});
+
+        //Calculating voting coeff
+        let votingCoef = await acroActorsInstance.votingCoefficient(user1, {from: user1});
+        expect(votingCoef.toString()).to.equal(1);
+
+    })
 
     it("A registered actor can vote for another registered actor", async() => {
         
