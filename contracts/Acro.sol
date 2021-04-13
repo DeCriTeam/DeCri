@@ -62,6 +62,17 @@ contract Acro is ERC20, Ownable {
     mapping(address => bool) public hasStaked;
     mapping(address => bool) public isStaking;
 
+   //to be used in a modifier in AcroActors
+    function is_staking_acro(address addr) external view returns (bool) {
+      return isStaking[addr];
+   }
+
+   //to be used in a modifier in AcroActors
+   function staking_balance(address addr) external view returns (uint) {
+      return stakingBalance[addr];
+   }
+   
+
    // User put Acro into the Acro (making then a deposit)
     function stakeAcroTokens(uint _amount) public {
          // Amount must be greater than zero
