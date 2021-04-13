@@ -6,15 +6,14 @@ const AcroContract = artifacts.require('Acro');
 
 contract('AcroActors', async accounts => {
 
-    var acroActorsInstance;
     var acroInstance;
-
+    var acroActorsInstance;
+    
     const [owner,user1,user2,user3,user4, user5] = accounts;
     
-
     beforeEach('setup contract for each test case', async () => {
-        acroActorsInstance = await AcroActors.new({from: owner});
-        acroInstance = await AcroContract.new({from: owner});
+        acroInstance = await AcroContract.new();
+        acroActorsInstance = await AcroActors.new(acroInstance.address);
     });
 
     // console.log(user1,user2,user3,user4, user5);

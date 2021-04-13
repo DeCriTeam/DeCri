@@ -38,16 +38,21 @@ contract AcroActors is Ownable {
 
    address[] public actors;
 
-   Acro acro_contract;
+   Acro public acro_contract;
 
    // Case without Acro contract
    // constructor() {
    //   actors_whitelist[msg.sender] = true;
    // }
    
-   constructor(address acro_contract_address) {
+   // constructor(address acro_contract_address) {
+   //   actors_whitelist[msg.sender] = true;
+   //   acro_contract = Acro(acro_contract_address);
+   // }
+
+    constructor(Acro _acro_contract) public {
+     acro_contract = _acro_contract;
      actors_whitelist[msg.sender] = true;
-     acro_contract = Acro(acro_contract_address);
    }
 
    
