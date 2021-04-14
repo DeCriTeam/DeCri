@@ -6,6 +6,7 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "./Acro.sol";
 import "./AcroActors.sol";
 
+/** @title Lagoon Token */
 contract Lagoon is ERC1155 {
    struct GameItem {
       uint8 x;
@@ -26,51 +27,39 @@ contract Lagoon is ERC1155 {
    mapping (uint256 => string) private _tokenURIs;
    mapping (uint256 => GameItem[]) public game_items;
 
-   /**
-    * @title onlyActor
-    * @notice This modifier checks if the sender is a verified actor in actor's smartcontract
-    */
+   // This modifier checks if the sender is a verified actor in actor's smartcontract
    modifier onlyActor() {
      require (actors_contract.is_actor(msg.sender)==true,"Not verified Actor");
      _;
    }
 
-   /**
-    * @title tokenExists
-    * @notice This modifier checks is a token exists in this ERC1155
-    * @param token_id Token ID
-    */
+   // This modifier checks if a given token exists in this ERC1155 contract
    modifier tokenExists(uint token_id) {
      require(token_id<=_tokenIds.current(),"Token does not exist");
      _;
    }
    
-   /**
-    * @title isMyToken
-    * @notice This modifier checks if the sender owns a token
-    * @param token_id Token ID
-    */
+   // This modifier checks if the sender owns a given token
    modifier isMyToken(uint token_id) {
      require(balanceOf(msg.sender, token_id)>0, "This is not your token");
+     _;
    }
 
    /**
-    * @title constructor
-    * @notice Acro and Actors contract's addresses are set on this contract during deployment
-    * @param acro_contract_address Acro contract address
-    * @param actors_contract_address Actors contract address
-    */
+     * @notice Acro and Actors contract's addresses are set on this contract during deployment
+     * @param acro_contract_address Acro contract address
+     * @param actors_contract_address Actors contract address
+     */
    constructor(address acro_contract_address, address actors_contract_address) ERC1155("") {
      acro_contract = Acro(acro_contract_address);
      actors_contract = AcroActors(actors_contract_address);
    } 
 
    /**
-    * @title uri
-    * @notice get json metadata file urls
-    * @param token_id Token ID
-    * @return string url
-    */
+     * @notice get json metadata file urls
+     * @param token_id Token ID
+     * @return string url
+     */
    function uri(uint256 token_id) 
       public
       view
@@ -82,7 +71,6 @@ contract Lagoon is ERC1155 {
    }
 
    /**
-    * @title new_real_zone
     * @notice Declare a new physical coral zone in the database
     * this declaration is allowed for verified actors only
     * @param metadatas_url json metadata file url
@@ -98,7 +86,6 @@ contract Lagoon is ERC1155 {
    }
 
    /**
-    * @title update_real_zone
     * @notice Declare a new state for an existing physical coral zone in the database
     * This declaration is allowed for verified actors only
     * Every actor is allowed to update informations about any coral aone
@@ -115,7 +102,6 @@ contract Lagoon is ERC1155 {
    }
 
    /**
-    * @title new_virtual_zone
     * @notice Create a new game party (virtual zone)
     * Everybody can create a new virtual zone
     */
@@ -130,7 +116,6 @@ contract Lagoon is ERC1155 {
    }
 
    /**
-    * @title merge_token
     * @notice Any user can merge one of his real token with one of his virtual zone
     * Virtual token is linked to real token and change type to "BOTH" token
     * The real token is destroyed for this user
@@ -156,7 +141,6 @@ contract Lagoon is ERC1155 {
    }
 
    /**
-    * @title get_tokens_count
     * @notice Get total tokens count (for UI)
     * @return uint token count
     */
@@ -169,7 +153,6 @@ contract Lagoon is ERC1155 {
    }
 
    /**
-    * @title  pay_acro
     * @notice Force user to pay an amount of Acro ERC20 token
     * user should first call approve on Acro ERC20 contract before
     * @param amount of Acro to be paid by user
@@ -181,7 +164,6 @@ contract Lagoon is ERC1155 {
    }
 
    /**
-    * @title buy_and_put_game_item
     * @notice Buy and add item for our game and put it on a virtual zone
     * @param token_id Token ID which represents our virtual zone
     * @param x X position where to put the item on our virtual zone
@@ -204,7 +186,6 @@ contract Lagoon is ERC1155 {
    }
 
    /**
-    * @title get_game_level
     * @notice Level increase for a virtual zone when a user adds items on it
     * this function gets the level for a given virtual zone
     * @param token_id Token ID which represents the virtual zone
@@ -220,7 +201,6 @@ contract Lagoon is ERC1155 {
    }
 
    /**
-    * @title get_game_datas
     * @notice gets serialized datas for a given virtual zone (item mapping)
     * @param token_id Token ID which represents the virtual zone
     * @return serialized data of the virtual zone
