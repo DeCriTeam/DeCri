@@ -4,7 +4,7 @@
  
 ## Description
 
-- to be done
+- to do -> abstract of wp
 
 
 ## Links
@@ -15,6 +15,8 @@ https://docs.google.com/presentation/d/1Hxhd25u1_e6L1vMgsCxNFhaGa1qNxPxr8uHhT3BZ
 * [Github](https://github.com/DeCriTeam/DeCri.git)
 * [DaPP Heroku](To do)
 * [Trello](https://trello.com/b/5Z7bPydP/conduite-de-projet)
+* [Website](to be added)
+* [Whitepaper](to be added)
  
 
 ## Features
@@ -44,11 +46,9 @@ In order to deploy to the test networks or the main network you need to:
 - Edit `.env` and set the below `property = "value"` pairs (one per line):
 
 ```
-MNEMONIC          = "TODO_enter_your_own_12_words_seed_here"
-INFURA_PROJECT_ID = "TODO_infura_project_id_here"
+MNEMONIC = word1 word2 word3 word4 word5 word6 word7 word8 word9 word10 word11 word12
+INFURA_ID = your_infura_project_id_here
 ```
-
-Keep in mind to surround each value with double quotes.
 
 # Compile
 
@@ -58,7 +58,8 @@ truffle compile
 
 # Run
 
-TODO
+cd client
+npm run start
 
 
 # Test
@@ -69,7 +70,13 @@ Run ganache on port 7545.
 truffle compile
 truffle deploy --reset --network ganache
 ```
-TODO
+TOBECOMPLETED
+truffle test test/tokenAcro.test.js
+truffle test test/actors.test.js
+
+
+# Deploying on test net
+truffle migrate --network rinkeby --reset
 
 # Documentation
 
