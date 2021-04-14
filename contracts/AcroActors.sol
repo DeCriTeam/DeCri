@@ -45,7 +45,7 @@ contract AcroActors is Ownable {
    //   actors_whitelist[msg.sender] = true;
    // }
    
-   constructor(Acro _acro_contract) public {
+   constructor(Acro _acro_contract) {
      acro_contract = _acro_contract;
      actors_whitelist[msg.sender] = true;
    }

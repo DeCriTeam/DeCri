@@ -5,8 +5,10 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Web3Context from "./Web3context";
 import IPFS from "ipfs-api"; // const IPFS = require('ipfs-api');
+import { useParams } from "react-router-dom";
 
-function AddData() {
+function AddState() {
+  const { token_id } = useParams();
   const web3Context = useContext(Web3Context);
   const {
     account,
@@ -31,11 +33,11 @@ function AddData() {
     }
   }
 
-  async function on_btn_new_real_zone_click() {
+  async function on_btn_add_state_click() {
      setDisabled(true);
      try
      {
-        const { latitude, longitude, profondeur, etat } = form
+        const { etat } = form
         const ipfs = new IPFS({host: 'ipfs.infura.io', port: 5001, protocol: 'https' });
 
         var url_image = "";
@@ -46,6 +48,8 @@ function AddData() {
           url_image = "https://ipfs.io/ipfs/" + hash_ipfs;
         }
 
+	     // ICIICI: Recup l'actuel
+/*
         var metadatas = {
           name: "LAG",
           description: "Lagoon",
@@ -66,6 +70,7 @@ function AddData() {
 
         await lagoon_contract.methods.new_real_zone(metadatas_ipfs_url).send({ from: account });
         window.location = '/data/all';
+	*/
      }
      catch (error)
      {
@@ -76,26 +81,8 @@ function AddData() {
 
   return (
       <>
-        <h2>Déclarer une nouvelle zone</h2>
+        <h2>Mise à jour de l'état d'une zone</h2>
         <Form>
-            <Form.Group as={Row}>
-                <Form.Label column sm={2}>Latitude</Form.Label>
-                <Col sm={10}>
-                    <Form.Control type="text" disabled={disabled} onChange={ e => setField('latitude', e.target.value) } />
-                </Col>
-            </Form.Group>
-            <Form.Group as={Row}>
-                <Form.Label column sm={2}>Longitude</Form.Label>
-                <Col sm={10}>
-                    <Form.Control type="text" disabled={disabled} onChange={ e => setField('longitude', e.target.value) } />
-                </Col>
-            </Form.Group>
-            <Form.Group as={Row}>
-                <Form.Label column sm={2}>Profondeur</Form.Label>
-                <Col sm={10}>
-                    <Form.Control type="text" disabled={disabled} onChange={ e => setField('profondeur', e.target.value) } />
-                </Col>
-            </Form.Group>
             <Form.Group as={Row}>
                 <Form.Label column sm={2}>Etat</Form.Label>
                 <Col sm={10}>
@@ -114,7 +101,7 @@ function AddData() {
             </Form.Group>
             <Form.Group as={Row}>
                 <Col sm={{ span: 10, offset: 2 }}>
-                    <Button onClick={on_btn_new_real_zone_click} disabled={disabled}>Create</Button>
+                    <Button onClick={on_btn_add_state_click} disabled={disabled}>OK</Button>
                 </Col>
             </Form.Group>
         </Form>
@@ -122,4 +109,4 @@ function AddData() {
   );
 }
 
-export default AddData;
+export default AddState;
