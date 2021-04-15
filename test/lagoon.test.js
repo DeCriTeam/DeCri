@@ -71,6 +71,26 @@ contract('LagoonContract', function (accounts) {
       await expectRevert(res1,"only applies to real");
    });
 
+   it("Buy and add items to a virtual zone", async () => {
+      await lagoon_instance.new_virtual_zone({from: user1});
+      await lagoon_instance.new_virtual_zone({from: user2});
+
+      await acro_instance.buy_acro({ from: user1, value:web3.utils.toWei('0.1', "ether") });
+      await acro_instance.buy_acro({ from: user2, value:web3.utils.toWei('0.1', "ether") });
+
+      await acro_instance.approve(lagoon_instance.address, web3.utils.toWei('0.5', 'ether'), { from: user1 });
+      await acro_instance.approve(lagoon_instance.address, web3.utils.toWei('0.5', 'ether'), { from: user2 });
+
+      await expectRevert(lagoon_instance.buy_and_put_game_item(2, 0,1, 1, { from: user1}),"This is not your token");
+
+      await lagoon_instance.buy_and_put_game_item(1, 0,1, 1, { from: user1});
+      await lagoon_instance.buy_and_put_game_item(1, 0,2, 1, { from: user1});
+      let level = await lagoon_instance.get_game_level(1);
+      expect(level).to.be.bignumber.equal(new BN('2'));
+
+      await expectRevert(lagoon_instance.buy_and_put_game_item(1, 0,1, 1, { from: user1 }),"Free slot required");
+   });
+
    it("Anybody can merge a virtual and a real zone", async () => {
       // Create a new real zone and give it to user1
       await lagoon_instance.new_real_zone("http://fake_metadata_file_url/", {from: actor1});
@@ -83,19 +103,26 @@ contract('LagoonContract', function (accounts) {
       let t2 = await lagoon_instance.balanceOf(user1,2);
       expect(t2).to.be.bignumber.equal(new BN('1'));
 
-      // expect( await lagoon_instance.lagoon_types(1) ).to.be.equal(LagoonContract.LagoonType.REAL.toString()); 
-      // expect( await lagoon_instance.lagoon_types(2) ).to.be.equal(LagoonContract.LagoonType.VIRTUAL.toString()); 
+      // new Promise(() => console.log(LagoonContract.LagoonType.REAL));
+
+      expect( await lagoon_instance.lagoon_types(1) ).to.be.bignumber.equal(new BN(LagoonContract.LagoonType.REAL)); 
+      expect( await lagoon_instance.lagoon_types(2) ).to.be.bignumber.equal(new BN(LagoonContract.LagoonType.VIRTUAL)); 
 
       // user1 will need some Acro to pay for merging
       await acro_instance.buy_acro({ from: user1, value:web3.utils.toWei('0.1', "ether") });
-      let acro_balance_before_merge = await acro_instance.balanceOf(user1);
 
-      await acro_instance.approve(lagoon_instance.address, web3.utils.toWei('1', 'ether'), { from: user1 });
+      await acro_instance.approve(lagoon_instance.address, web3.utils.toWei('0.1', 'ether'), { from: user1 });
+      await expectRevert(lagoon_instance.merge_tokens(1,2, { from: user1 }), 'insufficient game level');
+
+      // We need at least 4 items on the game to be allowed to merge virtual zone
+      await acro_instance.approve(lagoon_instance.address, web3.utils.toWei('0.5', 'ether'), { from: user1 });
+      await lagoon_instance.buy_and_put_game_item(2, 0,1, 1, { from: user1});
+      await lagoon_instance.buy_and_put_game_item(2, 0,2, 1, { from: user1});
+      await lagoon_instance.buy_and_put_game_item(2, 0,3, 1, { from: user1});
+      await lagoon_instance.buy_and_put_game_item(2, 0,4, 1, { from: user1});
       await lagoon_instance.merge_tokens(1,2, { from: user1 });
 
-      let acro_balance_after_merge = await acro_instance.balanceOf(user1);
-
-      // expect( await lagoon_instance.lagoon_types(2) ).to.be.equal(LagoonContract.LagoonType.BOTH.toString()); 
+      expect( await lagoon_instance.lagoon_types(2) ).to.be.bignumber.equal(new BN(LagoonContract.LagoonType.BOTH)); 
 
       // 1 token left
       t1 = await lagoon_instance.balanceOf(user1,1);

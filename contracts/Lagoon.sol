@@ -132,6 +132,7 @@ contract Lagoon is ERC1155 {
    {
       require(lagoon_types[real_token_id]==LagoonType.REAL, "Not real lagoon");
       require(lagoon_types[virtual_token_id]==LagoonType.VIRTUAL, "Not virtual lagoon");
+      require(get_game_level(virtual_token_id)>=4,"insufficient game level");
 
       pay_acro(100000000000000000);
       _burn(msg.sender, real_token_id, 1);    // Destruct real token for the user. (Balance can be 0, information about this real token is kept in the database)
@@ -191,7 +192,7 @@ contract Lagoon is ERC1155 {
     * @param token_id Token ID which represents the virtual zone
     * @return level of the virtual zone
     */
-   function get_game_level(uint token_id) external
+   function get_game_level(uint token_id) public
       view
       tokenExists(token_id)
       returns (uint) 
