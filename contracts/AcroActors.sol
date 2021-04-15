@@ -37,6 +37,9 @@ contract AcroActors is Ownable {
    //TO ADD: Nb of minted area - mapping
 
    address[] public actors;
+   Actor[] public actors_infos;
+
+  
 
    Acro public acro_contract;
 
@@ -56,6 +59,11 @@ contract AcroActors is Ownable {
       return isRegistered[addr];
    }
 
+   // function get_is_registered(address addr) external view returns (bool) {
+   //      bool isreg = RegisteredActors[addr].isRegistered;
+   //      return isreg;
+   //  }
+
    function get_actor_id(address addr) external view returns (uint) {
       return actors_registred_id[addr];
    }
@@ -64,7 +72,12 @@ contract AcroActors is Ownable {
       return actors_score_whitelist[addr];
    }
 
- ////To DO:  get actors informations
+    //get actors infos-  address ?
+   function get_actors_info() public view returns(Actor[] memory){
+      return actors_infos;
+   }
+
+ 
  
 // /*
   
@@ -88,6 +101,7 @@ contract AcroActors is Ownable {
       require(RegisteredActors[_address].isRegistered != true,"This address is already registered"); // Doublon à voir
       require(isRegistered[_address] != true, "This address is already registered");
       RegisteredActors[_address] = Actor(true, actorCount,date, _actorName, _country,_latCenter, _longCenter,  _yearOfCreation,_email,_actorType); //DATE A VOIR
+      actors_infos.push(RegisteredActors[_address]);
       actors.push(_address);
       actors_registred_id[_address] = actorCount;
       isRegistered[_address] = true;
