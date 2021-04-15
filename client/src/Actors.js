@@ -39,6 +39,8 @@ function Actors() {
         {items.map((item, index) => {
           return ( {item} )
         })}
+
+       
       </>
   );
 }
