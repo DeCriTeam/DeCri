@@ -8,19 +8,21 @@ import "./Acro.sol";
 /** @title Dabase of self-registering actors */
 contract AcroActors is Ownable {
    
-   //TO be cleaned and optimized
+   //TO be cleaned and optimized //cf order of variables (to be changed in addActors.js)
    ////To be completed (uint nb MintedArea?)
    struct Actor {
       bool isRegistered;
       uint id; //is it really usefull?
-      uint yearOfCreation; // year of birth of NGO 
+      string actorName;
+      string country; 
       int latCenter; //can be negative
       int longCenter; //can be negative
-      string dateOfRegistration;
-      string actorName;
-      string country;  
+      uint yearOfCreation; // year of birth of NGO 
       string email;
       string actorType; // NGO, Diving Club, Researcher
+      string dateOfRegistration;  
+      
+      
    }
 
    uint actorCount = 0; //to keep track of the number of actors and to generate a unique ID
@@ -104,10 +106,10 @@ contract AcroActors is Ownable {
                           uint _yearOfCreation,
                           string memory _email,
                           string memory _actorType,
-                          string memory date
+                          string memory _date
                           ) public {
       require(RegisteredActors[_address].isRegistered != true,"This address is already registered");
-      RegisteredActors[_address] = Actor(true, actorCount,date, _actorName, _country,_latCenter, _longCenter,  _yearOfCreation,_email,_actorType); //DATE A VOIR
+      RegisteredActors[_address] = Actor(true, actorCount,_actorName, _country,_latCenter, _longCenter,  _yearOfCreation,_email,_actorType,_date); //DATE A VOIR
       actors_infos.push(RegisteredActors[_address]);
       actors.push(_address);
       actorCount++;
