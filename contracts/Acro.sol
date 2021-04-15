@@ -5,7 +5,11 @@ pragma solidity 0.8.0;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
+/** @title Token acro - production and storage */
 contract Acro is ERC20, Ownable {
+
+   /// @dev Initial supply is produced at deployment
+   /// ERC20 Standard, token is named Acro
     constructor() ERC20("Acropora Token", "ACRO") {
       _mint(/* msg.sender */ address(this), 10000000000000000000000 /* initialSupply*/ );
       // _mint(msg.sender, initialSupply); //for tests, otherwise it does not work
@@ -17,29 +21,40 @@ contract Acro is ERC20, Ownable {
    event withdrawal(address otheradress, uint256 amount);
 
    // TO DO - modify fonction, to be discussed
+   /// @dev to buy acro
     function buy_acro() external payable {
        require(msg.value>0);
        _transfer(address(this), msg.sender, msg.value*20);
        emit buyingAcro(msg.sender, msg.value);
     }
 
+   /// @dev to get the balance in ether of this contract
+   /// @return uint balance in ether
     function get_ether_balance_of_this_contract() external view returns (uint) {
        return address(this).balance;
     }
 
+   /// @dev to get the balance in acro of this contract
+   /// @return uint balance in acro
     function get_acro_balance_of_this_contract() external view returns (uint) {
        return balanceOf(address(this));
     }
 
-   // Does not work on Ganache: wrong user eth balance value. seems to be a Ganache bug
+   // Does not work on Ganache: wrong user eth balance value. seems to be a Ganache bug!
+   /// @dev to get the balance in ether of the message sender
+   /// @return uint balance in ether
     function get_ether_balance_of_sender() external view returns (uint) {
        return msg.sender.balance;
     }
-
+   /// @dev to get the balance in acro of the message sender
+   /// @return uint balance in acro
     function get_acro_balance_of_sender() external view returns (uint) {
        return balanceOf(msg.sender);
     }
 
+   /// @dev to make a donation in acro to this contract
+   /// acro'balance must be greater than 0
+   /// @param amount amount in acro to be donated 
     function acro_donation(uint256 amount) external {
        require(amount > 0, "amount cannot be 0");
        transfer(address(this), amount);
@@ -47,65 +62,70 @@ contract Acro is ERC20, Ownable {
     }
 
    //to be checked and modified?
+   /// @dev to withdraw ether from this contract - so they are not stucked for ever!
+   /// ether'balance must be greater than the requested amount
+   /// @param amount amount in ether to be withdraw
     function withdraw_ether(uint256 amount) external payable onlyOwner {
       require(address(this).balance >= amount, "account balance is too low");
       payable(msg.sender).transfer(amount);
       emit withdrawal(msg.sender, amount);
     }
 
-   //-------------------------------------------------------------------------
-   //Staking Acro: Actors must stake a certain amount of Acro to be able to ...
-   //-------------------------------------------------------------------------
+   //---------------------------------------------------------------------------------------------
+   //Staking Acro: Actors must stake a certain amount of Acro to be able to vote for other actors
+   //--------------------------------------------------------------------------------------------
 
     address[] public stakers;
     mapping(address => uint) public stakingBalance;
     mapping(address => bool) public hasStaked;
     mapping(address => bool) public isStaking;
 
-   //to be used in a modifier in AcroActors
+   
+   /// @dev get if an actor is staking acro or not (for IU)
+   /// @param addr actor'address
+   /// @return true or false
     function is_staking_acro(address addr) external view returns (bool) {
       return isStaking[addr];
    }
 
-   //to be used in a modifier in AcroActors
+   /// @dev get the staking balance of an actor (for IU)
+   /// @param addr actor'address
+   /// @return uint amount in acro
    function staking_balance(address addr) external view returns (uint) {
       return stakingBalance[addr];
    }
    
 
-   // User put Acro into the Acro (making then a deposit)
-    function stakeAcroTokens(uint _amount) public {
-         // Amount must be greater than zero
+   /// @dev to stake acro in the contract in order to vote (used in AcroActors.sol)
+   /// staked amount must be greater than zero
+   /// staking balance is updated
+   /// sdd user to stakers array *only* if they haven't staked already
+   /// staking staking status are updated
+   /// @param amount nb of acros to be staked
+   function stakeAcroTokens(uint _amount) public {
          require(_amount > 0, "amount cannot be 0");
-         //transfer token to this contract for staking
          transfer(address(this), _amount);
-         //acrotokenaddress.transferFrom(msg.sender, address(this), _amount); //if we split the contract
-         //update staking balance
          stakingBalance[msg.sender] = stakingBalance[msg.sender] + _amount;
-         // Add user to stakers array *only* if they haven't staked already
+         
          if(!hasStaked[msg.sender]) {
                stakers.push(msg.sender);
          }
-         // Update staking status
+         
          isStaking[msg.sender] = true;
          hasStaked[msg.sender] = true;
             
        }
 
-    // Unstaking Tokens (Withdraw) - user can only widthdraw all tokens
-    // Later: a timelook should be implemented, i.e. stakers must stake for at least a certain period of time
+   ///TO DO: a timelock! i.e. stakers must stake for at least a certain period of time
+   /// @dev to unstake all the user'acro from the contract
+   /// staking balance of user must be greater than zero
+   /// staking balance is updated
+   /// staking staking status are updated
     function unstakeTokens() public {
-        // Fetch staking balance
         uint256 balance = stakingBalance[msg.sender];
-        // require amount greater than 0
         require(balance > 0, "staking balance cannot be 0");
-        //transfer token to staker
-        //acrotokenaddress.transfer(msg.sender, balance); //if we split the contract
-      //   transfer(msg.sender, balance); //ISSUE HERE ?? transferFrom instead?
         _transfer( address(this), msg.sender, balance);
-        //reset staking balance
         stakingBalance[msg.sender] = 0;
-        //update tokens staked status
         isStaking[msg.sender] = false;
     }
 
