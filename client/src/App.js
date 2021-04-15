@@ -62,11 +62,9 @@ const App = () => {
      }
   };
 
-	/*
   window.ethereum.on("accountsChanged", async function () {
      window.location = window.location.href;
   });
-  */
 
   useEffect(() => { init(); }, []);
 
