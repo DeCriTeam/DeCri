@@ -126,11 +126,7 @@ function AddActors() {
                 </Form.Group>
         </Form>
         <h2> List of actors </h2>
-            {actorsinfos !== null && 
-                actorsinfos.map((item, index) => (
-                <li key={index}>{item.description}</li>
-                ))
-            }
+          
         </>
         );
       }

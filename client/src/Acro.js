@@ -52,11 +52,12 @@ function Dons() {
      }
   };
 
-  async function on_btn_acro_stake(amount) {
+  async function on_btn_acro_stake() {
      try
      {
-      await acro_contract.contract.methods.approve(account, amount, {from: account});
-      await acro_contract.methods.stakeAcroTokens(amount).send( {from: account});
+      
+      await acro_contract.methods.stakeAcroTokens(web3.utils.toWei('2','ether')).send( {from: account});
+     
       await refresh();
      }
      catch (error)
@@ -89,22 +90,25 @@ function Dons() {
         <br />
         <button onClick={on_btn_acro_donation_click}>Donate 3 Acros to Decri</button>
         <br />
-        Ether contrat: {  web3.utils.fromWei( contract_ether_balance.toString(), 'ether') }<br />
+        Ether contrat: {  web3.utils.fromWei(contract_ether_balance.toString(), 'ether') }<br />
         Acro contrat: {  web3.utils.fromWei(contract_acro_balance.toString(), 'ether') }<br />
         Ether user: { web3.utils.fromWei(user_ether_balance.toString(), 'ether') }<br />
         Acro user: {  web3.utils.fromWei(user_acro_balance.toString(),'ether') }<br />
+
+        <h1> Stake your Acro </h1><img src= {accrologo} height="54" alt="" /> <br />
+        Staking balance: {  web3.utils.fromWei(user_acro_staking_balance.toString(), 'ether') }<br />
+                
+        <button onClick={on_btn_acro_stake}> Stake 2 acro ! </button><br />
+        <br />
+        <button onClick={on_btn_acro_unstake}> Unstake...</button>
+
+
       </>
   );
 }
 
-/*
-        <h1> Stake your Acro </h1><img src= {accrologo} height="54" alt="" /> <br />
-        Staking balance: {  web3.utils.fromWei(user_acro_staking_balance.toString(), 'ether') }<br />
-        <input id="number" type="number" value="10"></input>
+
         
-        <button onClick={on_btn_acro_stake}> Stake your accro ! </button><br />
-        <br />
-        <button onClick={on_btn_acro_unstake}> Unstake...</button>
-*/
+
 
 export default Dons;
