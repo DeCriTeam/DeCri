@@ -17,7 +17,7 @@ import Home from './Home';
 import Play from './Play';
 import Acro from './Acro';
 import Actors from './Actors';
-import AddActors from '/AddActors.js';
+import AddActors from './AddActors.js';
 import Data from './Data';
 import AddData from './AddData';
 import AddState from './AddState';
