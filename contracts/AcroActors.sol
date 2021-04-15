@@ -8,20 +8,20 @@ import "./Acro.sol";
 
 contract AcroActors is Ownable {
    
-   //struc limited to 12 variables apparently ? 
+   //TO be cleaned and optimized
+   ////To be completed (uint nb MintedArea?)
    struct Actor {
       bool isRegistered;
-      uint id; //!!to be added below & !!to be regrouped by var.cat. for optim
-      // uint nbMintedArea; // to be put in a mapping instead?
-      
-      string dateOfRegistration; // ? do we put that - CHECK variable type
+      uint id; 
+            
+      string dateOfRegistration;
       string actorName;
       string country;
-      uint latCenter;
-      uint longCenter;
+      int latCenter; //can be negative
+      int longCenter; //can be negative
       uint yearOfCreation; // year of birth of NGO ?
       string email; //type to be checked
-      string actorType; // individual, NGO, diving club      
+      string actorType; // NGO, Diving Club, Researcher
    }
 
    uint actorCount = 0; //to keep track of the number of actors and to generate a unique ID
@@ -40,11 +40,7 @@ contract AcroActors is Ownable {
 
    Acro public acro_contract;
 
-   // Case without Acro contract
-   // constructor() {
-   //   actors_whitelist[msg.sender] = true;
-   // }
-   
+  
    constructor(Acro _acro_contract) {
      acro_contract = _acro_contract;
      actors_whitelist[msg.sender] = true;
@@ -82,10 +78,10 @@ contract AcroActors is Ownable {
    function add_new_actor(address _address,
                           string memory _actorName,
                           string memory _country,
-                          uint _latCenter,
-                          uint _longCenter,
+                          int _latCenter, //can be negative
+                          int _longCenter, //can be negative
                           uint _yearOfCreation,
-                          string memory _email, //type to be checked
+                          string memory _email,
                           string memory _actorType,
                           string memory date
                           ) public {
@@ -101,7 +97,6 @@ contract AcroActors is Ownable {
 
   
    // Voter pour participer à la validation d'un acteur
-   //TO DO: THAT ACTOR MUST BE STAKING SOME ACROS to vote, need to import Acro contract for that
    //TO DO LATER: add a minimum delay of staking, i.e. at least a month
 
    // Warning: amount to be decided, beware decimals
@@ -137,7 +132,7 @@ contract AcroActors is Ownable {
 
 
    //Function to validate an actor. Number of votes to be defined - Admin only
-   // TO DO: validate several actor at once
+   // TO DO: validate several actor at once ?
    function validateActor(address actor_address) public onlyOwner {
       require(RegisteredActors[actor_address].isRegistered == true); //Only registered Actors can be validated
       

@@ -3,6 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Web3Context from "./Web3context";
 
 function AddActors() {
     const web3Context = useContext(Web3Context);
@@ -26,10 +27,10 @@ function AddActors() {
        setDisabled(true);
        try
        {
-          const { wallet, name, country, email, latitude, longitude, yearofcreation, actortype } = form;
-          const dateD; //à voir
-          
+          const { wallet, name, country, email, latitude, longitude, yearofcreation, actortype, dateD } = form;
+                    
           await actors_contract.methods.add_new_actor(wallet,name,country,latitude,longitude,yearofcreation,email, actortype,dateD).send({from: account});
+          
           window.location = '/actors/all';
        }
        catch (error)
@@ -85,6 +86,12 @@ function AddActors() {
                       <Form.Control type="text" disabled={disabled} onChange={ e => setField('yearofcreation', e.target.value) } />
                   </Col>
               </Form.Group>
+              <Form.Group as={Row}>
+              <Form.Label column sm={2}>Todaysdate</Form.Label>
+              <Col sm={10}>
+                  <Form.Control type="text" disabled={disabled} onChange={ e => setField('dateD', e.target.value) } />
+              </Col>
+          </Form.Group>
               <Form.Group as={Row}>
                   <Form.Label column sm={2}>Type</Form.Label>
                   <Col sm={10}>
