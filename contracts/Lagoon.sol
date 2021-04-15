@@ -167,23 +167,21 @@ contract Lagoon is ERC1155 {
    /**
     * @notice Buy and add item for our game and put it on a virtual zone
     * @param token_id Token ID which represents our virtual zone
-    * @param x X position where to put the item on our virtual zone
-    * @param y Y position where to put the item on our virtual zone
-    * @param item_type Item type
+    * @param item Coordinates (x,y) where to put the item on our virtual zone and item_type
     */
-   function buy_and_put_game_item(uint token_id, uint8 x, uint8 y,uint8 item_type) 
+   function buy_and_put_game_item(uint token_id, GameItem memory item)
      external
      tokenExists(token_id) 
      isMyToken(token_id)
    {
-     require(x<11 && y<11 && item_type<3,"Invalid x,y or item_type");
+     require(item.x<11 && item.y<11 && item.item_type<3,"Invalid x,y or item_type");
      pay_acro(100000000000000000);
      for (uint i=0;i<game_items[token_id].length;i++) {
-        if (game_items[token_id][i].x==x && game_items[token_id][i].y==y) {
+        if (game_items[token_id][i].x==item.x && game_items[token_id][i].y==item.y) {
            revert("Free slot required");
         }
      }
-     game_items[token_id].push(GameItem(x,y,item_type));
+     game_items[token_id].push(item);
    }
 
    /**

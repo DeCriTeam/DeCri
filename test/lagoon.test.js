@@ -81,14 +81,14 @@ contract('LagoonContract', function (accounts) {
       await acro_instance.approve(lagoon_instance.address, web3.utils.toWei('0.5', 'ether'), { from: user1 });
       await acro_instance.approve(lagoon_instance.address, web3.utils.toWei('0.5', 'ether'), { from: user2 });
 
-      await expectRevert(lagoon_instance.buy_and_put_game_item(2, 0,1, 1, { from: user1}),"This is not your token");
+      await expectRevert(lagoon_instance.buy_and_put_game_item(2,{x:0, y:1, item_type:1}, { from: user1}),"This is not your token");
 
-      await lagoon_instance.buy_and_put_game_item(1, 0,1, 1, { from: user1});
-      await lagoon_instance.buy_and_put_game_item(1, 0,2, 1, { from: user1});
+      await lagoon_instance.buy_and_put_game_item(1, {x:0, y:1, item_type:1}, { from: user1});
+      await lagoon_instance.buy_and_put_game_item(1, {x:0, y:2, item_type:1}, { from: user1});
       let level = await lagoon_instance.get_game_level(1);
       expect(level).to.be.bignumber.equal(new BN('2'));
 
-      await expectRevert(lagoon_instance.buy_and_put_game_item(1, 0,1, 1, { from: user1 }),"Free slot required");
+      await expectRevert(lagoon_instance.buy_and_put_game_item(1, {x:0, y:1, item_type:1}, { from: user1 }),"Free slot required");
    });
 
    it("Anybody can merge a virtual and a real zone", async () => {
@@ -116,10 +116,10 @@ contract('LagoonContract', function (accounts) {
 
       // We need at least 4 items on the game to be allowed to merge virtual zone
       await acro_instance.approve(lagoon_instance.address, web3.utils.toWei('0.5', 'ether'), { from: user1 });
-      await lagoon_instance.buy_and_put_game_item(2, 0,1, 1, { from: user1});
-      await lagoon_instance.buy_and_put_game_item(2, 0,2, 1, { from: user1});
-      await lagoon_instance.buy_and_put_game_item(2, 0,3, 1, { from: user1});
-      await lagoon_instance.buy_and_put_game_item(2, 0,4, 1, { from: user1});
+      await lagoon_instance.buy_and_put_game_item(2, {x:0,y:1,item_type:1}, { from: user1});
+      await lagoon_instance.buy_and_put_game_item(2, {item_type:1,x:5,y:6}, { from: user1});
+      await lagoon_instance.buy_and_put_game_item(2, {x:4,y:5,item_type:1}, { from: user1});
+      await lagoon_instance.buy_and_put_game_item(2, {x:3,y:2,item_type:1}, { from: user1});
       await lagoon_instance.merge_tokens(1,2, { from: user1 });
 
       expect( await lagoon_instance.lagoon_types(2) ).to.be.bignumber.equal(new BN(LagoonContract.LagoonType.BOTH)); 

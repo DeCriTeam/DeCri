@@ -45,9 +45,8 @@ function Play() {
   };
 
   async function on_canvas_click() {
-    console.log(x_sel + " ; " + y_sel)
     await acro_contract.methods.approve(lagoon_contract._address, '100000000000000000').send({ from: account });
-    await lagoon_contract.methods.buy_and_put_game_item(token_id, x_sel, y_sel, 1).send({ from: account });
+    await lagoon_contract.methods.buy_and_put_game_item(token_id, {item_type:1, x: x_sel, y:y_sel}).send({ from: account });
     await refresh();
   }
 
