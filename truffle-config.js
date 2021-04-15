@@ -16,13 +16,14 @@ module.exports = {
       network_id: "*"
     },
     ropsten2: {
-      provider: function() { return new HDWalletProvider(`${process.env.MNEMONIC}`, `https://ropsten.infura.io/v3/${process.env.INFURA_URL}`) },
+      provider: function() { return new HDWalletProvider(`${process.env.MNEMONIC}`, `${process.env.INFURA_URL}`) },
       network_id: 3
     },
     rinkeby: {
-      provider: function() {
-        return new HDWalletProvider(`${process.env.MNEMONIC}`, `https://rinkeby.infura.io/v3/${process.env.INFURA_ID}`)
-      },
+      // provider: function() {
+        // return new HDWalletProvider(`${process.env.MNEMONIC}`, `https://rinkeby.infura.io/v3/${process.env.INFURA_ID}`)
+      // },
+      provider: function() { return new HDWalletProvider(`${process.env.MNEMONIC}`, `${process.env.INFURA_URL}`) },
       network_id: 4
     },
   },
