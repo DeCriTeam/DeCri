@@ -17,6 +17,7 @@ import Home from './Home';
 import Play from './Play';
 import Acro from './Acro';
 import Actors from './Actors';
+import AddActors from '/AddActors.js';
 import Data from './Data';
 import AddData from './AddData';
 import AddState from './AddState';
@@ -98,7 +99,7 @@ const App = () => {
              <Switch>
                <Route path='/' exact component={Home} />
                <Route path='/acro' component={Acro} />
-               <Route path='/actors' component={Actors} />
+               <Route path='/actors' component={AddActors} />
                <Route path='/play/:token_id' component={Play} />
                <Route path='/data/:plags' component={Data} />
                <Route path='/add_data' component={AddData} />
