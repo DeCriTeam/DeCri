@@ -55,7 +55,7 @@ function Dons() {
   async function on_btn_acro_stake() {
      try
      {
-      
+     
       await acro_contract.methods.stakeAcroTokens(web3.utils.toWei('2','ether')).send( {from: account});
      
       await refresh();
@@ -68,9 +68,16 @@ function Dons() {
   };
 
   async function on_btn_acro_unstake() {
+
+   
       try
       {
-      await acro_contract.methods.unstakeTokens({from: account});
+      
+      await acro_contract.methods.unstakeTokens().send({from: account});
+      
+        this.setState({ loading: false });
+      
+
       await refresh();
       }
       catch (error)
