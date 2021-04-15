@@ -1,8 +1,8 @@
 import React, { useContext, useState, useEffect } from "react";
 import Button from 'react-bootstrap/Button';
 import CardDeck from "react-bootstrap/CardDeck";
-import Card from 'react-bootstrap/Card';
 import Web3Context from "./Web3context";
+import LagCard from "./LagCard";
 import { useParams } from "react-router-dom";
 import { Link } from 'react-router-dom'
 
@@ -78,26 +78,7 @@ function Data() {
         <CardDeck>
         {items.map((item, index) => {
           return (
-            <Card style={{ width: '18rem' }} key={index}>
-              <Card.Img variant="top" src={item.image} width="100" height="180" />
-              <Card.Body>
-                <Card.Title>{item.name}</Card.Title>
-                <Card.Text>{item.description}</Card.Text>
-                <Button variant="primary">Transférer</Button>
-                <div>
-                  Lagoon type: {item.lagoon_type}
-                </div>
-                <div>
-                  My balance: {item.my_balance}
-                </div>
-                <div>
-                  <a href={item.url_json} target="_blank" rel="noopener noreferrer">Metadatas</a>
-                </div>
-                <div>
-                  <Link to={`/play/${item.token_id}`}>Jouer</Link>
-                </div>
-              </Card.Body>
-            </Card>
+            <LagCard item={item} key={index} />
           )
         })}
         </CardDeck>

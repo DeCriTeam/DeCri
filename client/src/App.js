@@ -88,10 +88,10 @@ const App = () => {
                  <Nav.Link href='/acro'>Acheter (Acro)</Nav.Link>
                  <Nav.Link href='/actors'>Acteurs</Nav.Link>
                  <Nav.Link href='/data/me'>Mes LAGs</Nav.Link>
-                 <Nav.Link href='/data/all'>Datas</Nav.Link>
+                 { is_actor && (<Nav.Link href='/data/all'>Datas</Nav.Link>) }
                </Nav>
                <Nav> 
-                 <Nav.Link href='#'>{ account } { is_actor?("[A]"):("") }</Nav.Link>
+                 <Nav.Link href='#'>{ account } { is_actor?("[Acteur]"):("") }</Nav.Link>
                </Nav>
              </Navbar.Collapse>
            </Navbar>
