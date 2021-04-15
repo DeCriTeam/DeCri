@@ -12,6 +12,7 @@ function AddActors() {
       actors_contract,
     } = web3Context;
   
+    const [actorsinfos, setActorsInfos] = useState([]);
     
     const [disabled, setDisabled] = useState(false);
     const [ form, setForm ] = useState({})
@@ -23,7 +24,10 @@ function AddActors() {
     }
 
     async function refresh() {
-      let actorsinfos = await actors_contract.methods.get_actors_info().call();
+      var actorsinfos = [];
+      actorsinfos = await actors_contract.methods.get_actors_info().call();
+      setActorsInfos(actorsinfos);
+      console.log(actorsinfos);
     }
 
     
@@ -127,6 +131,12 @@ function AddActors() {
         </Form>
         <h2> List of actors </h2>
           
+        {actorsinfos !== null && 
+            actorsinfos.map((item, index) => (
+              <li key={index}>{item.actorName}</li>
+            ))
+          }
+
         </>
         );
       }
