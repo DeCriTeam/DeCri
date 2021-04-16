@@ -28,7 +28,7 @@ contract('AcroActors', async accounts => {
 
     //#1: ok!
     it("The owner is in the whitelist", async() => {
-        let res = await acroActorsInstance.is_actor(owner);
+        let res = await acroActorsInstance.is_validated_actor(owner);
         expect(res.toString()).to.equal("true");
         // console.log(res);
         // assert.isTrue(res, "If this is false, something is wrong");
@@ -37,33 +37,24 @@ contract('AcroActors', async accounts => {
     //#2: ok!
     it("A user can register himself as an actor, and other actors", async() => {
              
-        let newactor = await acroActorsInstance.add_new_actor(user1,"MDC","US",10,20,2020,"email@", "diving club","13/04/2021", {from: user1});
-        let res1 = await acroActorsInstance.get_actor_id(user1);
-        // console.log(res1.toString());
-        expect(res1.toString()).to.equal('0');
-
-        let newactor2 = await acroActorsInstance.add_new_actor(user2,"MDC","US",10,20,2020,"email@", "diving club","13/04/2021", {from: user1});
-        let res2 = await acroActorsInstance.get_actor_id(user2);
-        // console.log(res2.toString());
-        expect(res2.toString()).to.equal('1');
+        let newactor = await acroActorsInstance.add_new_actor(user1,{"MDC","US",10,20,2020,"email@", "diving club","13/04/2021"}, {from: user1});
+        let newactor2 = await acroActorsInstance.add_new_actor(user2,{"MDC","US",10,20,2020,"email@", "diving club","13/04/2021"}, {from: user1});
 
         let res3 = await acroActorsInstance.is_registered(user1);
         expect(res3.toString()).to.equal("true");
 
         let res4 = await acroActorsInstance.is_registered(user2);
         expect(res4.toString()).to.equal("true");
-
-
     });
 
     //#3: ok!
     // Cas à prévoir: si un acteur possède plusieurs wallets?
     it("A user cannot register an actor (address!) already registered", async() => {
            
-        let newactor = await acroActorsInstance.add_new_actor(user1,"MDC","US",10,20,2020,"email@", "diving club","13/04/2021", {from: user1});
-        await expectRevert.unspecified(acroActorsInstance.add_new_actor(user1,"MDC","US",10,20,2020,"email@", "diving club","13/04/2021", {from: user1}));
+        let newactor = await acroActorsInstance.add_new_actor(user1,{"MDC","US",10,20,2020,"email@", "diving club","13/04/2021"}, {from: user1});
+        await expectRevert(acroActorsInstance.add_new_actor(user1,{"MDC","US",10,20,2020,"email@", "diving club","13/04/2021"}, {from: user1}),"Actor already registered");
     });
-
+/*
     //#4: ok!
     //Checking voting coef with acro_balance
     it("calculate the right voting coefficient according to staking balance", async() => {
@@ -195,7 +186,7 @@ contract('AcroActors', async accounts => {
         expect(res2.toString()).to.equal("false");
         
     });
-
+*/
 
 
 

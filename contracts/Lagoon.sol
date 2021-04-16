@@ -29,7 +29,7 @@ contract Lagoon is ERC1155 {
 
    // This modifier checks if the sender is a verified actor in actor's smartcontract
    modifier onlyActor() {
-     require (actors_contract.is_actor(msg.sender)==true,"Not verified Actor");
+     require (actors_contract.is_validated_actor(msg.sender)==true,"Not verified Actor");
      _;
    }
 
@@ -104,6 +104,7 @@ contract Lagoon is ERC1155 {
    /**
     * @notice Create a new game party (virtual zone)
     * Everybody can create a new virtual zone
+    * @return generated token id for this game party
     */
    function new_virtual_zone() 
       external

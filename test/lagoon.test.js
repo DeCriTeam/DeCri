@@ -18,14 +18,14 @@ contract('LagoonContract', function (accounts) {
    });
 
    it("actor1 is a Verified actor", async() => {
-      let res = await actors_instance.is_actor(actor1);
+      let res = await actors_instance.is_validated_actor(actor1);
       expect(res).to.be.equal(true);
    });
 
    it("user1 and user2 are not verified actors", async() => {
-      let res1 = await actors_instance.is_actor(user1);
+      let res1 = await actors_instance.is_validated_actor(user1);
       expect(res1).to.be.equal(false);
-      let res2 = await actors_instance.is_actor(user2);
+      let res2 = await actors_instance.is_validated_actor(user2);
       expect(res2).to.be.equal(false);
    });
 

@@ -53,7 +53,7 @@ const App = () => {
 
        setWeb3(web3);
 
-       setIsActor(await _actors_contract.methods.is_actor(accounts[0]).call());
+       setIsActor(await _actors_contract.methods.is_validated_actor(accounts[0]).call());
      }
      catch (error)
      {
@@ -84,14 +84,14 @@ const App = () => {
              <Navbar.Toggle aria-controls="basic-navbar-nav" />
              <Navbar.Collapse id="basic-navbar-nav">
                <Nav className="mr-auto"> 
-                 <Nav.Link href='/'>Accueil</Nav.Link>
-                 <Nav.Link href='/acro'>Acheter (Acro)</Nav.Link>
-                 <Nav.Link href='/actors'>Acteurs</Nav.Link>
-                 <Nav.Link href='/data/me'>Mes LAGs</Nav.Link>
+                 <Nav.Link href='/'>Home</Nav.Link>
+                 <Nav.Link href='/acro'>Acro</Nav.Link>
+                 <Nav.Link href='/actors'>Actors</Nav.Link>
+                 <Nav.Link href='/data/me'>My LAGs</Nav.Link>
                  { is_actor && (<Nav.Link href='/data/all'>Datas</Nav.Link>) }
                </Nav>
                <Nav> 
-                 <Nav.Link href='#'>{ account } { is_actor?("[Acteur]"):("") }</Nav.Link>
+                 <Nav.Link href='#'>{ account } { is_actor?("[Validated actor]"):("") }</Nav.Link>
                </Nav>
              </Navbar.Collapse>
            </Navbar>

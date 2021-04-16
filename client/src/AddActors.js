@@ -24,13 +24,16 @@ function AddActors() {
     }
 
     async function refresh() {
-      var actorsinfos = [];
-      actorsinfos = await actors_contract.methods.get_actors_info().call();
-      setActorsInfos(actorsinfos);
-      console.log(actorsinfos);
+      let count = await actors_contract.methods.get_actors_count().call();
+      let actors = [];
+      for (var i=0;i<count;i++) {
+        let addr_actor = await actors_contract.methods.actors(i).call();
+        let actor = await actors_contract.methods.RegisteredActors(addr_actor).call();
+        actors.push(actor);
+      }
+      setActorsInfos(actors);
+      console.log(actors);
     }
-
-    
 
     useEffect(() => { refresh(); }, []);
 
@@ -39,9 +42,21 @@ function AddActors() {
        setDisabled(true);
        try
        {
-          const { wallet, name, country, email, latitude, longitude, yearofcreation, actortype, dateD } = form;
-                    
-          await actors_contract.methods.add_new_actor(wallet,name,country,latitude,longitude,yearofcreation,email, actortype,dateD).send({from: account});
+          const { name, country, email, latitude, longitude, yearofcreation, actortype, dateD } = form;
+
+          await actors_contract.methods.add_new_actor(account, {
+             actorName: name,
+             country: country,
+             latCenter: latitude,
+             longCenter: longitude,
+             yearOfCreation: yearofcreation,
+             email: email,
+             actorType: actortype,
+             dateOfRegistration: dateD,
+		 vote_score: 0,
+		  isRegistered: true,
+		  isValidated: false
+          }).send({from: account});
           
           window.location = '/actors/all';
        }
@@ -56,13 +71,6 @@ function AddActors() {
         <>
           <h2>Register a new actor</h2>
           <Form>
-                <Form.Group as={Row}>
-                    <Form.Label column sm={2}>Wallet</Form.Label>
-                    <Col sm={10}>
-                        <Form.Control type="text" disabled={disabled} onChange={ e => setField('wallet', e.target.value) } />
-                    </Col>
-                </Form.Group>
-                
                 <Form.Group as={Row}>
                     <Form.Label column sm={2}>Name</Form.Label>
                     <Col sm={10}>
@@ -116,9 +124,9 @@ function AddActors() {
                     <Form.Label column sm={2}>Type</Form.Label>
                         <Col sm={10}>
                             <Form.Control as="select" disabled={disabled} onChange={ e => setField('actortype', e.target.value) }>
-                                <option>NGO</option>
-                                <option>Diving Club</option>
-                                <option>Researcher</option>
+                                <option value="0">NGO</option>
+                                <option value="1">Diving Club</option>
+                                <option value="2">Researcher</option>
                             </Form.Control>
                         </Col>
                 </Form.Group>

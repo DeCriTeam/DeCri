@@ -11,8 +11,7 @@ contract Acro is ERC20, Ownable {
    /// @dev Initial supply is produced at deployment
    /// ERC20 Standard, token is named Acro
     constructor() ERC20("Acropora Token", "ACRO") {
-      _mint(/* msg.sender */ address(this), 10000000000000000000000 /* initialSupply*/ );
-      // _mint(msg.sender, initialSupply); //for tests, otherwise it does not work
+      _mint(address(this), 10000000000000000000000);
     }
     
    //List of events
@@ -101,7 +100,7 @@ contract Acro is ERC20, Ownable {
    /// staking balance is updated
    /// sdd user to stakers array *only* if they haven't staked already
    /// staking staking status are updated
-   /// @param amount nb of acros to be staked
+   /// @param _amount nb of acros to be staked
    function stakeAcroTokens(uint _amount) public {
          require(_amount > 0, "amount cannot be 0");
          transfer(address(this), _amount);

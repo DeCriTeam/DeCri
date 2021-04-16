@@ -70,9 +70,9 @@ function Data() {
   return (
       <>
         { (plags==='me') ? ( 
-            <h2>Mes lags</h2>
+            <h2>My LAGSs</h2>
           ) : (
-            <h2>Zones</h2>
+            <h2>Zones database</h2>
           )
         }
         <CardDeck>
@@ -83,14 +83,14 @@ function Data() {
         })}
         </CardDeck>
 
-        <h2>Déclarer une nouvelle zone réelle</h2>
+        <h2>Declare a new real zone</h2>
         <div>
-          <a href="/add_data">Déclarer une nouvelle zone réelle</a>
+          <a href="/add_data">Declare a new real zone</a>
         </div>
 
-        <h2>Nouvelle partie</h2>
+        <h2>Start new game</h2>
         <div>
-          <a href="#" onClick={on_btn_new_game_click}>Nouvelle partie</a>
+          <a href="#" onClick={on_btn_new_game_click}>Start new game</a>
         </div>
       </>
   );
