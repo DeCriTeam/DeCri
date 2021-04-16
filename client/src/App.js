@@ -99,7 +99,8 @@ const App = () => {
              <Switch>
                <Route path='/' exact component={Home} />
                <Route path='/acro' component={Acro} />
-               <Route path='/actors' component={AddActors} />
+               <Route path='/actors' exact component={Actors} />
+               <Route path='/actors/add' exact component={AddActors} />
                <Route path='/play/:token_id' component={Play} />
                <Route path='/data/:plags' component={Data} />
                <Route path='/add_data' component={AddData} />

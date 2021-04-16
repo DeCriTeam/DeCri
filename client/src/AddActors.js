@@ -11,8 +11,6 @@ function AddActors() {
       account,
       actors_contract,
     } = web3Context;
-  
-    const [actorsinfos, setActorsInfos] = useState([]);
     
     const [disabled, setDisabled] = useState(false);
     const [ form, setForm ] = useState({})
@@ -22,28 +20,13 @@ function AddActors() {
         [field]: value
       })
     }
-
-    async function refresh() {
-      let count = await actors_contract.methods.get_actors_count().call();
-      let actors = [];
-      for (var i=0;i<count;i++) {
-        let addr_actor = await actors_contract.methods.actors(i).call();
-        let actor = await actors_contract.methods.RegisteredActors(addr_actor).call();
-        actors.push(actor);
-      }
-      setActorsInfos(actors);
-      console.log(actors);
-    }
-
-    useEffect(() => { refresh(); }, []);
-
     
     async function on_btn_new_actor_click() {
        setDisabled(true);
        try
        {
           const { name, country, email, latitude, longitude, yearofcreation, actortype, dateD } = form;
-
+          console.log(actortype);
           await actors_contract.methods.add_new_actor(account, {
              actorName: name,
              country: country,
@@ -58,7 +41,7 @@ function AddActors() {
 		  isValidated: false
           }).send({from: account});
           
-          window.location = '/actors/all';
+          window.location = '/actors';
        }
        catch (error)
        {
@@ -137,13 +120,6 @@ function AddActors() {
                     </Col>
                 </Form.Group>
         </Form>
-        <h2> List of actors </h2>
-          
-        {actorsinfos !== null && 
-            actorsinfos.map((item, index) => (
-              <li key={index}>{item.actorName}</li>
-            ))
-          }
 
         </>
         );

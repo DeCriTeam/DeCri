@@ -1,48 +1,58 @@
 import React, { useContext, useState, useEffect } from "react";
+import Table from 'react-bootstrap/Table';
+import Button from 'react-bootstrap/Button';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import Web3Context from "./Web3context";
 
 function Actors() {
-  const web3Context = useContext(Web3Context);
-  const {
-    lagoon_contract
-  } = web3Context;
+    const web3Context = useContext(Web3Context);
+    const {
+      account,
+      actors_contract,
+    } = web3Context;
+  
+    const [actorsinfos, setActorsInfos] = useState([]);
 
-  const [items, setItems] = useState([]);
+    async function refresh() {
+      let count = await actors_contract.methods.get_actors_count().call();
+      let actors = [];
+      for (var i=0;i<count;i++) {
+        let addr_actor = await actors_contract.methods.actors(i).call();
+        let actor = await actors_contract.methods.RegisteredActors(addr_actor).call();
+        actors.push(actor);
+      }
+      setActorsInfos(actors);
+      console.log(actors);
+    }
 
-  async function refresh() {
-     /*
-      try {
-       var token_count = await lagoon_contract.methods.get_tokens_count().call();
-       var _items = [];
-       for (var i=0;i<token_count;i++) {
-         var url_json = await lagoon_contract.methods.uri(i+1).call();
-         let response = await fetch(url_json);
-         var responseJson = await response.json();
-         responseJson.url_json = url_json;
-         _items.push(responseJson);
-       }
-       setItems(_items);
-     }
-     catch (error)
-     {
-         alert('Transaction failed.');
-         console.error(error);
-     }
-     */
-  };
+    useEffect(() => { refresh(); }, []);
+  
+    return (
+        <>
+        <h2> List of actors </h2>
+        <a href="/actors/add">Register new actor</a>
 
-  useEffect(() => { refresh(); }, []);
-
-  return (
-      <>
-        <h2>Acteurs</h2>
-        {items.map((item, index) => {
-          return ( {item} )
-        })}
-
-       
-      </>
-  );
-}
+        <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+          </tr>
+        </thead>
+        <tbody>
+        {actorsinfos !== null && 
+            actorsinfos.map((item, index) => (
+              <tr key={index}>
+                <td>{item.actorName}</td>
+                <td>{item.email}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+        </Table>
+        </>
+        );
+      }
 
 export default Actors;

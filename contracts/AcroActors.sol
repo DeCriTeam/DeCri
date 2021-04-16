@@ -89,7 +89,7 @@ contract AcroActors {
    /// this coefficient is used in the votingForActor function
    /// @param addr actor'address
    /// @return uint coefficient
-   function votingCoefficient(address addr) private view returns(uint)
+   function votingCoefficient(address addr) public view returns(uint)
    {
       uint coef = 0;
       if (acro_contract.staking_balance(addr) > 1) 
