@@ -14,13 +14,15 @@ function Data() {
     account
   } = web3Context;
 
-  const [items, setItems] = useState([]);
+  const [real_items, setRealItems] = useState([]);
+  const [virtual_items, setVirtualItems] = useState([]);
 
   async function refresh() {
      // TODO: Récupérer la liste de tous les Lags qui sont associés à un terrain réel
      try {
        var token_count = await lagoon_contract.methods.get_tokens_count().call();
-       var _items = [];
+       var _virtual_items = [];
+       var _real_items = [];
        for (var i=0;i<token_count;i++) {
          var url_json = await lagoon_contract.methods.uri(i+1).call();
          var json_item = {}
@@ -33,10 +35,22 @@ function Data() {
          json_item.token_id = (i+1)
          json_item.lagoon_type = await lagoon_contract.methods.lagoon_types(i+1).call();
          json_item.my_balance = await lagoon_contract.methods.balanceOf(account, i+1).call();
+console.log(json_item.lagoon_type);
 
-         _items.push(json_item);
+
+         if (plags=='me' && json_item.my_balance==0) {
+	 } else {
+           if (json_item.lagoon_type==0) {
+              _virtual_items.push(json_item);
+           } else {
+              _real_items.push(json_item);
+           }
+           // TODO: Both items
+         }
        }
-       setItems(_items);
+
+       setVirtualItems(_virtual_items);
+       setRealItems(_real_items);
      }
      catch (error)
      {
@@ -70,28 +84,39 @@ function Data() {
   return (
       <>
         { (plags==='me') ? ( 
+          <>
             <h2>My LAGSs</h2>
+            <CardDeck>
+            {real_items.map((item, index) => {
+               return (
+                 <LagCard item={item} key={index} />
+               )
+            })}
+            </CardDeck>
+            &nbsp;
+            <CardDeck>
+            {virtual_items.map((item, index) => {
+               return (
+                 <LagCard item={item} key={index} />
+               )
+            })}
+            </CardDeck>
+            <a href="#" onClick={on_btn_new_game_click}>Start new game</a>
+          </>
           ) : (
+          <>
             <h2>Zones database</h2>
+            <a href="/add_data">Declare a new zone</a>
+            <CardDeck>
+            {real_items.map((item, index) => {
+               return (
+                 <LagCard item={item} key={index} />
+               )
+            })}
+            </CardDeck>
+          </>
           )
         }
-        <CardDeck>
-        {items.map((item, index) => {
-          return (
-            <LagCard item={item} key={index} />
-          )
-        })}
-        </CardDeck>
-
-        <h2>Declare a new real zone</h2>
-        <div>
-          <a href="/add_data">Declare a new real zone</a>
-        </div>
-
-        <h2>Start new game</h2>
-        <div>
-          <a href="#" onClick={on_btn_new_game_click}>Start new game</a>
-        </div>
       </>
   );
 }
