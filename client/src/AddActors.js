@@ -1,9 +1,10 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Web3Context from "./Web3context";
+import { Redirect } from "react-router-dom";
 
 function AddActors() {
     const web3Context = useContext(Web3Context);
@@ -11,7 +12,8 @@ function AddActors() {
       account,
       actors_contract,
     } = web3Context;
-    
+   
+    const [redirect, setRedirect] = useState(null);
     const [disabled, setDisabled] = useState(false);
     const [ form, setForm ] = useState({})
     const setField = (field, value) => {
@@ -41,7 +43,7 @@ function AddActors() {
 		  isValidated: false
           }).send({from: account});
           
-          window.location = '/actors';
+          setRedirect('/actors');
        }
        catch (error)
        {
@@ -49,7 +51,11 @@ function AddActors() {
            console.error(error);
        }
     };
-  
+
+    if (redirect) {
+      return <Redirect to={redirect} />;
+    }
+
     return (
         <>
           <h2>Register a new actor</h2>

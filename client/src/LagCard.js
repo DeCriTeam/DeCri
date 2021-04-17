@@ -1,23 +1,17 @@
-import React, { useContext, useState, useEffect } from "react";
-import Web3Context from "./Web3context";
+import React from "react";
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom'
 
 function LagCard(item) {
-  const web3Context = useContext(Web3Context);
-  const {
-    account
-  } = web3Context;
-
   item = item.item;
   return (
     <Card style={{ width: '18rem' }}>
-      { (item.lagoon_type==1) ? ( 
+      { (item.lagoon_type==='1') ? ( 
          <Card.Img variant="top" src={item.image} width="100" height="180" />
       ) : ("") }
       <Card.Body>
-        { (item.lagoon_type==1) ? ( 
+        { (item.lagoon_type==='1') ? ( 
           <>
             <Card.Title>{item.name}</Card.Title>
             <Card.Text>{item.description}</Card.Text>
@@ -26,7 +20,7 @@ function LagCard(item) {
           <Card.Title>Game</Card.Title>
         ) }
         <div>
-          { (item.lagoon_type==1) ? ( 
+          { (item.lagoon_type==='1') ? ( 
             <a href={item.url_json} target="_blank" rel="noopener noreferrer">Metadatas</a>
           ) : (
             <Link to={`/play/${item.token_id}`}>Play</Link>

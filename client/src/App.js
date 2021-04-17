@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Link, BrowserRouter, Route, Switch } from 'react-router-dom';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Container from "react-bootstrap/Container";
@@ -21,6 +21,8 @@ import AddActors from './AddActors.js';
 import Data from './Data';
 import AddData from './AddData';
 import AddState from './AddState';
+
+
 
 const App = () => {
 
@@ -75,23 +77,26 @@ const App = () => {
   return (
      <BrowserRouter>
        <div className="App">
-         <Web3Context.Provider value={{ web3, account, acro_contract, actors_contract, lagoon_contract }}>
+         <Web3Context.Provider value={{ web3, account, acro_contract, actors_contract, lagoon_contract, is_actor }}>
            <Navbar bg="light" expand="lg">
-             <Navbar.Brand href="/">
+             <Navbar.Brand>
                <img src='/logo.png' width='30' height='30' className="d-inline-block align-top" style={{ marginRight:10 +'px'}} alt="Decri logo" />
                Decri
              </Navbar.Brand>
              <Navbar.Toggle aria-controls="basic-navbar-nav" />
              <Navbar.Collapse id="basic-navbar-nav">
                <Nav className="mr-auto"> 
-                 <Nav.Link href='/'>Home</Nav.Link>
-                 <Nav.Link href='/acro'>Acro</Nav.Link>
-                 <Nav.Link href='/actors'>Actors</Nav.Link>
-                 <Nav.Link href='/data/me'>My LAGs</Nav.Link>
-                 { is_actor && (<Nav.Link href='/data/all'>Datas</Nav.Link>) }
+                 {/* Nav.Link cause a full page refresh. We are using Link for SPA 
+                 <Nav.Link href='/'>Home</Nav.Link> */}
+                 <Link to='/' className="nav-link">Home</Link>
+                 <Link to='/acro' className="nav-link">Acro</Link>
+                 <Link to='/actors' className="nav-link">Actors</Link>
+                 <Link to='/data/me' className="nav-link">My LAGs</Link>
+                 { is_actor && (<Link to='/data/all' className="nav-link">Datas</Link>) }
                </Nav>
                <Nav> 
-                 <Nav.Link href='#'>{ account } { is_actor?("[Validated actor]"):("") }</Nav.Link>
+                 {/* <Nav.Link href='#'>{ account } { is_actor?("[Validated actor]"):("") }</Nav.Link> */}
+                 { account } { is_actor?("[Validated actor]"):("") }
                </Nav>
              </Navbar.Collapse>
            </Navbar>

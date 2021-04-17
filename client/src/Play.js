@@ -57,7 +57,7 @@ function Play() {
     var nb_cases_largeur = 11;
     var nb_cases_hauteur = 11;
 
-    var images = Array();
+    var images = [];
     images[0] = new Image();
     images[0].src = '/corail-rouge-9.png';
     images[1] = new Image();
@@ -68,7 +68,7 @@ function Play() {
     function draw_game() {
        for (var x=nb_cases_largeur-1 ; x>=0 ; x--) {
          for (var y=0; y <nb_cases_hauteur; y++) {
-            var contour = (x==x_sel && y==y_sel)?'red':'grey';
+            var contour = (x===x_sel && y===y_sel)?'red':'grey';
             dessine_case(x, y, game_data[x + 11 * y], contour);
          }
        }
@@ -81,7 +81,7 @@ function Play() {
       context.fillStyle = 'blue';
       context.strokeStyle = color_contour;
 
-      if (color_contour=='red') {
+      if (color_contour==='red') {
          context.lineWidth = 5;
       } else {
          context.lineWidth = 1;

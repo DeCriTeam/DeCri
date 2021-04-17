@@ -1,15 +1,15 @@
 import React, { useContext, useState, useEffect } from "react";
-import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import Badge from 'react-bootstrap/Badge';
+import Table from 'react-bootstrap/Table';
 import Web3Context from "./Web3context";
 
 function Actors() {
     const web3Context = useContext(Web3Context);
     const {
-      account,
       actors_contract,
+      account,
+      is_actor,
     } = web3Context;
   
     const [actorsinfos, setActorsInfos] = useState([]);
@@ -20,11 +20,24 @@ function Actors() {
       for (var i=0;i<count;i++) {
         let addr_actor = await actors_contract.methods.actors(i).call();
         let actor = await actors_contract.methods.RegisteredActors(addr_actor).call();
+        actor.address = addr_actor;
         actors.push(actor);
       }
       setActorsInfos(actors);
-      console.log(actors);
     }
+
+    async function on_btn_vote_click(addr) {
+      try
+      {
+        await actors_contract.methods.votingForActor(addr).send({ from: account });
+        await refresh();
+      }
+      catch (error)
+      {
+         alert('Transaction failed.');
+         console.error(error);
+      }
+    };
 
     useEffect(() => { refresh(); }, []);
   
@@ -36,16 +49,22 @@ function Actors() {
         <Table striped bordered hover>
         <thead>
           <tr>
+            <th>Ethereum address</th>
             <th>Name</th>
             <th>Email</th>
+            <th>Vote score</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
         {actorsinfos !== null && 
             actorsinfos.map((item, index) => (
               <tr key={index}>
+                <td>{item.address}</td>
                 <td>{item.actorName}</td>
                 <td>{item.email}</td>
+                <td>{ item.isValidated===true ? (<Badge variant="success">Validated</Badge>) : (item.vote_score) }</td>
+                <td>{ is_actor && item.isValidated===false ? (<Button onClick={ () => on_btn_vote_click(item.address) } >Vote</Button>) : ("") }</td>
               </tr>
             ))
           }
