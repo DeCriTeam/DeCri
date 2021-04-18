@@ -87,8 +87,20 @@ function Dons() {
       }
 };
 
-
-  
+  async function on_btn_add_acro_asset_to_metamask_click() {
+    window.ethereum.request({
+      method: 'wallet_watchAsset',
+      params: {
+        type: 'ERC20',
+        options: {
+          address: acro_contract._address,
+          symbol: 'ACRO',
+          decimals: 18,
+          image: 'https://decri.herokuapp.com/static/media/ACRO-vf.819c178b.png'
+        },
+      }
+    });
+  };
 
   return (
       <>
@@ -96,6 +108,8 @@ function Dons() {
         <button onClick={on_btn_buy_acro_click}>Buy Acro (0.1 ether for 2 Acros)</button>
         <br />
         <button onClick={on_btn_acro_donation_click}>Donate 3 Acros to Decri</button>
+        <br />
+        <button onClick={on_btn_add_acro_asset_to_metamask_click}>Add Acro to metamask</button>
         <br />
         Ether contrat: {  web3.utils.fromWei(contract_ether_balance.toString(), 'ether') }<br />
         Acro contrat: {  web3.utils.fromWei(contract_acro_balance.toString(), 'ether') }<br />
