@@ -20,7 +20,6 @@ import Actors from './Actors';
 import AddActors from './AddActors.js';
 import Data from './Data';
 import AddData from './AddData';
-import AddState from './AddState';
 
 
 
@@ -111,7 +110,6 @@ const App = () => {
                <Route path='/play/:token_id' component={Play} />
                <Route path='/data/:plags' component={Data} />
                <Route path='/add_data' component={AddData} />
-               <Route path='/add_state/:token_id' component={AddState} />
              </Switch>
            </Container>
          </Web3Context.Provider>
