@@ -3,8 +3,13 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom'
 
-function LagCard(item) {
-  item = item.item;
+function LagCard(props) {
+  let item = props.item;
+
+  async function on_btn_transfer_click() {
+    props.onTransfer(item);
+  }
+
   return (
     <Card style={{ width: '18rem' }}>
       { (item.lagoon_type==='1') ? ( 
@@ -27,7 +32,7 @@ function LagCard(item) {
           ) }
         </div>
         <div>Balance: {item.my_balance}</div>
-        { (item.my_balance>0) ? ( <Button variant="primary">Transfer</Button> ) : ("") }
+        { (item.my_balance>0) ? ( <Button variant="primary" onClick={on_btn_transfer_click}>Transfer</Button> ) : ("") }
       </Card.Body>
     </Card>
   );

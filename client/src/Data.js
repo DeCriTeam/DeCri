@@ -1,5 +1,7 @@
 import React, { useCallback, useContext, useState, useEffect } from "react";
 import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import Modal from 'react-bootstrap/Modal';
 import Spinner from 'react-bootstrap/Spinner';
 import CardDeck from "react-bootstrap/CardDeck";
 import Web3Context from "./Web3context";
@@ -15,6 +17,11 @@ function Data() {
   } = web3Context;
 
   const [loading, setLoading] = useState(true);
+
+  const [modal_show, setModalShow] = useState(false);
+  const [modal_destination_wallet, setModalDestinationWallet] = useState(null);
+  const [modal_selected_lag, setModalSelectedLag] = useState(null);
+
   const [redirect, setRedirect] = useState(null);
   const [real_items, setRealItems] = useState([]);
   const [virtual_items, setVirtualItems] = useState([]);
@@ -61,11 +68,26 @@ function Data() {
 
   useEffect(() => { refresh(account, lagoon_contract,plags); }, [refresh,account,lagoon_contract,plags]);
 
+  async function on_btn_transfer_click(item) {
+     setModalSelectedLag(item);
+     setModalShow(true);
+  };
+
+  async function on_popup_btn_cancel_click() {
+     setModalShow(false);
+  };
+
+  async function on_popup_btn_transfer_click() {
+     console.log(modal_destination_wallet);
+	  console.log(modal_selected_lag);
+     setModalShow(false);
+  };
+
   async function on_btn_new_game_click() {
      try
      {
         var token_id = await lagoon_contract.methods.new_virtual_zone().send({ from: account });
-        token_id = await lagoon_contract.methods.get_tokens_count().call();	// TODO: Dirty way to get token_id
+        token_id = await lagoon_contract.methods.get_tokens_count().call();    // TODO: Dirty way to get token_id
         setRedirect(`/play/${token_id}`);
      }
      catch (error)
@@ -82,6 +104,23 @@ function Data() {
   // TODO: Agencement des cartes ci dessous (à la ligne)
   return (
       <>
+         <Modal show={modal_show}>
+          <Modal.Header>
+            <Modal.Title>Transfer { modal_selected_lag!=null ? modal_selected_lag.token_id : "" }</Modal.Title>
+          </Modal.Header>
+
+          <Modal.Body>
+            <Form.Group>
+              <Form.Label>Destination wallet (Ethereum public address)</Form.Label>
+              <Form.Control type="text" onChange={ e => setModalDestinationWallet(e.target.value) } />
+            </Form.Group>
+          </Modal.Body>
+
+          <Modal.Footer>
+            <Button variant="secondary" onClick={on_popup_btn_cancel_click}>Cancel</Button>
+            <Button variant="primary" onClick={on_popup_btn_transfer_click}>Transfer</Button>
+          </Modal.Footer>
+        </Modal>
         {loading ? (
           <div align="center">
             <Spinner animation="border" role="status" />
@@ -94,13 +133,13 @@ function Data() {
                 <Button onClick={on_btn_new_game_click}>Start new game</Button>
                 <CardDeck>
                 {real_items.map((item, index) => {
-                  return (<LagCard item={item} key={index} />)
+                  return (<LagCard onTransfer={ (e) => on_btn_transfer_click(item) } item={item} key={index} />)
                 })}
                 </CardDeck>
                 &nbsp;
                 <CardDeck>
                 {virtual_items.map((item, index) => {
-                  return (<LagCard item={item} key={index} />)
+                  return (<LagCard onTransfer={ (e) => on_btn_transfer_click(item) } item={item} key={index} />)
                 })}
                 </CardDeck>
               </>
@@ -110,7 +149,7 @@ function Data() {
                 <Link className="btn btn-primary" to="/add_data">Declare a new zone</Link>
                 <CardDeck>
                 {real_items.map((item, index) => {
-                  return (<LagCard item={item} key={index} />)
+                  return (<LagCard onTransfer={ (e) => on_btn_transfer_click(item) } item={item} key={index} />)
                 })}
                 </CardDeck>
               </>
