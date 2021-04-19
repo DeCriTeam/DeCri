@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useCallback, useContext, useState, useEffect } from "react";
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 import CardDeck from "react-bootstrap/CardDeck";
@@ -19,13 +19,13 @@ function Data() {
   const [real_items, setRealItems] = useState([]);
   const [virtual_items, setVirtualItems] = useState([]);
 
-  async function refresh() {
+  const refresh = useCallback( async (_account, _lagoon_contract, _plags) => {
      try {
-       var token_count = await lagoon_contract.methods.get_tokens_count().call();
+       var token_count = await _lagoon_contract.methods.get_tokens_count().call();
        var _virtual_items = [];
        var _real_items = [];
        for (var i=0;i<token_count;i++) {
-         var url_json = await lagoon_contract.methods.uri(i+1).call();
+         var url_json = await _lagoon_contract.methods.uri(i+1).call();
          var json_item = {}
          if (url_json!=='') {
             let response = await fetch(url_json);
@@ -34,10 +34,10 @@ function Data() {
 
          json_item.url_json = url_json;
          json_item.token_id = (i+1)
-         json_item.lagoon_type = await lagoon_contract.methods.lagoon_types(i+1).call();
-         json_item.my_balance = await lagoon_contract.methods.balanceOf(account, i+1).call();
+         json_item.lagoon_type = await _lagoon_contract.methods.lagoon_types(i+1).call();
+         json_item.my_balance = await _lagoon_contract.methods.balanceOf(_account, i+1).call();
 
-         if (plags==='me' && json_item.my_balance==='0') {
+         if (_plags==='me' && json_item.my_balance==='0') {
 	 } else {
            if (json_item.lagoon_type==='0') {
               _virtual_items.push(json_item);
@@ -57,9 +57,9 @@ function Data() {
          alert('Transaction failed.');
          console.error(error);
      }
-  };
+  },[]);
 
-  useEffect(() => { refresh(); }, []);
+  useEffect(() => { refresh(account, lagoon_contract,plags); }, [refresh,account,lagoon_contract,plags]);
 
   async function on_btn_new_game_click() {
      try

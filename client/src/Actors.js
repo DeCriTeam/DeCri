@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect,useCallback } from "react";
 import Button from 'react-bootstrap/Button';
 import Badge from 'react-bootstrap/Badge';
 import Table from 'react-bootstrap/Table';
@@ -14,23 +14,23 @@ function Actors() {
   
     const [actorsinfos, setActorsInfos] = useState([]);
 
-    async function refresh() {
-      let count = await actors_contract.methods.get_actors_count().call();
+    const refresh = useCallback( async (_actors_contract) => {
+      let count = await _actors_contract.methods.get_actors_count().call();
       let actors = [];
       for (var i=0;i<count;i++) {
-        let addr_actor = await actors_contract.methods.actors(i).call();
-        let actor = await actors_contract.methods.RegisteredActors(addr_actor).call();
+        let addr_actor = await _actors_contract.methods.actors(i).call();
+        let actor = await _actors_contract.methods.RegisteredActors(addr_actor).call();
         actor.address = addr_actor;
         actors.push(actor);
       }
       setActorsInfos(actors);
-    }
+    },[]);
 
     async function on_btn_vote_click(addr) {
       try
       {
         await actors_contract.methods.votingForActor(addr).send({ from: account });
-        await refresh();
+        await refresh(actors_contract);
       }
       catch (error)
       {
@@ -39,7 +39,7 @@ function Actors() {
       }
     };
 
-    useEffect(() => { refresh(); }, []);
+    useEffect(() => { refresh(actors_contract); }, [refresh,actors_contract]);
   
     return (
         <>

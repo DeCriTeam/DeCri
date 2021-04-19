@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useCallback } from "react";
 import Web3Context from "./Web3context";
 import accrologo from "./ACRO-vf.png";
 
@@ -16,21 +16,21 @@ function Dons() {
   const [user_ether_balance, setUserEtherBalance] = useState("");
   const [user_acro_staking_balance, setUserAcroStakingBalance] = useState("");
 
-  async function refresh() {
-     setContractEtherBalance(await acro_contract.methods.get_ether_balance_of_this_contract().call());
-     setContractAcroBalance(await acro_contract.methods.get_acro_balance_of_this_contract().call());
-     setUserEtherBalance(await acro_contract.methods.get_ether_balance_of_sender().call({ from: account }));
-     setUserAcroBalance(await acro_contract.methods.get_acro_balance_of_sender().call({ from: account }));
-     setUserAcroStakingBalance(await acro_contract.methods.stakingBalance(account).call({from: account}));
-  };
+  const refresh = useCallback( async (_account, _acro_contract) => {
+     setContractEtherBalance(await _acro_contract.methods.get_ether_balance_of_this_contract().call());
+     setContractAcroBalance(await _acro_contract.methods.get_acro_balance_of_this_contract().call());
+     setUserEtherBalance(await _acro_contract.methods.get_ether_balance_of_sender().call({ from: _account }));
+     setUserAcroBalance(await _acro_contract.methods.get_acro_balance_of_sender().call({ from: _account }));
+     setUserAcroStakingBalance(await _acro_contract.methods.stakingBalance(_account).call({from: _account}));
+  },[]);
 
-  useEffect(() => { refresh(); }, []);
-	
+  useEffect(() => { refresh(account, acro_contract); }, [refresh,account,acro_contract]);
+
   async function on_btn_buy_acro_click() {
      try
      {
         await acro_contract.methods.buy_acro().send({ from: account, value:web3.utils.toWei('0.1', "ether") });
-        await refresh();
+        await refresh(account, acro_contract);
      }
      catch (error)
      {
@@ -43,7 +43,7 @@ function Dons() {
      try
      {
         await acro_contract.methods.acro_donation(web3.utils.toWei('3','ether')).send({ from: account });
-        await refresh();
+        await refresh(account, acro_contract);
      }
      catch (error)
      {
@@ -55,10 +55,8 @@ function Dons() {
   async function on_btn_acro_stake() {
      try
      {
-     
-      await acro_contract.methods.stakeAcroTokens(web3.utils.toWei('2','ether')).send( {from: account});
-     
-      await refresh();
+       await acro_contract.methods.stakeAcroTokens(web3.utils.toWei('2','ether')).send( {from: account});
+       await refresh(account, acro_contract);
      }
      catch (error)
      {
@@ -68,24 +66,18 @@ function Dons() {
   };
 
   async function on_btn_acro_unstake() {
-
-   
-      try
-      {
+    try
+    {
       
       await acro_contract.methods.unstakeTokens().send({from: account});
-      
-        this.setState({ loading: false });
-      
-
-      await refresh();
-      }
-      catch (error)
-      {
-         alert('Transaction failed');
-         console.error(error);
-      }
-};
+      await refresh(account, acro_contract);
+    }
+    catch (error)
+    {
+       alert('Transaction failed');
+       console.error(error);
+    }
+  };
 
   async function on_btn_add_acro_asset_to_metamask_click() {
     window.ethereum.request({
