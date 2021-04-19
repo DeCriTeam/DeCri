@@ -74,10 +74,13 @@ contract Acro is ERC20, Ownable {
    //Staking Acro: Actors must stake a certain amount of Acro to be able to vote for other actors
    //--------------------------------------------------------------------------------------------
 
+   //Julien: should we use a struc instead of all these mappings?
     address[] public stakers;
     mapping(address => uint) public stakingBalance;
     mapping(address => bool) public hasStaked;
     mapping(address => bool) public isStaking;
+    mapping(address => uint) public unlockDate;
+    mapping(address => uint) public createdAt;
 
    
    /// @dev get if an actor is staking acro or not (for IU)
@@ -112,17 +115,20 @@ contract Acro is ERC20, Ownable {
          
          isStaking[msg.sender] = true;
          hasStaked[msg.sender] = true;
+         createdAt[msg.sender] = block.timestamp;
             
        }
 
-   ///TO DO: a timelock! i.e. stakers must stake for at least a certain period of time
+   ///TO BE CHECKED! i.e. stakers must stake for at least a certain period of time
    /// @dev to unstake all the user'acro from the contract
    /// staking balance of user must be greater than zero
    /// staking balance is updated
    /// staking staking status are updated
     function unstakeTokens() public {
         uint256 balance = stakingBalance[msg.sender];
+        unlockDate[msg.sender] =  createdAt[msg.sender] + 15 minutes; // TO BE DECIDED [+ 15 days; here set another value for testing purposes]
         require(balance > 0, "staking balance cannot be 0");
+        require(block.timestamp >= unlockDate[msg.sender], "you must be staking for at least 15 days");
         _transfer( address(this), msg.sender, balance);
         stakingBalance[msg.sender] = 0;
         isStaking[msg.sender] = false;
