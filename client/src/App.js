@@ -44,7 +44,9 @@ const App = () => {
        setAccount(accounts[0]);
 
        var deployedNetwork = AcroContract.networks[networkId];
-       setAcroContract(new web3.eth.Contract(AcroContract.abi, deployedNetwork && deployedNetwork.address));
+       let _acro_contract = new web3.eth.Contract(AcroContract.abi, deployedNetwork && deployedNetwork.address);
+       _acro_contract.events.Transfer().on("data", (event) => console.log('EVENT : ' + event.event)); 
+       setAcroContract(_acro_contract);
 
        deployedNetwork = ActorsContract.networks[networkId];
        let _actors_contract = new web3.eth.Contract(ActorsContract.abi, deployedNetwork && deployedNetwork.address);
