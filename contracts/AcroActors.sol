@@ -31,6 +31,7 @@ contract AcroActors {
    address[] public actors;
    mapping(address => mapping(address => bool)) private already_vote;
    Acro private acro_contract;
+   uint actorsCount = 0;
 
    /// @dev Acro contract address is set on this contract during deployment
    /// @param _acro_contract Acro contract address
@@ -48,7 +49,7 @@ contract AcroActors {
        actorType: ActorTypes.NGO,
        dateOfRegistration: "",
        vote_score: 0}));
-     RegisteredActors[msg.sender].isValidated = true;
+       RegisteredActors[msg.sender].isValidated = true;
    }
 
    /**
@@ -63,6 +64,7 @@ contract AcroActors {
       actor.isValidated = false;
       actor.vote_score = 0;
       RegisteredActors[addr] = actor;
+      actorsCount++;
       actors.push(addr);
       emit ActorRegistered(addr);
    }
@@ -81,6 +83,23 @@ contract AcroActors {
    function get_actors_count() external view returns (uint) {
       return actors.length;
    }
+
+  
+   /// @dev get the count of validated actors
+   /// the function is use in the function votingForActor
+   /// @return uint number of validated actors
+   function get_validated_actors_count() public view returns (uint){
+      uint validatedActorsCount = 0;
+      for (uint i = 0; i < actors.length; i++) {
+         address addr = actors[i];
+         if (RegisteredActors[addr].isValidated == true)
+         {
+            validatedActorsCount++;
+         }
+      }
+
+      return validatedActorsCount;
+   }
   
    //TO DO LATER: add a minimum delay of staking, i.e. at least a month
    // Warning: amount to be decided
@@ -92,20 +111,19 @@ contract AcroActors {
    function votingCoefficient(address addr) public view returns(uint)
    {
       uint coef = 0;
+
       if (acro_contract.staking_balance(addr) > 1) 
       {
          coef = 1;
       }
-      else if (acro_contract.staking_balance(addr) > 50)
-      {
-         coef = 2;
-      }
+     
       return uint(coef);
    }
 
    /// @dev Allows to vote for an actor. Only a validated actor can vote for another actor.
    /// The voter cannot vote for a non-registered actor, he cannot vote for himself
    /// The voter can vote only once for an actor.
+   /// An actor is automatically validated if its score is greater or equal to 80% of the voting actors
    /// @param actor_address actor'address for who the voter wants to vote
    function votingForActor(address actor_address) external { 
       require(RegisteredActors[msg.sender].isValidated == true,"Voter must be validated");
@@ -119,8 +137,10 @@ contract AcroActors {
 
       already_vote[msg.sender][actor_address] = true;
       emit votedEvent(actor_address);
+
+      uint NbValidatedActors = get_validated_actors_count();
       
-      if (RegisteredActors[actor_address].vote_score>2) { // !!! NUMBER TO BE SPECIFIED, set low here for testing purpose. FUNCTION?
+      if ((RegisteredActors[actor_address].vote_score*100) >= NbValidatedActors*80) {
          RegisteredActors[actor_address].isValidated = true;
          emit ActorIsValided(actor_address);
       }
