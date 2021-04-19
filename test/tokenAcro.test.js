@@ -4,6 +4,7 @@ const { expect } = require('chai');
 const AcroContract = artifacts.require('Acro');
 
 //In console do not forget to install: npm i ganache-time-traveler
+//works only locally not on truffle
 const timeMachine = require('ganache-time-traveler');
 
 
@@ -174,7 +175,7 @@ contract('Acro', function (accounts) {
 
 
             //Unstaking Acro tokens
-            await timeMachine.advanceTimeAndBlock(1800);//1800 s, i.e. 30 min
+            await timeMachine.advanceTimeAndBlock(16*24*60*60);//16 days
 
             await this.ERC20Instance.unstakeTokens({from: recipient});
             //check results after unstaking
