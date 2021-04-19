@@ -19,7 +19,14 @@ function Data() {
   const [loading, setLoading] = useState(true);
 
   const [modal_show, setModalShow] = useState(false);
-  const [modal_destination_wallet, setModalDestinationWallet] = useState(null);
+  const [disabled, setDisabled] = useState(false);
+  const [ form, setForm ] = useState({})
+  const setField = (field, value) => {
+    setForm({
+      ...form,
+      [field]: value
+    })
+  }
   const [modal_selected_lag, setModalSelectedLag] = useState(null);
 
   const [redirect, setRedirect] = useState(null);
@@ -70,6 +77,7 @@ function Data() {
 
   async function on_btn_transfer_click(item) {
      setModalSelectedLag(item);
+     setDisabled(false);
      setModalShow(true);
   };
 
@@ -78,9 +86,19 @@ function Data() {
   };
 
   async function on_popup_btn_transfer_click() {
-     console.log(modal_destination_wallet);
-	  console.log(modal_selected_lag);
-     setModalShow(false);
+     setDisabled(true);
+     try
+     {
+        const { quantity, destination_wallet } = form;
+        await lagoon_contract.methods.safeTransferFrom(account, destination_wallet, modal_selected_lag.token_id, quantity, Buffer.from(new ArrayBuffer(0))).send({ from:account });
+        setModalShow(false);
+        await refresh(account, lagoon_contract, plags);
+     }
+     catch (error)
+     {
+         alert('Transaction failed.');
+         console.error(error);
+     }
   };
 
   async function on_btn_new_game_click() {
@@ -106,19 +124,23 @@ function Data() {
       <>
          <Modal show={modal_show}>
           <Modal.Header>
-            <Modal.Title>Transfer { modal_selected_lag!=null ? modal_selected_lag.token_id : "" }</Modal.Title>
+            <Modal.Title>Transfer token #{ modal_selected_lag!=null ? modal_selected_lag.token_id : "" }</Modal.Title>
           </Modal.Header>
 
           <Modal.Body>
             <Form.Group>
+              <Form.Label>Quantity</Form.Label>
+              <Form.Control disabled={disabled} type="text" onChange={ e => setField('quantity', e.target.value) } />
+            </Form.Group>
+            <Form.Group>
               <Form.Label>Destination wallet (Ethereum public address)</Form.Label>
-              <Form.Control type="text" onChange={ e => setModalDestinationWallet(e.target.value) } />
+              <Form.Control disabled={disabled} type="text" onChange={ e => setField('destination_wallet', e.target.value) } placeholder="0x" />
             </Form.Group>
           </Modal.Body>
 
           <Modal.Footer>
-            <Button variant="secondary" onClick={on_popup_btn_cancel_click}>Cancel</Button>
-            <Button variant="primary" onClick={on_popup_btn_transfer_click}>Transfer</Button>
+            <Button variant="secondary" disabled={disabled} onClick={on_popup_btn_cancel_click}>Cancel</Button>
+            <Button variant="primary" disabled={disabled} onClick={on_popup_btn_transfer_click}>Transfer</Button>
           </Modal.Footer>
         </Modal>
         {loading ? (
