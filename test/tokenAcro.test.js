@@ -3,6 +3,9 @@ const { BN, expectEvent, ether } = require('@openzeppelin/test-helpers');
 const { expect } = require('chai');
 const AcroContract = artifacts.require('Acro');
 
+//In console do not forget to install: npm i ganache-time-traveler
+const timeMachine = require('ganache-time-traveler');
+
 
 function tokens(n) {
     return web3.utils.toWei(n, 'ether');
@@ -171,6 +174,8 @@ contract('Acro', function (accounts) {
 
 
             //Unstaking Acro tokens
+            await timeMachine.advanceTimeAndBlock(1800);//1800 s, i.e. 30 min
+
             await this.ERC20Instance.unstakeTokens({from: recipient});
             //check results after unstaking
             let balanceRecipientAfterUnstaking = await this.ERC20Instance.balanceOf(recipient);
