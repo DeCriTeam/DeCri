@@ -37,6 +37,7 @@ contract AcroActors {
    /// @param _acro_contract Acro contract address
    constructor(Acro _acro_contract) {
      acro_contract = _acro_contract;
+
      add_new_actor(msg.sender, Actor({
        isRegistered: true,
        isValidated: true,
@@ -49,7 +50,64 @@ contract AcroActors {
        actorType: ActorTypes.NGO,
        dateOfRegistration: "",
        vote_score: 0}));
+
+     add_new_actor(0x50BB734240C657d5da3EacF43195070b6EFFD70a, Actor({
+       isRegistered: true,
+       isValidated: true,
+       actorName: "Julien",
+       country: "France",
+       latCenter: 0,
+       longCenter: 0,
+       yearOfCreation: 2021,
+       email: "julien.crypt@gmail.com",
+       actorType: ActorTypes.NGO,
+       dateOfRegistration: "",
+       vote_score: 0}));
+
+     add_new_actor(0x41edF7a963c717867C57b2c5199b78452E7a9985, Actor({
+       isRegistered: true,
+       isValidated: true,
+       actorName: "Deborah",
+       country: "France",
+       latCenter: 0,
+       longCenter: 0,
+       yearOfCreation: 2021,
+       email: "",
+       actorType: ActorTypes.NGO,
+       dateOfRegistration: "",
+       vote_score: 0}));
+
+     add_new_actor(0xE3648af1685C59FEA0DE947bF6f70d3dB8C83681, Actor({
+       isRegistered: true,
+       isValidated: true,
+       actorName: "Leo",
+       country: "France",
+       latCenter: 0,
+       longCenter: 0,
+       yearOfCreation: 2021,
+       email: "",
+       actorType: ActorTypes.NGO,
+       dateOfRegistration: "",
+       vote_score: 0}));
+
+     add_new_actor(0x4B079e0D870b10c2EB64231f90FAfB4D330938Ce, Actor({
+       isRegistered: true,
+       isValidated: true,
+       actorName: "Melanie",
+       country: "France",
+       latCenter: 0,
+       longCenter: 0,
+       yearOfCreation: 2021,
+       email: "",
+       actorType: ActorTypes.NGO,
+       dateOfRegistration: "",
+       vote_score: 0}));
+
        RegisteredActors[msg.sender].isValidated = true;
+       RegisteredActors[0x50BB734240C657d5da3EacF43195070b6EFFD70a].isValidated = true;
+       RegisteredActors[0x41edF7a963c717867C57b2c5199b78452E7a9985].isValidated = true;
+       RegisteredActors[0xE3648af1685C59FEA0DE947bF6f70d3dB8C83681].isValidated = true;
+       RegisteredActors[0x4B079e0D870b10c2EB64231f90FAfB4D330938Ce].isValidated = true;
    }
 
    /**
