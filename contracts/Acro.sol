@@ -119,14 +119,13 @@ contract Acro is ERC20, Ownable {
             
        }
 
-   ///TO BE CHECKED! i.e. stakers must stake for at least a certain period of time
    /// @dev to unstake all the user'acro from the contract
    /// staking balance of user must be greater than zero
    /// staking balance is updated
    /// staking staking status are updated
     function unstakeTokens() public {
         uint256 balance = stakingBalance[msg.sender];
-        unlockDate[msg.sender] =  createdAt[msg.sender] + 15 minutes; // TO BE DECIDED [+ 15 days; here set another value for testing purposes]
+        unlockDate[msg.sender] =  createdAt[msg.sender] + 15 days; // TO BE DECIDED [+ 15 days; here set another value for testing purposes]
         require(balance > 0, "staking balance cannot be 0");
         require(block.timestamp >= unlockDate[msg.sender], "you must be staking for at least 15 days");
         _transfer( address(this), msg.sender, balance);
