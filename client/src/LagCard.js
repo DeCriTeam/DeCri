@@ -1,5 +1,7 @@
 import React from "react";
 import Card from 'react-bootstrap/Card';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import Badge from 'react-bootstrap/Badge';
 import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom'
 
@@ -12,27 +14,30 @@ function LagCard(props) {
 
   return (
     <Card style={{ width: '18rem' }}>
-      { (item.lagoon_type==='1') ? ( 
+      { (item.lagoon_type==='1' || item.lagoon_type==='2') ? ( 
          <Card.Img variant="top" src={item.image} width="100" height="180" />
       ) : ("") }
       <Card.Body>
-        { (item.lagoon_type==='1') ? ( 
+        { (item.lagoon_type==='1' || item.lagoon_type==='2') ? ( 
           <>
-            <Card.Title>{item.name}</Card.Title>
+            <Card.Title>
+              #{item.token_id} { item.lagoon_type==='2' ? ("Merged LAG") : (item.name) }
+              <Badge variant="danger">{item.my_balance}</Badge>
+            </Card.Title>
             <Card.Text>{item.description}</Card.Text>
           </>
         ) : (
-          <Card.Title>Game</Card.Title>
+          <Card.Title>#{item.token_id} Game</Card.Title>
         ) }
-        <div>
-          { (item.lagoon_type==='1') ? ( 
-            <a href={item.url_json} target="_blank" rel="noopener noreferrer">Metadatas</a>
-          ) : (
-            <Link to={`/play/${item.token_id}`}>Play</Link>
-          ) }
-        </div>
-        <div>Balance: {item.my_balance}</div>
-        { (item.my_balance>0) ? ( <Button variant="primary" onClick={on_btn_transfer_click}>Transfer</Button> ) : ("") }
+        <ButtonGroup>
+          { (item.lagoon_type==='1' || item.lagoon_type==='2') ? ( 
+            <a href={item.url_json} target="_blank" rel="noopener noreferrer" className="btn btn-primary">Datas</a>
+          ) : ("") }
+          { (item.lagoon_type==='0' || item.lagoon_type==='2') ? ( 
+            <Link to={`/play/${item.token_id}`} className="btn btn-info">Play</Link>
+          ) : ("") }
+        { (item.my_balance>0) ? ( <Button variant="warning" onClick={on_btn_transfer_click}>Transfer</Button> ) : ("") }
+        </ButtonGroup>
       </Card.Body>
     </Card>
   );

@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import Spinner from 'react-bootstrap/Spinner';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
@@ -114,6 +115,7 @@ function AddData() {
             </Form.Group>
             <Form.Group as={Row}>
                 <Col sm={{ span: 10, offset: 2 }}>
+                    { disabled ? (<Spinner animation="border" role="status" />) : ("") }
                     <Button onClick={on_btn_new_real_zone_click} disabled={disabled}>Create</Button>
                 </Col>
             </Form.Group>
