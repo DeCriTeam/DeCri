@@ -32,6 +32,13 @@ const App = () => {
   const [lagoon_contract, setLagoonContract] = useState(null);
   const [is_actor, setIsActor] = useState(null);
 
+  const callback_event_ref = React.useRef();
+  async function callback_event(event) {
+    console.log(account);
+    console.log(event);
+  }
+  callback_event_ref.current = callback_event;
+
   async function init() {
      try 
      {
@@ -44,7 +51,7 @@ const App = () => {
 
        var deployedNetwork = AcroContract.networks[networkId];
        let _acro_contract = new web3.eth.Contract(AcroContract.abi, deployedNetwork && deployedNetwork.address);
-       _acro_contract.events.Transfer().on("data", (event) => console.log('EVENT : ' + event.event)); 
+       _acro_contract.events.Transfer().on("data", (e) => callback_event_ref.current(e));
        setAcroContract(_acro_contract);
 
        deployedNetwork = ActorsContract.networks[networkId];
