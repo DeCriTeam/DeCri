@@ -22,7 +22,7 @@ contract Acro is ERC20, Ownable {
    // TO DO - modify fonction, to be discussed
    /// @dev to buy acro
     function buy_acro() external payable {
-       require(msg.value>0);
+       require(msg.value>0, "You must enter an amount >0");
        _transfer(address(this), msg.sender, msg.value*20);
        emit buyingAcro(msg.sender, msg.value);
     }
