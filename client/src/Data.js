@@ -39,7 +39,16 @@ function Data() {
        var _virtual_items = [];
        var _real_items = [];
        for (var i=0;i<token_count;i++) {
-         var url_json = await _lagoon_contract.methods.uri(i+1).call();
+         let lagoon_type = await _lagoon_contract.methods.lagoon_types(i+1).call();
+
+         var url_json = '';
+         if (lagoon_type==='2') {
+            let linked_token_id = await _lagoon_contract.methods.linked_real_token_id(i+1).call();
+            url_json = await _lagoon_contract.methods.uri(linked_token_id).call();
+         } else if (lagoon_type==='1') {
+            url_json = await _lagoon_contract.methods.uri(i+1).call();
+         }
+
          var json_item = {}
          if (url_json!=='') {
             let response = await fetch(url_json);
@@ -48,17 +57,16 @@ function Data() {
 
          json_item.url_json = url_json;
          json_item.token_id = (i+1)
-         json_item.lagoon_type = await _lagoon_contract.methods.lagoon_types(i+1).call();
+         json_item.lagoon_type = lagoon_type;
          json_item.my_balance = await _lagoon_contract.methods.balanceOf(_account, i+1).call();
 
          if (_plags==='me' && json_item.my_balance==='0') {
-	 } else {
+         } else {
            if (json_item.lagoon_type==='0') {
               _virtual_items.push(json_item);
            } else {
               _real_items.push(json_item);
            }
-           // TODO: Both items
          }
        }
 
