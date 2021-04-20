@@ -174,21 +174,24 @@ contract('Acro', function (accounts) {
             assert.equal(stakerstatus.toString(), 'true', 'investor staking status correct after staking');
 
 
-            //Unstaking Acro tokens
-            await timeMachine.advanceTimeAndBlock(16*24*60*60);//16 days
+            let chain_id = await web3.eth.getChainId();
+            if (chain_id==1337) {
+              //Unstaking Acro tokens
+              await timeMachine.advanceTimeAndBlock(16*24*60*60);//16 days
 
-            await this.ERC20Instance.unstakeTokens({from: recipient});
-            //check results after unstaking
-            let balanceRecipientAfterUnstaking = await this.ERC20Instance.balanceOf(recipient);
-            // console.log(balanceRecipientAfterUnstaking);
-            // assert.equal((balanceRecipientAfterUnstaking.toString()), tokens('0'), 'recipient Acro wallet balance correct after staking');
+              await this.ERC20Instance.unstakeTokens({from: recipient});
+              //check results after unstaking
+              let balanceRecipientAfterUnstaking = await this.ERC20Instance.balanceOf(recipient);
+              // console.log(balanceRecipientAfterUnstaking);
+              // assert.equal((balanceRecipientAfterUnstaking.toString()), tokens('0'), 'recipient Acro wallet balance correct after staking');
 
-            recipientStakingBalance = await this.ERC20Instance.stakingBalance(recipient);
-            assert.equal(recipientStakingBalance.toString(), tokens('0'), 'recipient staking balance correct after staking');
+              recipientStakingBalance = await this.ERC20Instance.stakingBalance(recipient);
+              assert.equal(recipientStakingBalance.toString(), tokens('0'), 'recipient staking balance correct after staking');
 
-            recipientStakingStatus = await this.ERC20Instance.isStaking(recipient);
-            // console.log(recipientStakingStatus.toString());
-            assert.equal(recipientStakingStatus.toString(), 'false', 'recipient staking status correct after staking');
+              recipientStakingStatus = await this.ERC20Instance.isStaking(recipient);
+              // console.log(recipientStakingStatus.toString());
+              assert.equal(recipientStakingStatus.toString(), 'false', 'recipient staking status correct after staking');
+            }
 
         });
 
