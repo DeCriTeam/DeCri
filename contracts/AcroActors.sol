@@ -170,7 +170,7 @@ contract AcroActors {
    {
       uint coef = 0;
 
-      if (acro_contract.staking_balance(addr) > 1) 
+      if (acro_contract.staking_balance(addr) >= 10000000000000000000)//10 acros 
       {
          coef = 1;
       }
