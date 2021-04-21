@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, BrowserRouter, Route, Switch } from 'react-router-dom';
 import Navbar from 'react-bootstrap/Navbar';
+import Spinner from 'react-bootstrap/Spinner';
 import Nav from 'react-bootstrap/Nav';
 import Container from "react-bootstrap/Container";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -27,6 +28,8 @@ const App = () => {
 
   const [web3, setWeb3] = useState(null);
   const [account, setAccount] = useState(null);
+  const [metamask_installed, setMetamaskInstalled] = useState(null);
+  const [chain_id, setChainId] = useState(null);
   const [acro_contract, setAcroContract] = useState(null);
   const [actors_contract, setActorsContract] = useState(null);
   const [lagoon_contract, setLagoonContract] = useState(null);
@@ -42,28 +45,39 @@ const App = () => {
   async function init() {
      try 
      {
+       let _metamask_installed = (window.ethereum!==undefined);
+       setMetamaskInstalled(_metamask_installed);
+       if (_metamask_installed!==true) {
+         return ;
+       }
+
        const web3 = await getWeb3();
        const accounts = await web3.eth.getAccounts();
+       const _chain_id = await web3.eth.getChainId();
+       setChainId(_chain_id);
 
        const networkId = await web3.eth.net.getId();
 
-       setAccount(accounts[0]);
+       if (_chain_id===4) {
+         setAccount(accounts[0]);
 
-       var deployedNetwork = AcroContract.networks[networkId];
-       let _acro_contract = new web3.eth.Contract(AcroContract.abi, deployedNetwork && deployedNetwork.address);
-       _acro_contract.events.Transfer().on("data", (e) => callback_event_ref.current(e));
-       setAcroContract(_acro_contract);
+         var deployedNetwork = AcroContract.networks[networkId];
+         let _acro_contract = new web3.eth.Contract(AcroContract.abi, deployedNetwork && deployedNetwork.address);
+         _acro_contract.events.Transfer().on("data", (e) => callback_event_ref.current(e));
+         setAcroContract(_acro_contract);
 
-       deployedNetwork = ActorsContract.networks[networkId];
-       let _actors_contract = new web3.eth.Contract(ActorsContract.abi, deployedNetwork && deployedNetwork.address);
-       setActorsContract(_actors_contract);
+         deployedNetwork = ActorsContract.networks[networkId];
+         let _actors_contract = new web3.eth.Contract(ActorsContract.abi, deployedNetwork && deployedNetwork.address);
+         setActorsContract(_actors_contract);
 
-       deployedNetwork = LagoonContract.networks[networkId];
-       setLagoonContract(new web3.eth.Contract(LagoonContract.abi, deployedNetwork && deployedNetwork.address));
+         deployedNetwork = LagoonContract.networks[networkId];
+         setLagoonContract(new web3.eth.Contract(LagoonContract.abi, deployedNetwork && deployedNetwork.address));
 
+         setIsActor(await _actors_contract.methods.is_validated_actor(accounts[0]).call());
+
+       }
        setWeb3(web3);
 
-       setIsActor(await _actors_contract.methods.is_validated_actor(accounts[0]).call());
      }
      catch (error)
      {
@@ -72,14 +86,30 @@ const App = () => {
      }
   };
 
-  window.ethereum.on("accountsChanged", async function () {
-     window.location = window.location.href;
-  });
+  if (window.ethereum!==undefined) {
+    window.ethereum.on("accountsChanged", async function () {
+      window.location = window.location.href;
+    });
+
+    window.ethereum.on('chainChanged', (chainId) => {
+      window.location = window.location.href;
+    });
+  }
 
   useEffect(() => { init(); }, []);
+  if (metamask_installed!==true) {
+    return <div>Please install metamask</div>
+  }
 
   if (!web3) {
-    return <div>Loading Web3, accounts, and contract...</div>;
+    return (<Spinner animation="border" role="status">
+      <span className="sr-only">Loading...</span>
+      </Spinner>
+    )
+  }
+
+  if (chain_id!==4) {
+    return <div>Please switch on Rinkeby network</div>
   }
 
   return (
