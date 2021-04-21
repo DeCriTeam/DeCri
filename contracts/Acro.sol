@@ -60,14 +60,13 @@ contract Acro is ERC20, Ownable {
        emit donatingAcro(msg.sender, amount);
     }
 
-   //to be checked and modified?
-   /// @dev to withdraw ether from this contract - so they are not stucked for ever!
+   //// @dev to withdraw ether from this contract - so they are not stucked for ever!
    /// ether'balance must be greater than the requested amount
    
-    function withdraw_ether() external payable onlyOwner {
-      require(address(this).balance >= msg.value, "account balance is too low");
-      payable(msg.sender).transfer(msg.value);
-      emit withdrawal(msg.sender, msg.value);
+    function withdraw_ether(uint256 amount) external onlyOwner {
+      require(address(this).balance >= amount, "account balance is too low");
+      payable(msg.sender).transfer(amount);
+      emit withdrawal(msg.sender, amount);
     }
 
    //---------------------------------------------------------------------------------------------
