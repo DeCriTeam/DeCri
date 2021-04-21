@@ -8,9 +8,6 @@ function tokens(n) {
     return web3.utils.toWei(n, 'ether');
 }
 
-function convertfromWei(n) {
-    return web3.utils.fromWei(n, 'ether');
-}
 
 contract('AcroActors', async accounts => {
 
@@ -84,15 +81,27 @@ contract('AcroActors', async accounts => {
     });
 
     it("calculate the right voting coefficient according to staking balance", async() => {
+        let newactor = await acroActorsInstance.add_new_actor(user1,{
+            actorName:"MDC",
+            country:"US",
+            latCenter:new BN('10'),
+            longCenter:new BN('20'),
+            yearOfCreation:new BN('2020'),
+            email:"email@",
+            actorType: new BN(AcroActors.ActorTypes.DIVING_CLUB),
+            dateOfRegistration:"13/04/2021",
+            vote_score:0
+         }, {from: user1});
         // Buying and staking process
-        await acroInstance.buy_acro({from: user1, value:web3.utils.toWei('0.1', "ether")}); //buying 2 Acro
-        let stakeAmount = new BN(2); // Stake Acro Tokens
-        await acroInstance.approve(user1, tokens(stakeAmount), {from: owner});
-        await acroInstance.stakeAcroTokens(tokens(stakeAmount), {from: user1});
+        await acroInstance.buy_acro({from: user1, value:web3.utils.toWei('0.5', "ether")}); //buying 10 Acro
+        let stakeAmount = new BN(10); // Stake Acro Tokens
+        // await acroInstance.approve(user1, web3.utils.toWei('10','ether'), {from: owner});
+        await acroInstance.stakeAcroTokens(web3.utils.toWei('10','ether'), {from: user1});
 
         // Calculating voting coeff
         let votingCoef = await acroActorsInstance.votingCoefficient(user1, {from: user1});
         expect(votingCoef.toString()).to.equal('1');
+        console.log(votingCoef.toString());
     })
 
     it("A validated actor can vote for another registered actor", async() => {
@@ -111,8 +120,8 @@ contract('AcroActors', async accounts => {
         let checkres0 = await acroActorsInstance.RegisteredActors(user2);
         expect(checkres0.vote_score).to.bignumber.equal(new BN("0"));
 
-        await acroInstance.buy_acro({from: owner, value:web3.utils.toWei('0.1', "ether")});
-        let stakeAmount = new BN(2);
+        await acroInstance.buy_acro({from: owner, value:web3.utils.toWei('0.5', "ether")});
+        let stakeAmount = new BN(10);
         await acroInstance.stakeAcroTokens(tokens(stakeAmount), {from: owner});
 
         let res = await acroActorsInstance.votingForActor(user2, {from: owner});
@@ -147,8 +156,8 @@ contract('AcroActors', async accounts => {
            vote_score:0
         }, {from: user1});
 
-        await acroInstance.buy_acro({from: user1, value:web3.utils.toWei('0.1', "ether")});
-        let stakeAmount = new BN(2);
+        await acroInstance.buy_acro({from: user1, value:web3.utils.toWei('0.5', "ether")});
+        let stakeAmount = new BN(10);
         await acroInstance.stakeAcroTokens(tokens(stakeAmount), {from: user1});
 
         await expectRevert( acroActorsInstance.votingForActor(user2, {from: user1}), "Voter must be validated" );

@@ -178,11 +178,11 @@ contract('Acro', function (accounts) {
 
         });
 
-        // //  TO DO withdraw_ether:
-        // // + expectEvent
+        ////  TO DO expectEvent
+        
         it('only owner can withdraw ether from contract', async function (){
             //first a user buy some acros, ether are transfert
-            await ERC20Instance.buy_acro({from: recipient, value:web3.utils.toWei('10', "ether")}); //buying 2 Acro
+            await ERC20Instance.buy_acro({from: recipient, value:web3.utils.toWei('2', "ether")}); //buying 2 Acro
             
 
             //check balance in ether of contract
@@ -190,15 +190,17 @@ contract('Acro', function (accounts) {
             console.log('Contract balance in eth BEFORE withdraw:', convertfromWei(balanceContractBeforeWithdraw.toString()));
 
             // Non owner withdraw half of the amount
-            await expectRevert.unspecified(ERC20Instance.withdraw_ether({from: recipient, value:web3.utils.toWei('1', "ether")}));
+            let withdrawAmount = new BN(1);
+            await expectRevert.unspecified(ERC20Instance.withdraw_ether(tokens(withdrawAmount),{from: recipient}));
             
             // Owner withdraw half of the amount
-            await ERC20Instance.withdraw_ether({from: owner, value:web3.utils.toWei('5', "ether")});
+            let res = await ERC20Instance.withdraw_ether(tokens(withdrawAmount),{from: owner});
+            
            
             //check balance in ether of contract after the withdraw
             let balanceContractAfterWithdraw = await ERC20Instance.get_ether_balance_of_this_contract();
             console.log('Contract balance in eth AFTER withdraw:', convertfromWei(balanceContractAfterWithdraw.toString()));
-            // //check balance in ether of owner after the withdraw
+            assert.equal(balanceContractAfterWithdraw.toString(), tokens('1'), 'Contract balance in eth correct after withdraw');
 
             
         });
