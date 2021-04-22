@@ -7,6 +7,7 @@ This document explains which measures we took to ensure that our contracts are n
 Attacks are avoided using the withdraw pattern. Tokens balance are kept within the contract in balances mapping.
 Require statement are used to check conditions.
 We use modifiers only for checks.
+We used only the transfer function, send and call methods were avoided.
 
 TO BE CHECKED
 Handling the multi-contract situations: a called contract could modify the state of another contract you depend on.
