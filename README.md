@@ -147,6 +147,6 @@ Each smart-contract is documented in a Markdown file in `client/src/contracts`.
 
 ## Deployed addresses
 The 3 smart-contracts have been deployed on the Rinkeby testnet.
-Deployed address are available here [addresses](deployed_addresses.md)
+Deployed address are available [here](deployed_addresses.md)
 
 
