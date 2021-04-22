@@ -1,6 +1,13 @@
 # DeCRI - Decentralized Coral Reef Initiative
 
-> Get part of a community that want to preserve and restore the coral reefs throughout the world!
+> Get part of a community that wants to preserve and restore the coral reefs throughout the world!
+
+## Contributors
+
+- [Deborah Bourgeade] Product Owner, Blockchain Project Officer
+- [Leo Leclerc] Scrum Master, Blockchain Project Officer
+- [Julien Bonneton]Chief Development Officer, Full-stack developer
+- [Mélanie Béguer-Pon] Chief Development Officer, Solidity Developer, Biologist - Scientific Advisor
  
 ## Description
 
@@ -18,17 +25,14 @@ See COPYING for more information or https://opensource.org/licenses/MIT .
 ## Links
 
 * [Open Application] (https://decri.herokuapp.com/)
-* [Wireframes](to do)
-* [Github](https://github.com/DeCriTeam/DeCri.git)
-* [DaPP Heroku](To do)
-* [Trello](https://trello.com/b/5Z7bPydP/conduite-de-projet)
-* [Website](to be added)
-* [Whitepaper](to be added)
- 
 
-## Features
+## Progression
+* Version #1 fully-developped
+* Further versions to be developped
 
-TODO
+## Langage 
+* Solidity
+* Javascript
 
 ## Architecture
 
@@ -67,11 +71,8 @@ The back-end is compoosed of the following Ethereum **smart-contracts**:
 Our **DApp** is a **Front-End** application written in **ReactJS** and deployed on Heroku.
 
 
-## Interactions
-
-The below diagram allows vizualizing the interactions between the smart-contracts.
-
-TO DO
+# Interactions
+A diagram allowing the vizualization of smart-contracts' interactions is available here: [diagram] (http://20.39.234.22/contracts.svg).
 
 # Security
 We tried to make our smart-contracts as resistant as possible to common attacks and potential hacks.  
@@ -84,7 +85,7 @@ git clone https://github.com/DeCriTeam/DeCri.git
 cd Decri
 ```
 
-# Configure
+## Configure
 
 ```
 npm install
@@ -92,6 +93,8 @@ npm install
 cd client
 npm install
 ```
+
+npm install @truffle/hdwallet-provider
 
 In order to deploy to the test networks or the main network you need to:
 
@@ -103,47 +106,47 @@ MNEMONIC = "word1 word2 word3 word4 word5 word6 word7 word8 word9 word10 word11 
 INFURA_URL = "https://rinkeby.infura.io/v3/your_infura_project_id_here"
 ```
 
-# Compile
+## Compile and Deploy
 
 ```
-truffle compile
+truffle deploy --reset --network ganache
+
 ```
 
-# Run
+## Run
 
 cd client
 npm run start
 
 
-# Test
+## Test
 
 Run ganache on port 7545.
 
 ```
-truffle compile
 truffle deploy --reset --network ganache
-```
+
 
 truffle test test/tokenAcro.test.js
 truffle test test/actors.test.js
 truffle test test/lagoon.test.js
 
+```
+
 # Deploying on test net
+```
 truffle migrate --network rinkeby --reset
-
-# Documentation
-
-Each smart-contract is documented in a Markdown file in `client/src/contracts`.
-
-
-## Decisions
-
-- Crypto-currency used: ACRO
-- TO BE COMPLETED
-
 
 ```
 
-</details>
+# Documentation
+Each smart-contract is documented in a Markdown file in `client/src/contracts`.
+
+## Design pattern decisions
+[Read more...](design_pattern_desicions.md)
+
+## Deployed addresses
+The 3 smart-contracts have been deployed on the Rinkeby testnet.
+Deployed address are available [here](deployed_addresses.md)
 
 
