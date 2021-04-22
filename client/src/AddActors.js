@@ -38,7 +38,7 @@ function AddActors() {
 				yearOfCreation: yearofcreation,
 				email: email,
 				actorType: actortype,
-				dateOfRegistration: new Date(),
+				dateOfRegistration: (new Date()).toISOString(),
 				vote_score: 0,
 				isRegistered: true,
 				isValidated: false
