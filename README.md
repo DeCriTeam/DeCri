@@ -72,7 +72,7 @@ Our **DApp** is a **Front-End** application written in **ReactJS** and deployed 
 
 
 # Interactions
-A diagram allowing the vizualization of smart-contracts' interactions is available here: [diagram] (http://20.39.234.22/contracts.svg).
+A diagram allowing the vizualization of smart-contracts'interactions is available here: [diagram] (https://github.com/DeCriTeam/DeCri/blob/5a593d0db5345ef1d688785f56989c292cf9bf8e/contracts.svg)
 
 # Security
 We tried to make our smart-contracts as resistant as possible to common attacks and potential hacks.  
