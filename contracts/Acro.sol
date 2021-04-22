@@ -73,20 +73,14 @@ contract Acro is ERC20, Ownable {
    //Staking Acro: Actors must stake a certain amount of Acro to be able to vote for other actors
    //--------------------------------------------------------------------------------------------
 
-   //Julien: should we use a struc instead of all these mappings?
-    address[] public stakers;
     mapping(address => uint) public stakingBalance;
-    mapping(address => bool) public hasStaked;
-    mapping(address => bool) public isStaking;
-    mapping(address => uint) public unlockDate;
-    mapping(address => uint) public createdAt;
-
+    mapping(address => uint) private stakingUnlockDate;
    
    /// @dev get if an actor is staking acro or not (for IU)
    /// @param addr actor'address
    /// @return true or false
     function is_staking_acro(address addr) external view returns (bool) {
-      return isStaking[addr];
+      return (stakingBalance[addr]>0);
    }
 
    /// @dev get the staking balance of an actor (for IU)
@@ -95,7 +89,6 @@ contract Acro is ERC20, Ownable {
    function staking_balance(address addr) external view returns (uint) {
       return stakingBalance[addr];
    }
-   
 
    /// @dev to stake acro in the contract in order to vote (used in AcroActors.sol)
    /// staked amount must be greater than zero
@@ -104,19 +97,11 @@ contract Acro is ERC20, Ownable {
    /// staking staking status are updated
    /// @param _amount nb of acros to be staked
    function stakeAcroTokens(uint _amount) public {
-         require(_amount > 0, "amount cannot be 0");
-         transfer(address(this), _amount);
-         stakingBalance[msg.sender] = stakingBalance[msg.sender] + _amount;
-         
-         if(!hasStaked[msg.sender]) {
-               stakers.push(msg.sender);
-         }
-         
-         isStaking[msg.sender] = true;
-         hasStaked[msg.sender] = true;
-         createdAt[msg.sender] = block.timestamp;
-            
-       }
+     require(_amount > 0, "amount cannot be 0");
+     transfer(address(this), _amount);
+     stakingBalance[msg.sender] = stakingBalance[msg.sender] + _amount;
+     stakingUnlockDate[msg.sender] = block.timestamp + 15 days;
+   }
 
    /// @dev to unstake all the user'acro from the contract
    /// staking balance of user must be greater than zero
@@ -124,12 +109,10 @@ contract Acro is ERC20, Ownable {
    /// staking staking status are updated
     function unstakeTokens() public {
         uint256 balance = stakingBalance[msg.sender];
-        unlockDate[msg.sender] =  createdAt[msg.sender] + 15 days; // TO BE DECIDED [+ 15 days; here set another value for testing purposes]
         require(balance > 0, "staking balance cannot be 0");
-        require(block.timestamp >= unlockDate[msg.sender], "you must be staking for at least 15 days");
+        require(block.timestamp >= stakingUnlockDate[msg.sender], "you must be staking for at least 15 days");
         _transfer( address(this), msg.sender, balance);
         stakingBalance[msg.sender] = 0;
-        isStaking[msg.sender] = false;
     }
 
 }

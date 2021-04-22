@@ -12,7 +12,6 @@ contract AcroActors {
 
    enum ActorTypes { NGO, DIVING_CLUB, RESEARCHER }
    
-   // TODO be cleaned and optimized //cf order of variables
    struct Actor {
       bool isRegistered;
       bool isValidated;
@@ -31,7 +30,6 @@ contract AcroActors {
    address[] public actors;
    mapping(address => mapping(address => bool)) private already_vote;
    Acro private acro_contract;
-   uint actorsCount = 0;
 
    /// @dev Acro contract address is set on this contract during deployment
    /// @param _acro_contract Acro contract address
@@ -122,7 +120,6 @@ contract AcroActors {
       actor.isValidated = false;
       actor.vote_score = 0;
       RegisteredActors[addr] = actor;
-      actorsCount++;
       actors.push(addr);
       emit ActorRegistered(addr);
    }

@@ -153,7 +153,7 @@ contract('Acro', function (accounts) {
             let investorStakingbalance = await ERC20Instance.stakingBalance(recipient);
             assert.equal(investorStakingbalance.toString(), tokens('2'), 'investor staking balance correct after staking');
 
-            let stakerstatus = await ERC20Instance.isStaking(recipient);
+            let stakerstatus = await ERC20Instance.is_staking_acro(recipient);
             assert.equal(stakerstatus.toString(), 'true', 'investor staking status correct after staking');
 
 
@@ -171,7 +171,7 @@ contract('Acro', function (accounts) {
               recipientStakingBalance = await ERC20Instance.stakingBalance(recipient);
               assert.equal(recipientStakingBalance.toString(), tokens('0'), 'recipient staking balance correct after staking');
 
-              recipientStakingStatus = await ERC20Instance.isStaking(recipient);
+              recipientStakingStatus = await ERC20Instance.is_staking_acro(recipient);
               // console.log(recipientStakingStatus.toString());
               assert.equal(recipientStakingStatus.toString(), 'false', 'recipient staking status correct after staking');
             }
