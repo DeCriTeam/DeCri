@@ -142,22 +142,22 @@ function Acro() {
            </td>
         </tr>
         <tr>
-           <td>My ACRO staking balance:</td>
+           <td>My locked ACRO balance:</td>
            <td>
              { web3.utils.fromWei(user_acro_staking_balance.toString(), 'ether') }
            </td>
            <td>
-             <Button onClick={on_btn_acro_stake}> Stake 2 ACROs</Button>
+             <Button onClick={on_btn_acro_stake}>Lock 2 ACROs</Button>
            </td>
         </tr>
         <tr>
-           <td>My ACRO staking unlock date:</td>
+           <td>My ACRO unlock date:</td>
            <td>
              { user_acro_staking_unlock_date==='0' ? ("-") : (new Date(user_acro_staking_unlock_date*1000)).toISOString() }
              
            </td>
            <td>
-              <Button onClick={on_btn_acro_unstake}>Unstake</Button>
+              <Button onClick={on_btn_acro_unstake}>Unlock</Button>
            </td>
         </tr>
       </tbody>
