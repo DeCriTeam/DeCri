@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect,useCallback } from "react";
+import { Link } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Badge from 'react-bootstrap/Badge';
 import Table from 'react-bootstrap/Table';
@@ -44,7 +45,7 @@ function Actors() {
     return (
         <>
         <h2> List of actors </h2>
-        <a href="/actors/add">Register new actor</a>
+        <Link to="/actors/add">Register new actor</Link>
 
         <Table striped bordered hover>
         <thead>

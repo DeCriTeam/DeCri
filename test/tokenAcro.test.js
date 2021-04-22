@@ -156,6 +156,7 @@ contract('Acro', function (accounts) {
             let stakerstatus = await ERC20Instance.is_staking_acro(recipient);
             assert.equal(stakerstatus.toString(), 'true', 'investor staking status correct after staking');
 
+            await expectRevert( ERC20Instance.unstakeTokens({from: recipient}), "you must be staking for at least 15 days");
 
             let chain_id = await web3.eth.getChainId();
             if (chain_id==1337) {

@@ -74,7 +74,7 @@ contract Acro is ERC20, Ownable {
    //--------------------------------------------------------------------------------------------
 
     mapping(address => uint) public stakingBalance;
-    mapping(address => uint) private stakingUnlockDate;
+    mapping(address => uint) public stakingUnlockDate;
    
    /// @dev get if an actor is staking acro or not (for IU)
    /// @param addr actor'address

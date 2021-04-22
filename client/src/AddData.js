@@ -77,7 +77,7 @@ function AddData() {
 
   return (
       <>
-        <h2>Déclarer une nouvelle zone</h2>
+        <h2>Add new zone</h2>
         <Form>
             <Form.Group as={Row}>
                 <Form.Label column sm={2}>Latitude</Form.Label>
@@ -92,23 +92,26 @@ function AddData() {
                 </Col>
             </Form.Group>
             <Form.Group as={Row}>
-                <Form.Label column sm={2}>Profondeur</Form.Label>
+                <Form.Label column sm={2}>Depth</Form.Label>
                 <Col sm={10}>
                     <Form.Control type="text" disabled={disabled} onChange={ e => setField('profondeur', e.target.value) } />
                 </Col>
             </Form.Group>
             <Form.Group as={Row}>
-                <Form.Label column sm={2}>Etat</Form.Label>
+                <Form.Label column sm={2}>State</Form.Label>
                 <Col sm={10}>
                     <Form.Control as="select" disabled={disabled} onChange={ e => setField('etat', e.target.value) }>
-                        <option>OK</option>
-                        <option>Bof</option>
-                        <option>HS</option>
+                        <option></option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
                     </Form.Control>
                 </Col>
             </Form.Group>
             <Form.Group as={Row}>
-                <Form.Label column sm={2}>Fichier</Form.Label>
+                <Form.Label column sm={2}>Photo file</Form.Label>
                 <Col sm={10}>
                   <Form.File type="file" id="file1" onChange={ on_file_change } disabled={disabled} />
                 </Col>

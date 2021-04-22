@@ -16,7 +16,7 @@ function AddActors() {
    
     const [redirect, setRedirect] = useState(null);
     const [disabled, setDisabled] = useState(false);
-    const [ form, setForm ] = useState({})
+    const [form, setForm ] = useState({})
     const setField = (field, value) => {
       setForm({
         ...form,
@@ -113,7 +113,8 @@ function AddActors() {
                 <Form.Group as={Row}>
                     <Form.Label column sm={2}>Type</Form.Label>
                         <Col sm={10}>
-                            <Form.Control as="select" disabled={disabled} onChange={ e => setField('actortype', e.target.value) }>
+                            <Form.Control as="select" required disabled={disabled} onChange={ e => setField('actortype', e.target.value) }>
+                                <option></option>
                                 <option value="0">NGO</option>
                                 <option value="1">Diving Club</option>
                                 <option value="2">Researcher</option>
