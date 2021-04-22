@@ -1,6 +1,13 @@
 # DeCRI - Decentralized Coral Reef Initiative
 
 > Get part of a community that want to preserve and restore the coral reefs throughout the world!
+
+## Contributors
+
+- [Deborah Bourgeade] Product Owner, Blockchain Project Officer
+- [Leo Leclerc] Scrum Master, Blockchain Project Officer
+- [Julien Bonneton]Chief Development Officer, Full-stack developer
+- [Mélanie Béguer-Pon] Chief Development Officer, Solidity Developer, Biologist - Scientific Advisor
  
 ## Description
 
@@ -26,9 +33,13 @@ See COPYING for more information or https://opensource.org/licenses/MIT .
 * [Whitepaper](to be added)
  
 
-## Features
+## Progression
+* Version #1 fully-developped
+* Further versions to be developped
 
-TODO
+## Langage 
+* Solidity
+* Javascript
 
 ## Architecture
 
@@ -69,9 +80,9 @@ Our **DApp** is a **Front-End** application written in **ReactJS** and deployed 
 
 ## Interactions
 
-The below diagram allows vizualizing the interactions between the smart-contracts.
+A diagram allowing the vizualization of smart-contracts' interactions is available here: [diagram] (http://20.39.234.22/contracts.svg).
 
-TO DO
+
 
 # Security
 We tried to make our smart-contracts as resistant as possible to common attacks and potential hacks.  
@@ -92,6 +103,8 @@ npm install
 cd client
 npm install
 ```
+
+npm install @truffle/hdwallet-provider
 
 In order to deploy to the test networks or the main network you need to:
 
@@ -131,19 +144,22 @@ truffle test test/lagoon.test.js
 # Deploying on test net
 truffle migrate --network rinkeby --reset
 
-# Documentation
 
+# Documentation
 Each smart-contract is documented in a Markdown file in `client/src/contracts`.
 
+## Design pattern decisions
+[Read more...](design_pattern_desicions.md)
 
-## Decisions
+## Deployed addresses
+The 3 smart-contracts have been deployed on the Rinkeby testnet. Deployed address are available here [addresses] (deployed_addresses.md)
 
-- Crypto-currency used: ACRO
-- TO BE COMPLETED
+
+
 
 
 ```
 
-</details>
+
 
 
