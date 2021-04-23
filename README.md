@@ -5,7 +5,7 @@
 ## Contributors
 
 - [Deborah Bourgeade] Product Owner, Blockchain Project Officer
-- [Leo Leclerc] Scrum Master, Blockchain Project Officer
+- [Leo Leclercq] Scrum Master, Blockchain Project Officer
 - [Julien Bonneton]Chief Development Officer, Full-stack developer
 - [Mélanie Béguer-Pon] Chief Development Officer, Solidity Developer, Biologist - Scientific Advisor
  
