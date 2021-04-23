@@ -47,13 +47,13 @@ The DeCRI Project is composed of 2 parts:
 
 The back-end is compoosed of the following Ethereum **smart-contracts**:
 
-- [`Acro`](contracts/acro.sol) This smart-contract produces the ERC-20 token named Acro. It also:
-    -allows users to buy acro and donate to this contract
-    -allows user to lock and unlock their acro for a certain period of time
+- [`Acro`](contracts/acro.sol) This smart-contract produces the ERC-20 token named ACRO. It also:
+    -allows users to buy ACROs and donate ACROs to this contract
+    -allows users to lock and unlock their ACROs for a certain period of time
     -allows owner to withdraw acro and ether from this contract.
 
 - [`AcroActors`](contracts/AcroActors.sol) This smart-contract allows:
-    - actors involved in coral reefs to be register themself in our database
+    - actors involved in coral reefs to register themself in our database
     - registered actors to be validated by the community (i.e. actors vote for other actors)
 
 - [`Lagoon`](contracts/Lagoon.sol) This smart-contract allows:
