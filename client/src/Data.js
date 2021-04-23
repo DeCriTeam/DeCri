@@ -13,7 +13,7 @@ function Data() {
   const web3Context = useContext(Web3Context);
   const {
     lagoon_contract,
-    account
+    account, is_actor
   } = web3Context;
 
   const [loading, setLoading] = useState(true);
@@ -176,7 +176,7 @@ function Data() {
             ) : (
               <>
                 <h2>Zones database</h2>
-                <Link className="btn btn-primary" to="/add_data">Declare a new zone</Link>
+                { is_actor && (<Link className="btn btn-primary" to="/add_data">Declare a new zone</Link>) }
                 <CardDeck>
                 {real_items.map((item, index) => {
                   return (<LagCard onTransfer={ (e) => on_btn_transfer_click(item) } item={item} key={index} />)

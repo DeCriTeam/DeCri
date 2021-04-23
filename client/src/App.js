@@ -130,10 +130,12 @@ const App = () => {
                  <Link to='/acro' className="nav-link">Acro</Link>
                  <Link to='/actors' className="nav-link">Actors</Link>
                  <Link to='/data/me' className="nav-link">My LAGs</Link>
-                 { is_actor && (<Link to='/data/all' className="nav-link">Coral Reef Areas database</Link>) }
+                 <Link to='/data/all' className="nav-link">Coral Reef Areas database</Link>
+                 {/*
+                 <Link to={`https://testnets.opensea.io/assets/${ lagoon_contract._address }`} className='nav-link'>View on Opensea</Link>
+                 */}
                </Nav>
                <Nav> 
-                 {/* <Nav.Link href='#'>{ account } { is_actor?("[Validated actor]"):("") }</Nav.Link> */}
                  { account } { is_actor?("[Validated actor]"):("") }
                </Nav>
              </Navbar.Collapse>
