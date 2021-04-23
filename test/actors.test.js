@@ -104,7 +104,7 @@ contract('AcroActors', async accounts => {
         // Calculating voting coeff
         let votingCoef = await acroActorsInstance.votingCoefficient(user1, {from: user1});
         expect(votingCoef.toString()).to.equal('1');
-        console.log(votingCoef.toString());
+        //console.log(votingCoef.toString());
     })
 
     it("A validated actor can vote for another registered actor", async() => {
@@ -128,10 +128,15 @@ contract('AcroActors', async accounts => {
         await acroInstance.stakeAcroTokens(tokens(stakeAmount), {from: owner});
 
         let res = await acroActorsInstance.votingForActor(user2, {from: owner});
-        await expectEvent(res, "votedEvent", {actorAddress: user2}, "Voted event is emitted");
+        await expectEvent(res, "votedEvent", {actorAddress: user2}, "Voted event is not emitted");
         
         let checkres = await acroActorsInstance.RegisteredActors(user2);
         expect(checkres.vote_score).to.bignumber.equal(new BN("1"));
+
+        //check that actor is not validated (because since there is 4 validated actors, he must have 4 votes to be registered)
+        let res2 = await acroActorsInstance.is_validated_actor(user2);
+        expect(res2.toString()).to.equal("false");
+        // await expectEvent(res, "ActorIsValided", {actorAddress: user2}, "Actor Validating event is not emitted");
     });
 
     it("A non-validated actor cannot vote", async() => {
@@ -165,4 +170,5 @@ contract('AcroActors', async accounts => {
 
         await expectRevert( acroActorsInstance.votingForActor(user2, {from: user1}), "Voter must be validated" );
     });
+
 });

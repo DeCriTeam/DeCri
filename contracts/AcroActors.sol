@@ -156,9 +156,6 @@ contract AcroActors {
       return validatedActorsCount;
    }
   
-   //TO DO LATER: add a minimum delay of staking, i.e. at least a month
-   // Warning: amount to be decided
-
    /// @dev Calculation of voting coefficient according to the actor'staking balance
    /// this coefficient is used in the votingForActor function
    /// @param addr actor'address
