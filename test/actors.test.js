@@ -52,6 +52,9 @@ contract('AcroActors', async accounts => {
         }, {from: user1});
         let count = await acroActorsInstance.get_actors_count();
         expect(count).to.bignumber.equal(new BN('7'));
+
+        await expectEvent(newactor, "ActorRegistered", {actorAddress: user1}, "Registering Actor1 event incorrect");
+        await expectEvent(newactor2, "ActorRegistered", {actorAddress: user2}, "Registering Actor2 event incorrect");
     });
 
     it("A user cannot register an actor (address!) already registered", async() => {
@@ -125,7 +128,7 @@ contract('AcroActors', async accounts => {
         await acroInstance.stakeAcroTokens(tokens(stakeAmount), {from: owner});
 
         let res = await acroActorsInstance.votingForActor(user2, {from: owner});
-        await expectEvent(res, "votedEvent", {actorAddress: user2}, "Voted event");
+        await expectEvent(res, "votedEvent", {actorAddress: user2}, "Voted event is emitted");
         
         let checkres = await acroActorsInstance.RegisteredActors(user2);
         expect(checkres.vote_score).to.bignumber.equal(new BN("1"));

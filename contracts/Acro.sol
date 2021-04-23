@@ -16,8 +16,8 @@ contract Acro is ERC20, Ownable {
     
    //List of events
    event buyingAcro(address msgsender, uint256 amount);
-   event donatingAcro(address msgsender, uint256 amout);
-   event withdrawal(address otheradress, uint256 amount);
+   event donatingAcro(address msgsender, uint256 amount);
+   event withdrawal(address msgsender, uint256 amount);
 
    // TO DO - modify fonction, to be discussed
    /// @dev to buy acro
