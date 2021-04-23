@@ -63,8 +63,8 @@ contract('Acro', function (accounts) {
             // let balanceOwnerBeforeTransfer = await ERC20Instance.balanceOf(owner);
             
             
-            await ERC20Instance.buy_acro({from: recipient, value:web3.utils.toWei('0.1', "ether")});
-            // await ERC20Instance.transfer(recipient, amount, {from: owner});
+            res = await ERC20Instance.buy_acro({from: recipient, value:web3.utils.toWei('0.1', "ether")});
+            await expectEvent(res, "buyingAcro", {msgsender: recipient, amount:web3.utils.toWei('0.1', "ether")}, "BuyingAcro event incorrect");
             
             let balanceContractAfterTransfer = await ERC20Instance.get_acro_balance_of_this_contract();
             let balanceRecipientAfterTransfer = await ERC20Instance.balanceOf(recipient);
@@ -102,8 +102,10 @@ contract('Acro', function (accounts) {
             let balanceRecipientBeforeTransfer = await ERC20Instance.balanceOf(recipient);
                         
             await ERC20Instance.buy_acro({from: recipient, value:web3.utils.toWei('0.1', "ether")}); //buying 2 Acro
-            await ERC20Instance.acro_donation(web3.utils.toWei('1','ether'), { from: recipient }); //giving 1 Acro
-                       
+            res = await ERC20Instance.acro_donation(web3.utils.toWei('1',"ether"), { from: recipient }); //giving 1 Acro
+        
+            await expectEvent(res, "donatingAcro", {msgsender: recipient, amount:web3.utils.toWei('1', "ether")}, "DonatingAcro event incorrect");
+
             let balanceContractAfterTransfer = await ERC20Instance.get_acro_balance_of_this_contract();
             let balanceRecipientAfterTransfer = await ERC20Instance.balanceOf(recipient);
             console.log('balance contract after buy: ',convertfromWei(balanceContractAfterTransfer.toString()));
@@ -196,7 +198,7 @@ contract('Acro', function (accounts) {
             
             // Owner withdraw half of the amount
             let res = await ERC20Instance.withdraw_ether(tokens(withdrawAmount),{from: owner});
-            
+            await expectEvent(res, "withdrawal", {msgsender: owner, amount:web3.utils.toWei('1', "ether")}, "Withdrawning event incorrect");
            
             //check balance in ether of contract after the withdraw
             let balanceContractAfterWithdraw = await ERC20Instance.get_ether_balance_of_this_contract();
