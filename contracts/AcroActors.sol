@@ -166,7 +166,7 @@ contract AcroActors {
 
       if (acro_contract.staking_balance(addr) >= 10000000000000000000)//10 acros 
       {
-         coef = 10; //TO BE CHANGED TO ONE - set to 10 here for testing purposes
+         coef = 1; // changed for testing purposes
       }
      
       return uint(coef);
