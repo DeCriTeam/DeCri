@@ -135,7 +135,7 @@ contract Lagoon is ERC1155 {
       require(lagoon_types[virtual_token_id]==LagoonType.VIRTUAL, "Not virtual lagoon");
       require(get_game_level(virtual_token_id)>=4,"insufficient game level");
 
-      pay_acro(100000000000000000);
+      pay_acro(100000000000000000000); // 100 ACROs
       _burn(msg.sender, real_token_id, 1);    // Destruct real token for the user. (Balance can be 0, information about this real token is kept in the database)
 
       lagoon_types[virtual_token_id] = LagoonType.BOTH;        // Link virtual token with real
@@ -176,7 +176,7 @@ contract Lagoon is ERC1155 {
      isMyToken(token_id)
    {
      require(item.x<11 && item.y<11 && item.item_type<3,"Invalid x,y or item_type");
-     pay_acro(100000000000000000);
+     pay_acro(100000000000000000000); // 100 ACROs
      for (uint i=0;i<game_items[token_id].length;i++) {
         if (game_items[token_id][i].x==item.x && game_items[token_id][i].y==item.y) {
            revert("Free slot required");
