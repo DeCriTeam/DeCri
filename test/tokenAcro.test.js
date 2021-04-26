@@ -19,7 +19,7 @@ function convertfromWei(n) {
 contract('Acro', function (accounts) {
     const _name = 'Acropora Token';
     const _symbol = 'ACRO';
-    const _initialsupply = new BN(10000);
+    const _initialsupply = new BN(7500000);//7.5 millions
     const _decimals = new BN(18);
     const [owner,recipient,recipient2] = accounts;
 
@@ -49,9 +49,9 @@ contract('Acro', function (accounts) {
 
         it('contract balance check', async function (){
             // let balanceOwner = await this.ERC20Instance.balanceOf(owner);
-            let mintedAcro = new BN(10000);
+            let mintedAcro = new BN(7500000);
             let totalSupply = await ERC20Instance.totalSupply(); //Accro balance in Wei 
-            console.log('Acro contract balance: ', convertfromWei(totalSupply.toString())); //Accro balance in ether value (/10^18)
+            console.log('Acro contract balance: ', convertfromWei(totalSupply.toString()));
             expect(convertfromWei(totalSupply)).to.be.bignumber.equal(mintedAcro);
         });
 
@@ -63,8 +63,8 @@ contract('Acro', function (accounts) {
             // let balanceOwnerBeforeTransfer = await ERC20Instance.balanceOf(owner);
             
             
-            res = await ERC20Instance.buy_acro({from: recipient, value:web3.utils.toWei('0.1', "ether")});
-            await expectEvent(res, "buyingAcro", {msgsender: recipient, amount:web3.utils.toWei('0.1', "ether")}, "BuyingAcro event incorrect");
+            res = await ERC20Instance.buy_acro({from: recipient, value:web3.utils.toWei('0.01', "ether")});
+            await expectEvent(res, "buyingAcro", {msgsender: recipient, amount:web3.utils.toWei('0.01', "ether")}, "BuyingAcro event incorrect");
             
             let balanceContractAfterTransfer = await ERC20Instance.get_acro_balance_of_this_contract();
             let balanceRecipientAfterTransfer = await ERC20Instance.balanceOf(recipient);
@@ -77,8 +77,8 @@ contract('Acro', function (accounts) {
             balanceRecipientAT = convertfromWei(balanceRecipientAfterTransfer.toString());
             // console.log(balanceRecipientBT,balanceRecipientAT);
 
-            expect(balancecontractAT).to.equal('9998');
-            expect(balanceRecipientAT).to.equal('2');
+            expect(balancecontractAT).to.equal('7499987');
+            expect(balanceRecipientAT).to.equal('13');
 
             // let nbtokens = new BN(2);
             // console.log(nbtokens);
@@ -101,7 +101,7 @@ contract('Acro', function (accounts) {
             let acroBalanceContract = await ERC20Instance.get_acro_balance_of_this_contract();
             let balanceRecipientBeforeTransfer = await ERC20Instance.balanceOf(recipient);
                         
-            await ERC20Instance.buy_acro({from: recipient, value:web3.utils.toWei('0.1', "ether")}); //buying 2 Acro
+            await ERC20Instance.buy_acro({from: recipient, value:web3.utils.toWei('0.01', "ether")}); //buying 13 Acro
             res = await ERC20Instance.acro_donation(web3.utils.toWei('1',"ether"), { from: recipient }); //giving 1 Acro
         
             await expectEvent(res, "donatingAcro", {msgsender: recipient, amount:web3.utils.toWei('1', "ether")}, "DonatingAcro event incorrect");
@@ -117,8 +117,8 @@ contract('Acro', function (accounts) {
             balanceRecipientAT = convertfromWei(balanceRecipientAfterTransfer.toString());
             console.log(balanceRecipientBT,balanceRecipientAT);
 
-            expect(balancecontractAT).to.equal('9999');
-            expect(balanceRecipientAT).to.equal('1');
+            expect(balancecontractAT).to.equal('7499988');
+            expect(balanceRecipientAT).to.equal('12');
         
         });
 
@@ -132,17 +132,16 @@ contract('Acro', function (accounts) {
         it('staking is ok', async function (){
             //  first buying Acro
             let balanceRecipientBeforeTransfer = await ERC20Instance.balanceOf(recipient);
-            let amount = new BN(2);
-            
-            await ERC20Instance.buy_acro({from: recipient, value:web3.utils.toWei('0.1', "ether")}); //buying 2 Acro
+                        
+            await ERC20Instance.buy_acro({from: recipient, value:web3.utils.toWei('0.01', "ether")}); //buying 13 Acro
 
             let balanceRecipientAfterTransfer = await ERC20Instance.balanceOf(recipient);
             // console.log(balanceRecipientAfterTransfer);
             // expect(balanceRecipientAfterTransfer).to.be.bignumber.equal(balanceRecipientBeforeTransfer.add(amount));
-            assert.equal(balanceRecipientAfterTransfer.toString(), tokens('2'), 'investor Acro wallet balance correct before staking');
+            assert.equal(balanceRecipientAfterTransfer.toString(), tokens('13'), 'investor Acro wallet balance correct before staking');
               
             // Stake Acro Tokens
-            let stakeAmount = new BN(2);
+            let stakeAmount = new BN(13);
             await ERC20Instance.approve(recipient, tokens(stakeAmount), {from: owner});
             await ERC20Instance.stakeAcroTokens(tokens(stakeAmount), { from: recipient });
 
@@ -153,7 +152,7 @@ contract('Acro', function (accounts) {
         
             //investor staking balance      
             let investorStakingbalance = await ERC20Instance.stakingBalance(recipient);
-            assert.equal(investorStakingbalance.toString(), tokens('2'), 'investor staking balance correct after staking');
+            assert.equal(investorStakingbalance.toString(), tokens('13'), 'investor staking balance correct after staking');
 
             let stakerstatus = await ERC20Instance.is_staking_acro(recipient);
             assert.equal(stakerstatus.toString(), 'true', 'investor staking status correct after staking');
@@ -181,11 +180,10 @@ contract('Acro', function (accounts) {
 
         });
 
-        ////  TO DO expectEvent
-        
+              
         it('only owner can withdraw ether from contract', async function (){
             //first a user buy some acros, ether are transfert
-            await ERC20Instance.buy_acro({from: recipient, value:web3.utils.toWei('2', "ether")}); //buying 2 Acro
+            await ERC20Instance.buy_acro({from: recipient, value:web3.utils.toWei('2', "ether")}); //buying 13000*2 Acro
             
 
             //check balance in ether of contract
@@ -206,9 +204,7 @@ contract('Acro', function (accounts) {
             assert.equal(balanceContractAfterWithdraw.toString(), tokens('1'), 'Contract balance in eth correct after withdraw');
 
             
-        });
-
-            
+        });    
         
        
 
