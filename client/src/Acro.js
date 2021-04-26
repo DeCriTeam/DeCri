@@ -59,7 +59,7 @@ function Acro() {
   async function on_btn_acro_stake() {
     try
     {
-      await acro_contract.methods.stakeAcroTokens(web3.utils.toWei('2','ether')).send( {from: account});
+      await acro_contract.methods.stakeAcroTokens(web3.utils.toWei('10','ether')).send( {from: account});
       await refresh(account, acro_contract);
     }
     catch (error)
@@ -148,7 +148,7 @@ function Acro() {
              { web3.utils.fromWei(user_acro_staking_balance.toString(), 'ether') }
            </td>
            <td>
-             <Button onClick={on_btn_acro_stake}>Lock 2 ACRO</Button>
+             <Button onClick={on_btn_acro_stake}>Lock 10 ACRO</Button>
            </td>
         </tr>
         <tr>
