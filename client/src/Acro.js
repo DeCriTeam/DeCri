@@ -3,6 +3,7 @@ import Web3Context from "./Web3context";
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 
+
 function Acro() {
   const web3Context = useContext(Web3Context);
   const {
@@ -32,7 +33,7 @@ function Acro() {
   async function on_btn_buy_acro_click() {
     try
     {
-       await acro_contract.methods.buy_acro().send({ from: account, value:web3.utils.toWei('0.001', "ether") });
+       await acro_contract.methods.buy_acro().send({ from: account, value:web3.utils.toWei('0.01', "ether") });
        await refresh(account, acro_contract);
     }
     catch (error)
@@ -110,11 +111,11 @@ function Acro() {
       <tbody>
         <tr>
           <td colSpan="3">
-            <Button onClick={on_btn_add_acro_asset_to_metamask_click}>Add ACRO to metamask</Button>
+            <Button color="info" onClick={on_btn_add_acro_asset_to_metamask_click}>Add ACRO to metamask</Button>
           </td>
         </tr>
         <tr>
-           <td>Contract Ether balance:</td>
+           <td>Contract ETH balance:</td>
            <td>{  web3.utils.fromWei(contract_ether_balance.toString(), 'ether') }</td>
            <td></td>
         </tr>
@@ -122,11 +123,11 @@ function Acro() {
            <td>Contract ACRO balance:</td>
            <td>{  web3.utils.fromWei(contract_acro_balance.toString(), 'ether') }</td>
            <td>
-              <Button onClick={on_btn_acro_donation_click}>Donate 3 Acros to Decri</Button>
+              <Button onClick={on_btn_acro_donation_click}>Donate 3 ACRO to Decri</Button>
            </td>
         </tr>
         <tr>
-           <td>My Ether balance:</td>
+           <td>My ETH balance:</td>
            <td>
               { web3.utils.fromWei(user_ether_balance.toString(), 'ether') }
            </td>
@@ -138,7 +139,7 @@ function Acro() {
               { web3.utils.fromWei(user_acro_balance.toString(),'ether') }
            </td>
            <td>
-             <Button onClick={on_btn_buy_acro_click}>Buy Acro (0.1 ether for 2 Acros)</Button>
+             <Button onClick={on_btn_buy_acro_click}>Buy ACRO (0.01 ETH for 13 ACRO)</Button>
            </td>
         </tr>
         <tr>
@@ -147,7 +148,7 @@ function Acro() {
              { web3.utils.fromWei(user_acro_staking_balance.toString(), 'ether') }
            </td>
            <td>
-             <Button onClick={on_btn_acro_stake}>Lock 2 ACROs</Button>
+             <Button onClick={on_btn_acro_stake}>Lock 2 ACRO</Button>
            </td>
         </tr>
         <tr>
