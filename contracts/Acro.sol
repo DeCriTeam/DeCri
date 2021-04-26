@@ -11,7 +11,7 @@ contract Acro is ERC20, Ownable {
    /// @dev Initial supply is produced at deployment
    /// ERC20 Standard, token is named Acro
     constructor() ERC20("Acropora Token", "ACRO") {
-      _mint(address(this), 10000000000000000000000);
+      _mint(address(this), 7500000000000000000000000); //7.5 millions
     }
     
    //List of events
@@ -19,11 +19,10 @@ contract Acro is ERC20, Ownable {
    event donatingAcro(address msgsender, uint256 amount);
    event withdrawal(address msgsender, uint256 amount);
 
-   // TO DO - modify fonction, to be discussed
    /// @dev to buy acro
     function buy_acro() external payable {
        require(msg.value>0, "You must enter an amount >0");
-       _transfer(address(this), msg.sender, msg.value*20);
+       _transfer(address(this), msg.sender, msg.value*1300); //*20// RATE!
        emit buyingAcro(msg.sender, msg.value);
     }
 
