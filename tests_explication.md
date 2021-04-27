@@ -47,10 +47,9 @@ What we tested and how:
 - real zones are properly updated: we checked the created uri is equal to the expected one.
 - any user can create a virtual zone
 - it is not possible to add a state to a virtual zone: the function called to update a real zone reverts. 
-
-- users can buy and add items to a virtual zone:TO BE COMPLETED
-
-- anybody can merge a virtual and a real zone: TO BE COMPLETED 
+- users can buy and add items to a virtual zone:the function that allows buying and adding game item reverts when wrong id token is used
+- anybody can merge a virtual and a real zone: merging function is checked and lagoon type is correct after merging.
+- It is not possible to add a state to a virtual zone: function to update a real zone reverts when used to update a virtual zone.
 
 
 
