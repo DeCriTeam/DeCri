@@ -75,11 +75,11 @@ contract('LagoonContract', function (accounts) {
       await lagoon_instance.new_virtual_zone({from: user1});
       await lagoon_instance.new_virtual_zone({from: user2});
 
-      await acro_instance.buy_acro({ from: user1, value:web3.utils.toWei('0.1', "ether") });
-      await acro_instance.buy_acro({ from: user2, value:web3.utils.toWei('0.1', "ether") });
+      await acro_instance.buy_acro({ from: user1, value:web3.utils.toWei('1', "ether") });
+      await acro_instance.buy_acro({ from: user2, value:web3.utils.toWei('1', "ether") });
 
-      await acro_instance.approve(lagoon_instance.address, web3.utils.toWei('0.5', 'ether'), { from: user1 });
-      await acro_instance.approve(lagoon_instance.address, web3.utils.toWei('0.5', 'ether'), { from: user2 });
+      await acro_instance.approve(lagoon_instance.address, web3.utils.toWei('500', 'ether'), { from: user1 });
+      await acro_instance.approve(lagoon_instance.address, web3.utils.toWei('500', 'ether'), { from: user2 });
 
       await expectRevert(lagoon_instance.buy_and_put_game_item(2,{x:0, y:1, item_type:1}, { from: user1}),"This is not your token");
 
@@ -109,13 +109,13 @@ contract('LagoonContract', function (accounts) {
       expect( await lagoon_instance.lagoon_types(2) ).to.be.bignumber.equal(new BN(LagoonContract.LagoonType.VIRTUAL)); 
 
       // user1 will need some Acro to pay for merging
-      await acro_instance.buy_acro({ from: user1, value:web3.utils.toWei('0.1', "ether") });
+      await acro_instance.buy_acro({ from: user1, value:web3.utils.toWei('1', "ether") });
 
-      await acro_instance.approve(lagoon_instance.address, web3.utils.toWei('0.1', 'ether'), { from: user1 });
+      await acro_instance.approve(lagoon_instance.address, web3.utils.toWei('100', 'ether'), { from: user1 });
       await expectRevert(lagoon_instance.merge_tokens(1,2, { from: user1 }), 'insufficient game level');
 
       // We need at least 4 items on the game to be allowed to merge virtual zone
-      await acro_instance.approve(lagoon_instance.address, web3.utils.toWei('0.5', 'ether'), { from: user1 });
+      await acro_instance.approve(lagoon_instance.address, web3.utils.toWei('500', 'ether'), { from: user1 });
       await lagoon_instance.buy_and_put_game_item(2, {x:0,y:1,item_type:1}, { from: user1});
       await lagoon_instance.buy_and_put_game_item(2, {item_type:1,x:5,y:6}, { from: user1});
       await lagoon_instance.buy_and_put_game_item(2, {x:4,y:5,item_type:1}, { from: user1});
