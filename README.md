@@ -12,10 +12,10 @@
 ## Description
 
 - Actors involved in coral reefs management register themself in the Actor database. Each actor are validated by the community once the threeshold of 80% of votes from the validated actors is reached.
-- ACRO tokens can be bought. Actors must buy and lock Acro tokens to be able to vote. ACRO tokens are also used to buy game items for our Coral Bay game (see below). Anybody can donate ACRO tokens to our fundation or to validated actors.
+- ACRO tokens can be bought. Actors must buy and lock ACRO tokens to be able to vote. ACRO tokens are also used to buy game items for our Coral Bay game (see below). Anybody can donate ACRO tokens to our fundation or to validated actors.
 - Validated actors can tokenize coral reef zones from their physical area (in the real world!) by registering them on our application (100 SFT per area are minted). Once created, these SFT,named LAG, can be transfered, bought and sold. 
 - By buying SFT, donations are made to valided actors so they can make actions in the real world.
-- Users can buy SFT to play at our game named "Coral Bay". The goal of this game is to improve the state of the coral reef area by adding items (corals, fish etc.), these items can be bought with Acro tokens.
+- Users can buy SFT to play at our game named "Coral Bay". The goal of this game is to improve the state of the coral reef area by adding items (corals, fish etc.), these items can be bought with ACRO tokens.
 
 ## Licence
 DeCRI is released under the terms of the MIT license.
