@@ -12,9 +12,6 @@ Require statement are used to check conditions.
 We use modifiers only for checks.
 We used only the transfer function, send and call methods were avoided.
 
-* #### Forcibly Sending Ether to a Contract
-Acro contract can receive any amount in ether at any time.
-
 * #### Randomness
 None of our contract is using random numbers.
 
