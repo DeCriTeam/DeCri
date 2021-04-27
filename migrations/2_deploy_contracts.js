@@ -8,7 +8,7 @@ module.exports = async function(deployer) {
   const acro_contract = await Acro.deployed()
   
   // Deploy AcroActors
-  await deployer.deploy(AcroActors, acro_contract.address); //, Acro.address
+  await deployer.deploy(AcroActors, acro_contract.address)
   const acroActors = await AcroActors.deployed()
 
   // Deploy Lagoon
