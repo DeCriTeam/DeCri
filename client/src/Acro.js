@@ -99,7 +99,7 @@ function Acro() {
           address: acro_contract._address,
           symbol: 'ACRO',
           decimals: 18,
-          image: 'https://decri.herokuapp.com/static/media/ACRO-vf.819c178b.png'
+          image: 'https://decri.herokuapp.com/ACRO-vf.png'
         },
       }
     });
