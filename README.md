@@ -12,7 +12,7 @@
 ## Description
 
 - Actors involved in coral reefs management register themself in the Actor database. Each actor are validated by the community once the threeshold of 80% of votes from the validated actors is reached.
-- Acro tokens can be bought. Actors must buy and lock Acro tokens to be able to vote. Acro tokens are also used to buy game items for our Coral Bay game (see below). Anybody can donate Acro tokens to our fundation or to validated actors.
+- ACRO tokens can be bought. Actors must buy and lock Acro tokens to be able to vote. ACRO tokens are also used to buy game items for our Coral Bay game (see below). Anybody can donate ACRO tokens to our fundation or to validated actors.
 - Validated actors can tokenize coral reef zones from their physical area (in the real world!) by registering them on our application (100 SFT per area are minted). Once created, these SFT,named LAG, can be transfered, bought and sold. 
 - By buying SFT, donations are made to valided actors so they can make actions in the real world.
 - Users can buy SFT to play at our game named "Coral Bay". The goal of this game is to improve the state of the coral reef area by adding items (corals, fish etc.), these items can be bought with Acro tokens.
@@ -50,7 +50,7 @@ The back-end is compoosed of the following Ethereum **smart-contracts**:
 - [`Acro`](contracts/acro.sol) This smart-contract produces the ERC-20 token named ACRO. It also:
     -allows users to buy ACROs and donate ACROs to this contract
     -allows users to lock and unlock their ACROs for a certain period of time
-    -allows owner to withdraw acro and ether from this contract.
+    -allows owner to withdraw ACRO and ETH from this contract.
 
 - [`AcroActors`](contracts/AcroActors.sol) This smart-contract allows:
     - actors involved in coral reefs to register themself in our database
@@ -76,7 +76,7 @@ A diagram allowing the vizualization of smart-contracts'interactions is availabl
 
 # Security
 We tried to make our smart-contracts as resistant as possible to common attacks and potential hacks.  
-[Read more...](doc/avoiding_common_attacks.md)
+[Read more...](https://github.com/DeCriTeam/DeCri/blob/b777252fc911795611e9478c73e75add523f5992/avoiding_common_attacks.md)
 
 # Install
 
@@ -147,6 +147,7 @@ Each smart-contract is documented in a Markdown file in `client/src/contracts`.
 
 ## Deployed addresses
 The 3 smart-contracts have been deployed on the Rinkeby testnet.
-Deployed address are available [here](deployed_addresses.md)
+Deployed address are available [here](https://github.com/DeCriTeam/DeCri/blob/b777252fc911795611e9478c73e75add523f5992/deployed_addresses.md)
+
 
 
