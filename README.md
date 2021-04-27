@@ -72,11 +72,11 @@ Our **DApp** is a **Front-End** application written in **ReactJS** and deployed 
 
 
 # Interactions
-A diagram allowing the vizualization of smart-contracts'interactions is available here: [diagram] (https://github.com/DeCriTeam/DeCri/blob/5a593d0db5345ef1d688785f56989c292cf9bf8e/contracts.svg)
+A diagram allowing the vizualization of smart-contracts'interactions is available here: [diagram] (https://github.com/DeCriTeam/DeCri/blob/master/contracts.svg)
 
 # Security
 We tried to make our smart-contracts as resistant as possible to common attacks and potential hacks.  
-[Read more...](https://github.com/DeCriTeam/DeCri/blob/b777252fc911795611e9478c73e75add523f5992/avoiding_common_attacks.md)
+[Read more...](https://github.com/DeCriTeam/DeCri/blob/master/avoiding_common_attacks.md)
 
 # Install
 
@@ -147,7 +147,7 @@ Each smart-contract is documented in a Markdown file in `client/src/contracts`.
 
 ## Deployed addresses
 The 3 smart-contracts have been deployed on the Rinkeby testnet.
-Deployed address are available [here](https://github.com/DeCriTeam/DeCri/blob/b777252fc911795611e9478c73e75add523f5992/deployed_addresses.md)
+Deployed address are available [here](https://github.com/DeCriTeam/DeCri/blob/master/deployed_addresses.md)
 
 
 

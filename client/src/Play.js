@@ -61,7 +61,7 @@ function Play() {
   };
 
   async function on_canvas_click() {
-    await acro_contract.methods.approve(lagoon_contract._address, '100000000000000000').send({ from: account });
+    await acro_contract.methods.approve(lagoon_contract._address, '100000000000000000000').send({ from: account });
     await lagoon_contract.methods.buy_and_put_game_item(token_id, {item_type:1, x: x_sel, y:y_sel}).send({ from: account });
     await refresh();
   }
@@ -80,7 +80,7 @@ function Play() {
      try
      {
         const { merge_token_id } = form;
-        await acro_contract.methods.approve(lagoon_contract._address, '100000000000000000').send({ from: account });
+        await acro_contract.methods.approve(lagoon_contract._address, '100000000000000000000').send({ from: account });
         await lagoon_contract.methods.merge_tokens(merge_token_id, token_id).send({from:account});
         setModalShow(false);
         await refresh();
@@ -171,7 +171,7 @@ function Play() {
           </Modal.Footer>
         </Modal>
 
-        <h1>Jeu { token_id } - Level: {level} </h1>
+        <h1>Game #{ token_id } - Level: {level} </h1>
         <canvas ref={canvasRef} onMouseMove={on_canvas_mousemove} onClick={on_canvas_click} width="800" height="600" style={{ backgroundColor: 'black' }}/>
         { (level>=4 && lagoon_type==='0') ? (
         <div><Button onClick={on_btn_merge_click}>Merge with a real Token</Button></div>

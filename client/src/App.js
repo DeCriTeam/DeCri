@@ -14,7 +14,6 @@ import LagoonContract from "./contracts/Lagoon.json";
 
 import getWeb3 from "./getWeb3";
 
-import Home from './Home';
 import Play from './Play';
 import Acro from './Acro';
 import Actors from './Actors';
@@ -126,8 +125,7 @@ const App = () => {
                <Nav className="mr-auto"> 
                  {/* Nav.Link cause a full page refresh. We are using Link for SPA 
                  <Nav.Link href='/'>Home</Nav.Link> */}
-                 <Link to='/' className="nav-link">Home</Link>
-                 <Link to='/acro' className="nav-link">Acro</Link>
+                 <Link to='/' className="nav-link">Acro</Link>
                  <Link to='/actors' className="nav-link">Actors</Link>
                  <Link to='/data/me' className="nav-link">My LAGs</Link>
                  <Link to='/data/all' className="nav-link">Coral Reef Areas database</Link>
@@ -142,8 +140,7 @@ const App = () => {
            </Navbar>
            <Container>
              <Switch>
-               <Route path='/' exact component={Home} />
-               <Route path='/acro' component={Acro} />
+               <Route path='/' exact component={Acro} />
                <Route path='/actors' exact component={Actors} />
                <Route path='/actors/add' exact component={AddActors} />
                <Route path='/play/:token_id' component={Play} />
