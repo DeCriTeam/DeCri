@@ -127,7 +127,6 @@ function Data() {
     return <Redirect to={redirect} />;
   }
 
-  // TODO: Agencement des cartes ci dessous (à la ligne)
   return (
       <>
          <Modal show={modal_show}>
@@ -159,27 +158,30 @@ function Data() {
           <>
             { (plags==='me') ? ( 
               <>
-                <h2>My LAGSs</h2>
-                <Button onClick={on_btn_new_game_click}>Start new game</Button>
+                <h2>My real LAGSs</h2>
                 <CardDeck>
                 {real_items.map((item, index) => {
-                  return (<LagCard onTransfer={ (e) => on_btn_transfer_click(item) } item={item} key={index} />)
+                  return (<LagCard onTransfer={ (e) => on_btn_transfer_click(item) } item={item} key={index} index={index} />)
                 })}
                 </CardDeck>
                 &nbsp;
+                <h2>My virtual LAGSs</h2>
+                <div><Button onClick={on_btn_new_game_click}>Start new game</Button></div>
+                &nbsp;
                 <CardDeck>
                 {virtual_items.map((item, index) => {
-                  return (<LagCard onTransfer={ (e) => on_btn_transfer_click(item) } item={item} key={index} />)
+                  return (<LagCard onTransfer={ (e) => on_btn_transfer_click(item) } item={item} key={index} index={index} />)
                 })}
                 </CardDeck>
               </>
             ) : (
               <>
                 <h2>Zones database</h2>
-                { is_actor && (<Link className="btn btn-primary" to="/add_data">Declare a new zone</Link>) }
+                { is_actor && (<div><Link className="btn btn-primary" to="/add_data">Declare a new zone</Link></div>) }
+                &nbsp;
                 <CardDeck>
                 {real_items.map((item, index) => {
-                  return (<LagCard onTransfer={ (e) => on_btn_transfer_click(item) } item={item} key={index} />)
+                  return (<LagCard onTransfer={ (e) => on_btn_transfer_click(item) } item={item} key={index} index={index} />)
                 })}
                 </CardDeck>
               </>

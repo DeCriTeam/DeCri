@@ -13,17 +13,20 @@ function LagCard(props) {
   }
 
   return (
+   <div class="col-auto mb-4">
     <Card style={{ width: '18rem' }}>
+      <Card.Header>
+              #{item.token_id} { item.lagoon_type==='2' ? ("Merged LAG") : (item.lagoon_type==='0' ? "Game" : (item.name)) }
+              <div class="float-right">
+                <Badge variant="danger">{item.my_balance}</Badge>
+              </div>
+      </Card.Header>
       { (item.lagoon_type==='1' || item.lagoon_type==='2') ? ( 
          <Card.Img variant="top" src={item.image} width="100" height="180" />
       ) : ("") }
       <Card.Body>
         { (item.lagoon_type==='1' || item.lagoon_type==='2') ? ( 
           <>
-            <Card.Title>
-              #{item.token_id} { item.lagoon_type==='2' ? ("Merged LAG") : (item.name) }
-              <Badge variant="danger">{item.my_balance}</Badge>
-            </Card.Title>
             <Card.Text>{item.description}</Card.Text>
           </>
         ) : (
@@ -40,6 +43,7 @@ function LagCard(props) {
         </ButtonGroup>
       </Card.Body>
     </Card>
+   </div>
   );
 }
 
