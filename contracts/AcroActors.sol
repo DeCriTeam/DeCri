@@ -166,7 +166,7 @@ contract AcroActors {
 
       if (acro_contract.staking_balance(addr) >= 10000000000000000000)//10 acros 
       {
-         coef = 1; // changed for testing purposes
+         coef = 1;
       }
      
       return uint(coef);
@@ -184,7 +184,7 @@ contract AcroActors {
       require(already_vote[msg.sender][actor_address] == false,"Alread vote for this actor");
 
       uint coef_vote = votingCoefficient(msg.sender);
-      //A voir car si zero il ne faudrait pas l'enregistrer sur already_vote
+      
       RegisteredActors[actor_address].vote_score += (1*coef_vote);
 
       already_vote[msg.sender][actor_address] = true;
